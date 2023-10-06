@@ -14,7 +14,7 @@ export class ProjectsComponent {
   projects: Project[] = [
     {
       title: 'MXK RESTAURANTE BAR',
-      description: 'MXK Mexiko-Restaurante Bar, fue mi primera Web para el curso de "Programador Web Inicial" parte de la Diplomatura que realice de "Programador Web Full Stack',
+      description: 'MXK Mexiko-Restaurante Bar, fue mi primera Web para el curso de "Programador Web Inicial" parte de la Diplomatura que realice de "Programador Web Full Stack.',
       technologies: ['HTML', 'CSS', 'Javascript', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/MXK',
       link: 'https://tomivillarrueldev.github.io/MXK/'
@@ -49,7 +49,7 @@ export class ProjectsComponent {
     },
     {
       title: 'Comic App',
-      description: 'Comic App fue mi primer proyecto utilizando Angular',
+      description: 'Comic App fue mi primer proyecto utilizando Angular.',
       technologies: ['Angular', 'Typescript', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/Comic-app',
       link:'',
@@ -63,7 +63,7 @@ export class ProjectsComponent {
     },
     {
       title: 'Django Portfolio',
-      description: 'Portfolio desarrollado con Django',
+      description: 'Portfolio desarrollado con Django.',
       technologies: ['Django', 'Python', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/DJANGO-PORTFOLIO',
       link:'',
