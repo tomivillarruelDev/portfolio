@@ -38,7 +38,7 @@ export class ExperienceComponent {
       name: 'Diplomatura de Programador Web Full Stack',
       company: 'Universidad Tecnológica Nacional Facultad Regional Chaco',
       date: '2022',
-      description: 'La Diplomatura de Programador Web Full Stack, consistió de tres cursos clave para mi desarrollo profesional: Programador Web Inicial, Programación Web Nivel Medio con PHP y MySQL, Programación Web Avanzada con PHP y MySQL. Estos cursos me proporcionaron una base sólida en desarrollo web y programación full stack, permitiéndome abordar proyectos web con confianza y eficiencia.'
+      description: 'Consistió de tres cursos clave para mi desarrollo profesional: Programador Web Inicial, Programación Web Nivel Medio con PHP y MySQL, Programación Web Avanzada con PHP y MySQL. Estos cursos me proporcionaron una base sólida en desarrollo web, permitiéndome abordar proyectos web con confianza y eficiencia.'
     },
     {
       name: 'Introducción a la Programación Web',

@@ -12,6 +12,15 @@
     }
 }
 
+svg path {
+  fill: var(--gray-light);
+  transition: fill 0.3s;
+  cursor: pointer;
+}
+
+svg:hover path {
+  fill: var(--red);
+}
 
   .menu-icon {
     border: none;

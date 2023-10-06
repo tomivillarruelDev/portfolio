@@ -10,6 +10,7 @@ import { Project } from '../../interfaces/project.interface';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent {
+
   projects: Project[] = [
     {
       title: 'MXK RESTAURANTE BAR',
@@ -52,6 +53,35 @@ export class ProjectsComponent {
       technologies: ['Angular', 'Typescript', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/Comic-app',
       link:'',
+    },
+    {
+      title: 'Colored Rain API REST',
+      description: 'API REST desarrollada con Django Rest Framework para un la organización de negocios, simplificando la gestión de datos y mejorando la eficiencia.',
+      technologies: ['Django Rest Framework', 'Python'],
+      github: 'https://github.com/tomivillarruelDev/COLOREDRAIN-API-REST',
+      link:'',
+    },
+    {
+      title: 'Django Portfolio',
+      description: 'Portfolio desarrollado con Django',
+      technologies: ['Django', 'Python', 'Bootstrap'],
+      github: 'https://github.com/tomivillarruelDev/DJANGO-PORTFOLIO',
+      link:'',
     }
   ];
+
+  show_all_projects: boolean = false;
+  
+  six_projects = this.projects.slice(0, 6);
+
+  projects_ = this.projects.slice(6);
+
+  buttonText = 'See more';
+
+  constructor() { }
+
+  showProjects(){
+    this.show_all_projects = !this.show_all_projects;
+    this.buttonText = this.show_all_projects ? 'See less' : 'See more';
+  }
 }
