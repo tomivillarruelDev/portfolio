@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg py-4">
+    <div class="container">
+      <a class="navbar-brand ml-auto" href="#">Navbar</a>
+      <button type="button" class="menu-icon d-lg-none" aria-label="Menu Icon" (click)="toggleMenu()" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="menu-icon-content" [ngClass]="{ 'menu-icon-content-active': menu_active, 'menu-icon-content-inactive': !menu_active }">
+          <div class="menu-icon-inner"></div>
+        </div>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div class="navbar-nav align-items-end justify-content-center section-vh-md">
+          <a class="nav-link nav-a mx-2 my-4-lg"><span class="text-red">01. </span>Introducción</a>
+          <a class="nav-link nav-a mx-2"><span class="text-red">02. </span>Acerca de mi</a>
+          <a class="nav-link nav-a mx-2"><span class="text-red">03. </span>Experiencia</a>
+          <a class="nav-link nav-a mx-2"><span class="text-red">04. </span>Proyectos</a>
+          <a class="nav-link nav-a mx-2"><span class="text-red">05. </span>Contacto</a>
+          <a class="nav-link btn-red mx-2 px-4">Curriculum</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <!--  Hamburger menu Button  -->
+    
+  </div>

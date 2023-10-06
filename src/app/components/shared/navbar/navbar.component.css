@@ -1,0 +1,78 @@
+.nav-a{
+    font-size: 0.9rem;
+    color: var(--gray-light);
+    cursor: pointer;
+
+    & span{
+        font-size: 0.9rem;
+    }
+
+    &:hover{
+        color: var(--red);
+    }
+}
+
+
+  .menu-icon {
+    border: none;
+    z-index: 999;
+    display: block;
+    position: relative;
+    background: transparent;
+  }
+  .menu-icon-content {
+    width: 3.6rem;
+    display: flex;
+    height: 3.2rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-icon-inner {
+    width: 100%;
+    display: flex;
+    height: 0.4rem;
+    position: relative;
+    align-items: center;
+    background: var(--red);
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+  }
+  .menu-icon-inner:after,
+  .menu-icon-inner:before {
+    right: 0;
+    width: 75%;
+    z-index: 1;
+    content: "";
+    top: -1.2rem;
+    height: 0.4rem;
+    position: absolute;
+    background: inherit;
+    transition: all 0.2s ease-in-out;
+  }
+  .menu-icon-inner:after {
+    width: 50%;
+    top: 1.2rem;
+  }
+  .menu-icon-content-active > .menu-icon-inner {
+    transform: rotate(225deg);
+  }
+  .menu-icon-content-active > .menu-icon-inner:after,
+  .menu-icon-content-active > .menu-icon-inner:before {
+    top: 0;
+    width: 100%;
+    transform: rotate(90deg);
+  }
+  .menu-icon-content-active > .menu-icon-inner:after {
+    opacity: 0;
+  }
+  
+  @media (max-width: 992px) {
+    .nav-a{
+        margin: 0.5rem 0;
+    }
+
+    .btn-red{
+        margin: 0.5rem 0;
+    }
+}
