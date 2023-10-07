@@ -16,6 +16,10 @@
         position: relative;
         transition: all 0.2s ease-in-out;
     
+        &:hover .card-project-url {
+            color: var(--red);
+        }
+        
         &:hover {
             transform: translateY(-1.2rem);
         }
@@ -48,8 +52,6 @@
                 font-size: 1rem;
             }
         }
-    
-
         
         .card-project-list {
             padding: 0;
@@ -78,9 +80,7 @@ svg:hover path {
     fill: var(--red);
 }
 
-.card-project:hover .card-project-url {
-    color: rgb(194, 71, 86);
-}
+
 @media (max-width: 768px) {
     .grid {
         grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
