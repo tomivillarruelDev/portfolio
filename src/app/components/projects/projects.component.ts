@@ -38,7 +38,7 @@ export class ProjectsComponent {
       description: 'SpotiApp es una aplicación que desarrollé utilizando Angular y la API de Spotify. Esta aplicación permite buscar artistas y canciones. También permite reproducir un preview de alguna canción.',
       technologies: ['Angular', 'Typescript', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/SpotiApp',
-      link:''
+      link:'https://spotiapp-tomas.web.app/#/home'
     },
     {
       title: 'Django Crud',
@@ -52,7 +52,7 @@ export class ProjectsComponent {
       description: 'Comic App fue mi primer proyecto utilizando Angular.',
       technologies: ['Angular', 'Typescript', 'Bootstrap'],
       github: 'https://github.com/tomivillarruelDev/Comic-app',
-      link:'',
+      link:'https://comic-app-d84e9.web.app/heroes',
     },
     {
       title: 'Colored Rain API REST',
