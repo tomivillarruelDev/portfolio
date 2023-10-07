@@ -79,7 +79,7 @@ svg:hover path {
 }
 
 .card-project:hover .card-project-url {
-    color: var(--red);
+    color: rgb(194, 71, 86);
 }
 @media (max-width: 768px) {
     .grid {
