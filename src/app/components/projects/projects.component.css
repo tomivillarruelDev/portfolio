@@ -49,9 +49,7 @@
             }
         }
     
-        &:hover .card-project-url {
-            color: var(--red);
-        }
+
         
         .card-project-list {
             padding: 0;
@@ -80,7 +78,9 @@ svg:hover path {
     fill: var(--red);
 }
 
-
+.card-project:hover .card-project-url {
+    color: var(--red);
+}
 @media (max-width: 768px) {
     .grid {
         grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
