@@ -13,12 +13,6 @@
     font-size: 1.1rem;
 }
 
-a{
-    color: var(--gray-light);
-    text-decoration: none;
-}
-
-
 .inter{
     font-family: 'Inter', sans-serif;
 }

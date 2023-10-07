@@ -61,6 +61,7 @@
       .branch{
         color: var(--gray-light);
         transition: color 0.3s;
+        text-decoration: none;
 
         &:hover{
             color: var(--red);
