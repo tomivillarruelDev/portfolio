@@ -16,13 +16,14 @@
         position: relative;
         transition: all 0.2s ease-in-out;
     
-        &:hover .card-project-url {
-            color: var(--red);
-        }
-        
         &:hover {
             transform: translateY(-1.2rem);
+
+            &:hover .card-project-url {
+                color: var(--red);
+            }
         }
+        
         .card-project-header{
             gap: inherit;
             display: flex;
