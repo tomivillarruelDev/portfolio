@@ -8,9 +8,12 @@
 *{
     text-decoration: none;
     font-family: 'Inconsolata', monospace;
-    background-color: var(--gray-dark);
     color: var(--gray-light);
     font-size: 1.1rem;
+}
+
+body{
+    background-color: var(--gray-dark);
 }
 
 .inter{

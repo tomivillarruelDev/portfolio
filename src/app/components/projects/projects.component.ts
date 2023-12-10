@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-
-// Import the interface
-import { Project } from '../../interfaces/project.interface';
-
+import { Project } from 'src/app/interfaces/project.interface';
 
 @Component({
   selector: 'app-projects',
@@ -11,6 +8,7 @@ import { Project } from '../../interfaces/project.interface';
 })
 export class ProjectsComponent {
 
+  
   projects: Project[] = [
     {
       title: 'MXK RESTAURANTE BAR',
