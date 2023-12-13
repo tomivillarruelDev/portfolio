@@ -39,6 +39,7 @@
         border-top: 0.1rem solid var(--red);
         padding-top: 2rem;
         padding: 2rem 1rem;
+        margin: 0 auto;
     }
 
     .s5-btn{
