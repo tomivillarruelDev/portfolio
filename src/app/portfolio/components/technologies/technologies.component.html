@@ -1,0 +1,26 @@
+<!--
+<fa-icon
+  class="technology-icon tippy-tech"
+  [ngClass]="technology"
+  [icon]="['fab', `brand-${technology}`]"
+  attr.data-tippy-content="{{technology | titlecase}}"
+  ></fa-icon> -->
+
+<!-- <i-tabler
+  *ngIf="technology"
+  [name]="'brand-' + technology"
+  [ngClass]="technology"
+  class="technology-icon"
+  attr.data-tippy-content="{{ technology | titlecase }}"
+></i-tabler> -->
+
+<div class="icons flex flex-row gap-x-2">
+  <img
+    [ngClass]="size ? size : 'size-4'"
+    [src]=" getPathIcon( technology ) "
+    [alt]="technology"
+    class="tippy-tech object-cover z-10"
+    attr.data-tippy-content="{{ technology | titlecase }}"
+    *ngFor="let technology of technologies"
+  >
+</div>

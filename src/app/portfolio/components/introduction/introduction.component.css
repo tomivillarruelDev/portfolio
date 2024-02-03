@@ -1,0 +1,57 @@
+.s1__image-container {
+  display: inline-block;
+
+  .s2__profile-img {
+    border: 0.5rem solid var(--gray-darker);
+    width: 16rem;
+
+    background-color: var(--gray);
+  }
+}
+
+.icons{
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.icons__item{
+  border-radius: 0.8rem;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  outline: 0.1rem solid #2C3643;
+  background-color: var(--gray);
+  transition: all 0.3s;
+
+  & img{
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: cover;
+  }
+
+  &:hover {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    outline: 0.3rem solid #2C3643;
+  }
+
+  & svg  {
+    color: #10B981;
+
+  }
+
+}
+
+.icons__item:first-child:hover{
+
+  padding: 0.5rem 1rem;
+  outline: 0.3rem solid #62D1AC;
+  background-color: #10B981;;
+
+  & svg  {
+    color: #FFFFFF;
+
+  }
+
+}
