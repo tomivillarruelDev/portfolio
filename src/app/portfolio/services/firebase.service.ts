@@ -14,8 +14,6 @@ export class FirebaseService {
 
   constructor(private http: HttpClient) {}
 
-
-
   get technologiesProjects(): string[] {
     return this.projects
       .map((project) => project.technologies)

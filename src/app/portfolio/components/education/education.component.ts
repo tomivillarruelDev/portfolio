@@ -13,7 +13,7 @@ export class EducationComponent {
     {
       name: 'Angular: De cero a experto',
       company: 'Udemy',
-      date: 'Actualidad',
+      date: 'Diciembre - 2023',
       teacher: 'Fernando Herrera',
       description: 'TypeScript, RXJS, SPA, Signals, componentes, directivas, servicios, mapas, JWT, autenticación, despliegues, mongo, Git, GitHub y mucho más'
     },
@@ -29,7 +29,7 @@ export class EducationComponent {
       company: 'Universidad Tecnológica Nacional Facultad Regional Córdoba',
       date: 'Junio - 2023',
       teacher: 'Ing. Fanny Montoya',
-      description: 'Unit Testing, Integration Testing, Metodologías ágiles, Scrum' 
+      description: 'Unit Testing, Integration Testing, Metodologías ágiles, Scrum'
     },
     {
       name: 'Programación web con JavaScript',
