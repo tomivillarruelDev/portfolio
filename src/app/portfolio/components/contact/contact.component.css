@@ -1,5 +1,4 @@
-
-.icons{
+.icons {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -8,16 +7,16 @@
   margin-top: 1rem;
 }
 
-.icons__item{
+.icons__item {
   border-radius: 0.8rem;
   display: flex;
   gap: 0.4rem;
   padding: 0.9rem 1.3rem;
   font-size: 1rem;
-  outline: 0.1rem solid #2C3643;
+  outline: 0.1rem solid #2c3643;
   transition: all 0.3s;
 
-  & img{
+  & img {
     width: 1.5rem;
     height: 1.5rem;
     object-fit: cover;
@@ -26,24 +25,22 @@
   &:hover {
     padding-right: 2rem;
     padding-left: 2rem;
-    outline: 0.3rem solid #2C3643;
+    outline: 0.3rem solid #2c3643;
   }
-
 }
 
-
-.email{
+.email {
   display: flex;
   gap: 0.8rem;
   margin-top: 1rem;
 }
 
-.email-buttons{
+.email-buttons {
   display: flex;
   gap: 0.8rem;
 }
 
-.email__button{
+.email__button {
   padding: 0.6rem 1.2rem;
   border-radius: 0.8rem;
   font-size: 1rem;
@@ -53,11 +50,7 @@
   &:hover {
     color: rgb(255, 255, 255);
   }
-
-
 }
-
-
 
 .email__button:first-child {
   border: 0.1rem solid var(--red);
@@ -66,45 +59,43 @@
   background-position: right;
 
   svg path {
-    color: #FFFF;
+    color: #ffff;
   }
 }
-.isActivated{
-  border: 0.1rem solid #2C3643 !important;
-  background-position: left  !important;
-  background-color: var(--gray-dark) !important
-
-
+.isActivated {
+  border: 0.1rem solid #2c3643 !important;
+  background-position: left !important;
+  background-color: var(--gray-dark) !important;
 }
 
 .isActivated svg path {
   color: var(--gray-light);
-
 }
 .email__button:last-child {
-  border: 0.1rem solid #2C3643;
-  background-image: linear-gradient(90deg, transparent 50%, var(--gray-dark) 50%);
+  border: 0.1rem solid #2c3643;
+  background-image: linear-gradient(
+    90deg,
+    transparent 50%,
+    var(--gray-dark) 50%
+  );
   background-position: right;
 
   &:hover {
-      border: 0.1rem solid var(--red);
-      background-position: left;
-      background-color: var(--red)
-
+    border: 0.1rem solid var(--red);
+    background-position: left;
+    background-color: var(--red);
   }
 }
 
 .email__button:last-child:hover svg path {
-  color: #FFFF;
+  color: #ffff;
 }
 
-
-.email__input{
+.email__input {
   background-color: var(--gray);
   border: 0;
   border-radius: 0.8rem;
   color: #fff;
 
   padding: 0.4rem 1rem;
-
 }

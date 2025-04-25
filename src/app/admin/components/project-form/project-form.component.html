@@ -1,0 +1,165 @@
+<div class="project-form-container">
+  <div class="project-form-header">
+    <h2>{{ isEditMode ? "Editar Proyecto" : "Crear Nuevo Proyecto" }}</h2>
+    <div
+      class="project-type-badge"
+      [ngClass]="{
+        'image-type': projectType === projectTypes.IMAGE,
+        'card-type': projectType === projectTypes.CARD
+      }"
+    >
+      {{
+        projectType === projectTypes.IMAGE
+          ? "Proyecto con Imagen"
+          : "Proyecto Tipo Tarjeta"
+      }}
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando datos del proyecto...</div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <form *ngIf="!loading" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <!-- Nombre del proyecto -->
+    <div class="form-group">
+      <label for="name">Nombre del proyecto *</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        placeholder="Ingresa el nombre del proyecto"
+      />
+      <div
+        *ngIf="
+          projectForm.get('name')?.invalid && projectForm.get('name')?.touched
+        "
+        class="validation-error"
+      >
+        El nombre del proyecto es obligatorio
+      </div>
+    </div>
+
+    <!-- Descripción del proyecto -->
+    <div class="form-group">
+      <label for="description">Descripción *</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="4"
+        placeholder="Describe tu proyecto"
+      ></textarea>
+      <div
+        *ngIf="
+          projectForm.get('description')?.invalid &&
+          projectForm.get('description')?.touched
+        "
+        class="validation-error"
+      >
+        La descripción del proyecto es obligatoria
+      </div>
+    </div>
+
+    <!-- Selector de Tecnologías - Mejorado con grid -->
+    <div class="form-group">
+      <label>Tecnologías *</label>
+      <div class="technologies-checkbox-grid">
+        <div *ngFor="let tech of allTechnologies" class="tech-checkbox-item">
+          <label class="tech-checkbox-label">
+            <input
+              type="checkbox"
+              [checked]="isTechSelected(tech)"
+              (change)="onTechCheckboxChange($event, tech)"
+            />
+            <span class="tech-name">{{
+              tech.name.charAt(0).toUpperCase() + tech.name.slice(1)
+            }}</span>
+          </label>
+        </div>
+      </div>
+      <div
+        *ngIf="!hasSelectedTechnologies() && projectForm.touched"
+        class="validation-error"
+      >
+        Debes seleccionar al menos una tecnología
+      </div>
+    </div>
+
+    <!-- URL de GitHub -->
+    <div class="form-group">
+      <label for="github">URL de GitHub *</label>
+      <input
+        type="url"
+        id="github"
+        formControlName="github"
+        placeholder="https://github.com/usuario/proyecto"
+      />
+      <div
+        *ngIf="
+          projectForm.get('github')?.invalid &&
+          projectForm.get('github')?.touched
+        "
+        class="validation-error"
+      >
+        La URL de GitHub es obligatoria
+      </div>
+    </div>
+
+    <!-- URL del sitio web (opcional) -->
+    <div class="form-group">
+      <label for="page">URL del sitio web (opcional)</label>
+      <input
+        type="url"
+        id="page"
+        formControlName="page"
+        placeholder="https://ejemplo.com"
+      />
+    </div>
+
+    <!-- Imagen del proyecto - solo para proyectos con imagen -->
+    <div class="form-group" *ngIf="projectType === projectTypes.IMAGE">
+      <label>Imagen del proyecto {{ isEditMode ? "" : "*" }}</label>
+      <div class="image-upload">
+        <div *ngIf="previewUrl" class="image-preview">
+          <img [src]="previewUrl" alt="Vista previa" />
+        </div>
+        <div class="file-input-container">
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            id="file"
+          />
+          <label for="file" class="file-label">
+            {{ selectedFile ? selectedFile.name : "Seleccionar imagen" }}
+          </label>
+        </div>
+        <small *ngIf="isEditMode && !selectedFile" class="image-hint">
+          Selecciona una nueva imagen solo si deseas cambiarla
+        </small>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelEdit()">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="btn-save"
+        [disabled]="projectForm.invalid || saving"
+      >
+        {{
+          saving
+            ? "Guardando..."
+            : isEditMode
+            ? "Actualizar Proyecto"
+            : "Crear Proyecto"
+        }}
+      </button>
+    </div>
+  </form>
+</div>

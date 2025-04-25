@@ -1,0 +1,252 @@
+<div class="project-list-container">
+  <div class="project-list-header">
+    <h2>Gestión de Proyectos</h2>
+    <button routerLink="/admin/dashboard" class="btn btn-back">
+      Volver al Dashboard
+    </button>
+  </div>
+
+  <div class="tabs-container">
+    <div class="tabs">
+      <button
+        [class.active]="activeTab === 'image'"
+        (click)="setActiveTab('image')"
+        class="tab-button"
+      >
+        Proyectos con Imagen
+      </button>
+      <button
+        [class.active]="activeTab === 'card'"
+        (click)="setActiveTab('card')"
+        class="tab-button"
+      >
+        Proyectos Tipo Tarjeta
+      </button>
+    </div>
+  </div>
+
+  <div class="reorder-instructions">
+    <div class="info-icon">ℹ️</div>
+    <p>
+      Usa los botones de flechas para cambiar el orden de los proyectos en tu
+      portfolio.
+    </p>
+  </div>
+
+  <!-- Proyectos con imagen -->
+  <div *ngIf="activeTab === 'image'">
+    <div class="tab-header">
+      <h3>Proyectos con Imagen</h3>
+      <button
+        class="btn btn-primary"
+        (click)="createProject(projectTypes.IMAGE)"
+      >
+        Crear Nuevo Proyecto con Imagen
+      </button>
+    </div>
+
+    <div *ngIf="loading['image']" class="loading">
+      Cargando proyectos con imagen...
+    </div>
+
+    <div *ngIf="error['image']" class="error-message">
+      {{ error["image"] }}
+      <button (click)="loadImageProjects()">Reintentar</button>
+    </div>
+
+    <div
+      *ngIf="!loading['image'] && !error['image'] && imageProjects.length === 0"
+      class="empty-state"
+    >
+      <p>No hay proyectos con imagen disponibles.</p>
+      <button class="btn" (click)="createProject(projectTypes.IMAGE)">
+        Crear tu primer proyecto con imagen
+      </button>
+    </div>
+
+    <div
+      *ngIf="!loading['image'] && !error['image'] && imageProjects.length > 0"
+      class="project-table"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th class="order-column">Orden</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Tecnologías</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let project of imageProjects; let i = index"
+            class="project-row"
+          >
+            <td class="order-column">
+              <div class="order-controls">
+                <button
+                  class="order-btn up"
+                  [disabled]="i === 0"
+                  (click)="moveProjectUp(i, projectTypes.IMAGE)"
+                  title="Mover hacia arriba"
+                >
+                  ▲
+                </button>
+                <span class="order-number">{{ i + 1 }}</span>
+                <button
+                  class="order-btn down"
+                  [disabled]="i === imageProjects.length - 1"
+                  (click)="moveProjectDown(i, projectTypes.IMAGE)"
+                  title="Mover hacia abajo"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+            <td class="project-image">
+              <img
+                *ngIf="project.photoURL"
+                [src]="project.photoURL"
+                alt="{{ project.name }}"
+              />
+              <div *ngIf="!project.photoURL" class="no-image">Sin imagen</div>
+            </td>
+            <td>{{ project.name }}</td>
+            <td class="project-description">{{ project.description }}</td>
+            <td class="project-technologies">
+              <span
+                *ngFor="let techId of project.technologies"
+                class="technology-tag"
+              >
+                {{ getTechnologyNameById(techId) }}
+              </span>
+            </td>
+            <td class="project-actions">
+              <button
+                class="btn btn-edit"
+                (click)="editProject(project.id!, projectTypes.IMAGE)"
+              >
+                Editar
+              </button>
+              <button
+                class="btn btn-delete"
+                (click)="deleteProject(project.id!, projectTypes.IMAGE)"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Proyectos tipo tarjeta -->
+  <div *ngIf="activeTab === 'card'">
+    <div class="tab-header">
+      <h3>Proyectos Tipo Tarjeta</h3>
+      <button
+        class="btn btn-primary"
+        (click)="createProject(projectTypes.CARD)"
+      >
+        Crear Nuevo Proyecto Tipo Tarjeta
+      </button>
+    </div>
+
+    <div *ngIf="loading['card']" class="loading">
+      Cargando proyectos tipo tarjeta...
+    </div>
+
+    <div *ngIf="error['card']" class="error-message">
+      {{ error["card"] }}
+      <button (click)="loadCardProjects()">Reintentar</button>
+    </div>
+
+    <div
+      *ngIf="!loading['card'] && !error['card'] && cardProjects.length === 0"
+      class="empty-state"
+    >
+      <p>No hay proyectos tipo tarjeta disponibles.</p>
+      <button class="btn" (click)="createProject(projectTypes.CARD)">
+        Crear tu primer proyecto tipo tarjeta
+      </button>
+    </div>
+
+    <div
+      *ngIf="!loading['card'] && !error['card'] && cardProjects.length > 0"
+      class="project-table"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th class="order-column">Orden</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Tecnologías</th>
+            <th>GitHub</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let project of cardProjects; let i = index"
+            class="project-row"
+          >
+            <td class="order-column">
+              <div class="order-controls">
+                <button
+                  class="order-btn up"
+                  [disabled]="i === 0"
+                  (click)="moveProjectUp(i, projectTypes.CARD)"
+                  title="Mover hacia arriba"
+                >
+                  ▲
+                </button>
+                <span class="order-number">{{ i + 1 }}</span>
+                <button
+                  class="order-btn down"
+                  [disabled]="i === cardProjects.length - 1"
+                  (click)="moveProjectDown(i, projectTypes.CARD)"
+                  title="Mover hacia abajo"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+            <td>{{ project.name }}</td>
+            <td class="project-description">{{ project.description }}</td>
+            <td class="project-technologies">
+              <span
+                *ngFor="let techId of project.technologies"
+                class="technology-tag"
+              >
+                {{ getTechnologyNameById(techId) }}
+              </span>
+            </td>
+            <td>
+              <a [href]="project.github" target="_blank" class="github-link">{{
+                project.github
+              }}</a>
+            </td>
+            <td class="project-actions">
+              <button
+                class="btn btn-edit"
+                (click)="editProject(project.id!, projectTypes.CARD)"
+              >
+                Editar
+              </button>
+              <button
+                class="btn btn-delete"
+                (click)="deleteProject(project.id!, projectTypes.CARD)"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

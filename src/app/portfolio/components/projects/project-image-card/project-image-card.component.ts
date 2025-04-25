@@ -11,10 +11,22 @@ export class ProjectImageCardComponent implements OnInit {
 
   public projects: Project[] = [];
 
+  imagesLoaded: { [key: string]: boolean } = {};
+
   constructor( private firebaseService: FirebaseService ) { }
 
   async ngOnInit(): Promise<void> {
     this.projects = await this.getProjects();
+    this.projects.forEach(project => {
+      if (project.id) {
+        this.imagesLoaded[project.id] = false;
+      }
+    });
+  }
+
+  onImageLoad(projectId: string): void {
+    // Marcar la imagen como cargada
+    this.imagesLoaded[projectId] = true;
   }
 
   public getImageProject( projectName: string ): string {

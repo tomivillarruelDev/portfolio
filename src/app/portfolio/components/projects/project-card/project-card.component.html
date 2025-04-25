@@ -1,6 +1,4 @@
-
-
-  <ul class="grid my-20 animate__animated animate__fadeInUp">
+<ul class="grid my-20 animate__animated animate__fadeInUp">
     <li
       class="card-project "
       *ngFor="let project of projects | slice:0:projectsToShow"
@@ -32,12 +30,10 @@
             </p>
         </div>
         <div>
-            <ul class="card-project-list">
+            <ul class="card-project-list pt-2">
                 <li class="card-project-categories">
                     <span class="card-project-category small">
                         <app-technologies [technologies]="project.technologies"></app-technologies>
-
-
                     </span>
                 </li>
             </ul>

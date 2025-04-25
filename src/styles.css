@@ -89,12 +89,12 @@ main, footer{
     background-size: 200%;
     background-position: right;
     transition: all 0.3s, color 0.4s;
+}
 
-    &:hover{
-        background-position: left;
-        background-color: var(--red);
-        color: rgb(255, 255, 255) !important;
-    }
+.btn-red:hover{
+  background-position: left;
+  background-color: var(--red);
+  color: rgb(255, 255, 255) !important;
 }
 
 

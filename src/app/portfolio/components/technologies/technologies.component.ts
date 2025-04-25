@@ -1,39 +1,55 @@
-import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewInit,
+  AfterViewChecked,
+  OnInit,
+} from '@angular/core';
 
 import Iconify from '@iconify/iconify';
+import { Technology } from 'src/app/shared/interfaces/technology.interface';
+import { TechnologyService } from 'src/app/admin/services/technology.service';
 
 import tippy from 'tippy.js';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-technologies',
   templateUrl: './technologies.component.html',
-  styleUrls: ['./technologies.component.css']
+  styleUrls: ['./technologies.component.css'],
 })
-export class TechnologiesComponent implements OnInit, AfterViewInit {
-
+export class TechnologiesComponent implements OnInit, AfterViewChecked {
   @Input() technologies: string[] = [];
+  @Input() size: string = 'size-4';
 
-  @Input() size: string = '';
+  public technologyObjects: Technology[] = [];
+  private tippyInitialized = false;
 
+  constructor(
+    private technologyService: TechnologyService,
+  ) {}
 
-  ngOnInit(): void {
-    if (!this.technologies) return;
-
-    this.technologies = this.technologies.map((tech) => tech ? tech.toLowerCase() : tech);
-    this.technologies = this.technologies.filter((tech) => tech && tech !== '');
-
+  async ngOnInit(): Promise<void> {
+    if (!Array.isArray(this.technologies) || this.technologies.length === 0) {
+      this.technologyObjects = [];
+      return;
+    }
+    const allTechnologies = await this.technologyService.getTechnologies();
+    this.technologyObjects = this.technologies
+      .map((id) => allTechnologies.find((tech) => tech.id === id))
+      .filter((tech): tech is Technology => !!tech);
   }
 
-  getPathIcon(technology: string): string {
-    return `./assets/icons/svgs/${ technology }.svg`;
-  }
-
-  ngAfterViewInit() {
-
-    tippy('.tippy-tech', {
-      animation: 'shift-away-extreme',
-      theme: 'light-border',
-    });
+  ngAfterViewChecked(): void {
+    if (!this.tippyInitialized && this.technologyObjects.length > 0) {
+      const elements = document.querySelectorAll('.tippy-tech');
+      if (elements.length > 0) {
+        tippy('.tippy-tech', {
+          animation: 'shift-away-extreme',
+          theme: 'light-border',
+        });
+        this.tippyInitialized = true;
+      }
+    }
   }
 }
-

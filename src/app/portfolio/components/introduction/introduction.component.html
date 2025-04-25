@@ -1,48 +1,42 @@
-<!-- <section class="container section-vh d-flex align-items-center animate__animated animate__fadeInUp">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="row text-center">
-                <div class="col-12">
-                    <p class="text-red my-0">
-                        01. Hola, mi nombres es
-                    </p>
-                </div>
-                <div class="col-12">
-                    <p class="inter-title">
-                        Tomás Villarruel
-                    </p>
-                </div>
-                <div class="col-12 d-flex justify-content-center">
-                    <p class="col-md-6 pb-3">
-                        <span class="text-red">Desarrollador Full Stack</span> apasionado por la tecnología y motivado por un constante deseo de aprendizaje.
-                    </p>
-                </div>
-                <div class="col-12">
-                    <p>
-                        <a href="home#s5" class="btn-red py-3">Contáctame!</a>
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section> -->
 
 <section
   class="w-full lg:w-[740px] mx-auto animate__animated animate__fadeInUp py-16 lg:py-28"
 >
   <div class="flex flex-col lg:flex-row items-center lg:justify-center lg:gap-x-6 gap-y-6">
-    <div class="s1__image-container w-4/10">
+    <!-- Contenedor principal con aspecto cuadrado pero que mostrará contenido circular -->
+    <div class="s1__image-container relative w-[200px] h-[200px] aspect-square ">
+      <!-- Contenedor para el skeleton loader con posición absoluta y forma circular -->
+      <div class="absolute inset-0 z-10 rounded-full overflow-hidden" *ngIf="!imageLoaded">
+        <ngx-skeleton-loader
+          [theme]="{
+            height: '100%',
+            width: '100%',
+            'border-radius': '50%',
+            'background-color': 'rgba(255, 255, 255, 0.15)',
+            'margin-bottom': '0'
+          }"
+          animation="pulse"
+          count="1"
+          appearance="circle"
+        ></ngx-skeleton-loader>
+      </div>
+
+      <!-- Imagen con forma circular -->
       <img
-        src="./assets/img/tomas.png"
+        [src]="profileImageUrl"
         alt="Tomás Villarruel photo"
-        class="img-fluid s2__profile-img rounded-circle"
+        class="s2__profile-img rounded-full transition-opacity duration-500 w-full h-full object-cover"
+        [class.opacity-0]="!imageLoaded"
+        [class.opacity-100]="imageLoaded"
+        (load)="onImageLoad()"
+        loading="lazy"
       />
     </div>
 
-    <div class="w-6/10 ">
+    <div class="w-6/10">
       <p class="flex row">
-        <span class="text-red">01.
+        <span class="text-red"
+          >01.
           <span class="text-white/85">Hola, soy</span>
         </span>
         <span class="onest text-white font-bold text-4xl my-0 pb-6 lg:pb-6">
@@ -51,9 +45,7 @@
       </p>
 
       <p class="text-xl text-wrap max-w-[700px] text-white/70">
-        <span class="text-white/85">
-          Desarrollador Web Full Stack.</span
-        >
+        <span class="text-white/85"> Desarrollador Web Full Stack.</span>
         <span class="text-white/80">
           De <span class="">Córdoba </span>Argentina.</span
         >
@@ -62,25 +54,42 @@
         >
       </p>
 
-      <div class="icons flex justify-center lg:justify-start items-center flex-wrap sm:flex-nowrap">
+      <div
+        class="icons flex justify-center lg:justify-start items-center flex-wrap sm:flex-nowrap"
+      >
         <span class="icons__item tippy-work">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mood-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20.925 13.163a8.998 8.998 0 0 0 -8.925 -10.163a9 9 0 0 0 0 18" /><path d="M9 10h.01" /><path d="M15 10h.01" /><path d="M9.5 15c.658 .64 1.56 1 2.5 1s1.842 -.36 2.5 -1" /><path d="M15 19l2 2l4 -4" /></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-mood-check"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M20.925 13.163a8.998 8.998 0 0 0 -8.925 -10.163a9 9 0 0 0 0 18"
+            />
+            <path d="M9 10h.01" />
+            <path d="M15 10h.01" />
+            <path d="M9.5 15c.658 .64 1.56 1 2.5 1s1.842 -.36 2.5 -1" />
+            <path d="M15 19l2 2l4 -4" />
+          </svg>
         </span>
         <a
           href="https://www.linkedin.com/in/tomasvillarruel/"
           target="_blank"
           class="icons__item text-white/70"
-
         >
-          <img src="./assets/icons/linkedIn.svg" alt="LinkedIn"> LinkedIn
+          <img src="./assets/icons/linkedIn.svg" alt="LinkedIn" /> LinkedIn
         </a>
 
-        <a href="/assets/tomasvillarruelCV.pdf" target="_blank" class="btn-red">
-          Curriculum
-        </a>
+        <a [href]="cvUrl" target="_blank" class="btn-red"> Curriculum </a>
       </div>
     </div>
   </div>
 </section>
-
-

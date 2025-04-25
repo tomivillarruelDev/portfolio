@@ -4,23 +4,19 @@ import { ProjectImageCardComponent } from './project-image-card/project-image-ca
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { ProjectsComponent } from './projects.component';
 import { TechnologiesComponent } from '../technologies/technologies.component';
-
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader'; // Importar el módulo de skeleton loader
 
 @NgModule({
   declarations: [
     ProjectImageCardComponent,
     ProjectCardComponent,
     ProjectsComponent,
-    TechnologiesComponent
+    TechnologiesComponent,
   ],
   imports: [
     CommonModule,
-
+    NgxSkeletonLoaderModule, // Añadir el módulo a los imports
   ],
-  exports: [
-    ProjectImageCardComponent,
-    ProjectCardComponent,
-    ProjectsComponent,
-    ]
+  exports: [ProjectImageCardComponent, ProjectCardComponent, ProjectsComponent],
 })
-export class ProjectsModule { }
+export class ProjectsModule {}

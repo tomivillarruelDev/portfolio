@@ -23,17 +23,10 @@ export class ProjectCardComponent implements OnInit {
     this.projects = await this.getProjects();
   }
 
-  get technologiesProjects(): string[] {
-    return this.firebaseService.technologiesProjects;
-  }
-
   private async getProjects(): Promise<Project[]> {
     const resp = await this.firebaseService.getProjects('projects');
     return resp;
   }
-
-
-
 
   showProjects() {
     if (this.projectsToShow >= this.projects.length) {

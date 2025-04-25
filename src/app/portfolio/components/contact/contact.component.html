@@ -1,8 +1,10 @@
-
 <section id="s5" class="w-full lg:w-[740px] mx-auto">
   <div class="col-auto">
     <p class="text-red mb-6">
-      04. <span class=" font-semibold mb-4 items-center text-2xl onest text-white">Contacto</span>
+      04.
+      <span class="font-semibold mb-4 items-center text-2xl onest text-white"
+        >Contacto</span
+      >
     </p>
   </div>
 
@@ -11,7 +13,22 @@
       <div class="flex gap-x-1 align-items-center text-white/85">
         <p class="text-1xl text-inherit">Redes</p>
         <span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-at" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" /></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-at"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+            <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" />
+          </svg>
         </span>
       </div>
 
@@ -20,13 +37,12 @@
           [href]="social[1].url"
           target="_blank"
           class="icons__item"
-          [ngStyle]="{ 'color': social[1].color }"
-          *ngFor=" let social of socialValues "
+          [ngStyle]="{ color: social[1].color }"
+          *ngFor="let social of socialValues"
         >
-          <img [src]="social[1].icon" alt="social icon"> {{ social[0] }}
+          <img [src]="social[1].icon" alt="social icon" /> {{ social[0] }}
         </a>
       </div>
-
     </div>
   </div>
 
@@ -35,23 +51,59 @@
       <div class="flex gap-x-1 align-items-center text-white/85">
         <p class="text-1xl text-inherit">Correo electrónico</p>
         <span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mail" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" /></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-mail"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"
+            />
+            <path d="M3 7l9 6l9 -6" />
+          </svg>
         </span>
       </div>
     </div>
 
     <div class="col-12 email">
-      <input type="text" value="tomasvillarruel18@gmail.com" readonly class="form-control email__input" disabled>
+      <input
+        type="text"
+        value="tomasvillarruel18@gmail.com"
+        readonly
+        class="form-control email__input"
+        disabled
+      />
       <div class="email-buttons">
         <a
           href="mailto:tomasadrianvillarruel@gmail.com"
           type="button"
           class="email__button send tippy-email"
-          [ngClass]="{'isActivated': isHovering }"
+          [ngClass]="{ isActivated: isHovering }"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-send-2"   width="24" height="24" viewBox="0 0 24 24"    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-send-2"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" />
+            <path
+              d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z"
+            />
             <path d="M6.5 12h14.5" />
           </svg>
         </a>
@@ -62,18 +114,28 @@
           (mouseover)="isHovering = true"
           (mouseout)="isHovering = false"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-copy"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
-            <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+            <path
+              d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"
+            />
+            <path
+              d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"
+            />
           </svg>
-
         </button>
-
       </div>
     </div>
-
   </div>
-
-
 </section>

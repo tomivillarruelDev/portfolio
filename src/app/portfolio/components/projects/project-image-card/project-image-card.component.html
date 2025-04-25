@@ -1,11 +1,37 @@
-
 <article
   class="flex flex-col md:flex-row gap-6 h-auto md:h-60 mb-10"
   *ngFor="let project of projects"
 >
+  <!-- Contenedor de imagen con efecto de carga -->
+  <a
+    class="image-container relative overflow-hidden"
+    [href]="project.page"
+    target="_blank"
+  >
+    <!-- Usar ngx-skeleton-loader con animación pulse -->
+    <ngx-skeleton-loader
+      *ngIf="!imagesLoaded[project.id || '']"
+      [theme]="{
+        height: '100%',
+        width: '100%',
+        'border-radius': '8px',
+        'background-color': 'rgba(255, 255, 255, 0.15)'
+      }"
+      animation="pulse"
+      count="1"
+      appearance="line"
+    ></ngx-skeleton-loader>
 
-  <a class="image-container" [href]="project.page" target="_blank">
-    <img class="slide-image w-full h-48 md:h-full object-cover" [src]="getImageProject( project.name )" [alt]="'Imagen del proyecto' + project.name ">
+    <!-- Imagen con efecto de fade-in al cargar -->
+    <img
+      class="slide-image w-full h-full object-cover transition-opacity duration-500"
+      [class.opacity-0]="!imagesLoaded[project.id || '']"
+      [class.opacity-100]="imagesLoaded[project.id || '']"
+      [src]="project.photoURL"
+      [alt]="'Imagen del proyecto ' + project.name"
+      (load)="onImageLoad(project.id || '')"
+      loading="lazy"
+    />
   </a>
 
   <div class="flex flex-col justify-evenly">
@@ -15,19 +41,34 @@
       <ul>
         <li>
           <app-technologies
-            [technologies]=" project.technologies "
+            [technologies]="project.technologies"
             [size]="'size-[1.35rem] mr-1'"
-            ></app-technologies>
+          ></app-technologies>
         </li>
       </ul>
     </div>
     <div class="buttons flex mt-2">
-      <a [href]="project.github" target="_blank" class="button-links font-semibold onest">Código</a>
-      <a [href]="project.page" target="_blank" class="button-links font-semibold onest">Ver
+      <a
+        [href]="project.github"
+        target="_blank"
+        class="button-links font-semibold onest"
+        >Código</a
+      >
+      <a
+        [href]="project.page"
+        target="_blank"
+        class="button-links font-semibold onest"
+        >Ver
         <span class="link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="22" height="22">
-              <path  d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">
-            </path>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="22"
+            height="22"
+          >
+            <path
+              d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"
+            ></path>
           </svg>
         </span>
       </a>

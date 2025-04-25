@@ -1,0 +1,33 @@
+<div class="upload-container">
+  <div class="preview-container" *ngIf="previewUrl">
+    <img [src]="previewUrl" alt="Vista previa de la imagen" />
+  </div>
+
+  <div class="file-selection">
+    <input
+      type="file"
+      id="fileInput"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      [disabled]="uploading"
+    />
+    <label for="fileInput" class="file-label">
+      {{ selectedFile ? selectedFile.name : "Seleccionar imagen" }}
+    </label>
+  </div>
+
+  <div class="upload-actions">
+    <button
+      (click)="uploadImage()"
+      class="upload-button"
+      [disabled]="!selectedFile || uploading"
+    >
+      <span *ngIf="!uploading">Subir imagen</span>
+      <span *ngIf="uploading">Subiendo...</span>
+    </button>
+  </div>
+
+  <div *ngIf="uploadError" class="upload-error">
+    {{ uploadError }}
+  </div>
+</div>

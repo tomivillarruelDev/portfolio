@@ -1,0 +1,180 @@
+<div class="technology-management-container">
+  <div class="tech-header">
+    <h2>Gestión de Tecnologías</h2>
+    <button routerLink="/admin/dashboard" class="btn btn-back">
+      Volver al Dashboard
+    </button>
+  </div>
+  <p class="subtitle">
+    Añade, edita o elimina las tecnologías disponibles para tus proyectos
+  </p>
+
+  <!-- Mensajes de éxito y error -->
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+    <button class="close-btn" (click)="error = ''">×</button>
+  </div>
+
+  <div *ngIf="success" class="alert alert-success">
+    {{ success }}
+    <button class="close-btn" (click)="success = ''">×</button>
+  </div>
+
+  <!-- Botón para importar tecnologías desde proyectos existentes -->
+  <div class="import-section">
+    <button
+      class="btn-import"
+      (click)="importFromProjects()"
+      [disabled]="loading"
+    >
+      <span>Importar tecnologías desde proyectos existentes</span>
+    </button>
+    <small class="helper-text">
+      Esto importará automáticamente todas las tecnologías que ya están siendo
+      utilizadas en tus proyectos
+    </small>
+  </div>
+
+  <!-- Formulario para añadir/editar tecnologías -->
+  <div class="tech-form-section">
+    <h3>{{ editMode ? "Editar" : "Añadir" }} Tecnología</h3>
+
+    <form [formGroup]="technologyForm" (ngSubmit)="saveTechnology()">
+      <div class="form-group">
+        <label for="name">Nombre de la tecnología*</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Ej: javascript, react, angular, etc."
+        />
+        <div
+          *ngIf="
+            technologyForm.get('name')?.invalid &&
+            technologyForm.get('name')?.touched
+          "
+          class="validation-error"
+        >
+          El nombre de la tecnología es obligatorio
+        </div>
+        <small class="helper-text">
+          Usa nombres en minúsculas y sin espacios para mejor compatibilidad
+        </small>
+      </div>
+
+      <!-- Sección para cargar ícono -->
+      <div class="form-group">
+        <label for="icon">Ícono de la tecnología</label>
+
+        <!-- Previsualización del ícono -->
+        <div *ngIf="previewUrl" class="icon-preview">
+          <img [src]="previewUrl" alt="Vista previa del ícono" />
+          <button
+            type="button"
+            class="btn-remove-icon"
+            (click)="removeIcon()"
+            title="Eliminar ícono"
+          >
+            ×
+          </button>
+        </div>
+
+        <!-- Input para seleccionar archivo -->
+        <div class="file-input-container" *ngIf="!previewUrl">
+          <input
+            type="file"
+            id="icon-file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            class="file-input"
+          />
+          <label for="icon-file" class="file-label">
+            Seleccionar ícono...
+          </label>
+        </div>
+
+        <small class="helper-text">
+          Recomendado: SVG o PNG con fondo transparente, máximo 50KB
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="resetForm()"
+          *ngIf="editMode"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save"
+          [disabled]="technologyForm.invalid"
+        >
+          {{ editMode ? "Actualizar" : "Añadir" }} Tecnología
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de tecnologías existentes -->
+  <div class="tech-list-section">
+    <h3>Tecnologías Disponibles</h3>
+
+    <div *ngIf="loading" class="loading-indicator">Cargando tecnologías...</div>
+
+    <div *ngIf="!loading && technologies.length === 0" class="empty-state">
+      No hay tecnologías disponibles. Añade una tecnología usando el formulario
+      o importa tecnologías de los proyectos existentes.
+    </div>
+
+    <ul class="tech-list" *ngIf="!loading && technologies.length > 0">
+      <li *ngFor="let tech of technologies" class="tech-item">
+        <div class="tech-icon" *ngIf="tech.icon">
+          <img [src]="tech.icon" [alt]="tech.name + ' icon'" />
+        </div>
+        <div class="tech-name">{{ tech.name }}</div>
+        <div class="tech-actions">
+          <button
+            class="btn-edit"
+            (click)="editTechnology(tech)"
+            title="Editar tecnología"
+          >
+            <span>✎</span>
+          </button>
+          <button
+            class="btn-delete"
+            (click)="deleteTechnology(tech.id!)"
+            title="Eliminar tecnología"
+          >
+            <span>×</span>
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="tech-tips">
+      <h4>Tips</h4>
+      <ul>
+        <li>
+          Los nombres de tecnologías son usados para mostrar los íconos
+          correspondientes en la web.
+        </li>
+        <li>
+          Use nombres en minúsculas y sin espacios (ej: "javascript", "react",
+          "angular").
+        </li>
+        <li>
+          Si elimina una tecnología que está en uso en algún proyecto, esta ya
+          no aparecerá en la web.
+        </li>
+        <li>
+          Para íconos cargados manualmente, formatos como SVG o PNG con fondo
+          transparente funcionan mejor.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

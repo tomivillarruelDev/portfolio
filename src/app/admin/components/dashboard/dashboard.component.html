@@ -1,0 +1,124 @@
+<div class="admin-dashboard">
+  <header class="admin-header">
+    <h1>Panel de Administración</h1>
+    <button class="logout-btn" (click)="logout()">Cerrar Sesión</button>
+  </header>
+
+  <div class="admin-content flex flex-col md:flex-row w-full min-h-screen">
+    <div
+      class="admin-sidebar w-full md:w-1/4 lg:w-1/5 bg-gray-900 text-white p-4 md:min-h-screen flex-shrink-0"
+    >
+      <nav class="admin-nav">
+        <ul class="flex flex-col gap-2">
+          <li class="w-full">
+            <a
+              routerLink="/admin/dashboard"
+              routerLinkActive="active"
+              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
+              >Dashboard</a
+            >
+          </li>
+          <li class="w-full">
+            <a
+              routerLink="/admin/projects"
+              routerLinkActive="active"
+              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
+              >Proyectos</a
+            >
+          </li>
+          <li class="w-full">
+            <a
+              routerLink="/admin/technologies"
+              routerLinkActive="active"
+              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
+              >Tecnologías</a
+            >
+          </li>
+          <li class="w-full">
+            <a
+              routerLink="/admin/upload-cv"
+              routerLinkActive="active"
+              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
+              >Curriculum Vitae</a
+            >
+          </li>
+          <li class="w-full">
+            <a
+              routerLink="/admin/upload-profile-image"
+              routerLinkActive="active"
+              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
+              >Imagen de Perfil</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <main class="admin-main flex-1 w-full p-2 md:p-8">
+      <div class="dashboard-content w-full">
+        <h2 class="text-xl md:text-2xl font-bold mb-2">
+          Bienvenido a tu panel de administración
+        </h2>
+        <p class="mb-4">
+          Desde aquí podrás gestionar el contenido de tu portfolio:
+        </p>
+
+        <div
+          class="dashboard-cards grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
+        >
+          <div
+            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
+          >
+            <h3 class="font-semibold text-lg mb-1">Proyectos</h3>
+            <p class="mb-2">Administra tus proyectos</p>
+            <button
+              routerLink="/admin/projects"
+              class="btn-red px-4 py-2 mt-auto"
+            >
+              Ir a Proyectos
+            </button>
+          </div>
+
+          <div
+            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
+          >
+            <h3 class="font-semibold text-lg mb-1">Tecnologías</h3>
+            <p class="mb-2">Gestiona las tecnologías disponibles</p>
+            <button
+              routerLink="/admin/technologies"
+              class="btn-red px-4 py-2 mt-auto"
+            >
+              Ir a Tecnologías
+            </button>
+          </div>
+
+          <div
+            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
+          >
+            <h3 class="font-semibold text-lg mb-1">Curriculum Vitae</h3>
+            <p class="mb-2">Sube o actualiza tu CV</p>
+            <button
+              routerLink="/admin/upload-cv"
+              class="btn-red px-4 py-2 mt-auto"
+            >
+              Gestionar CV
+            </button>
+          </div>
+
+          <div
+            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
+          >
+            <h3 class="font-semibold text-lg mb-1">Imagen de Perfil</h3>
+            <p class="mb-2">Actualiza tu foto de perfil</p>
+            <button
+              routerLink="/admin/upload-profile-image"
+              class="btn-red px-4 py-2 mt-auto"
+            >
+              Gestionar Imagen
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
