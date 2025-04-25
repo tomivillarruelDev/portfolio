@@ -24,7 +24,7 @@
     "angular-tabler-icons": "^2.46.0",
     "firebase": "^9.23.0",
     "ngx-skeleton-loader": "^7.0.0",
-    "ngx-sortablejs": "^11.1.0",
+    "ngx-sortablejs": "^14.0.0",
     "rxjs": "~7.8.0",
     "sortablejs": "^1.15.6",
     "svgls": "^0.0.10",
