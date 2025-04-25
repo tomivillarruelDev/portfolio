@@ -2,12 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
 import { TechnologyService } from '../../services/technology.service';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'app-technology-management',
-    templateUrl: './technology-management.component.html',
-    styleUrls: ['./technology-management.component.css'],
-    standalone: false
+  selector: 'app-technology-management',
+  templateUrl: './technology-management.component.html',
+  styleUrls: ['./technology-management.component.css'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
 })
 export class TechnologyManagementComponent implements OnInit {
   technologies: Technology[] = [];

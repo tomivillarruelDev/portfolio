@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { Education } from '../../interfaces/education.interface';
+import { CommonModule } from '@angular/common';
 // import { Education } from 'src/app/interfaces/education.interface';
 
 @Component({
     selector: 'app-education',
     templateUrl: './education.component.html',
     styleUrls: ['./education.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule]
 })
 export class EducationComponent {
 

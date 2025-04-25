@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-upload',
-    templateUrl: './upload.component.html',
-    styleUrls: ['./upload.component.css'],
-    standalone: false
+  selector: 'app-upload',
+  templateUrl: './upload.component.html',
+  styleUrls: ['./upload.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class UploadComponent {
   @Input() projectName: string = '';

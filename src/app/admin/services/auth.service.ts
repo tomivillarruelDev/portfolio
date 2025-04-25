@@ -1,79 +1,61 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable, BehaviorSubject, from, throwError } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import firebase from 'firebase/compat/app'; // Importar firebase para UserCredential
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // Usar un tipo más específico para el estado de autenticación (User | null)
-  private authStateSubject = new BehaviorSubject<firebase.User | null>(null);
-  // Exponer un observable del usuario actual, no solo un booleano
-  currentUser$: Observable<firebase.User | null> =
-    this.authStateSubject.asObservable();
-  // Exponer un observable booleano para conveniencia en plantillas/guards
-  isAuthenticated$: Observable<boolean> = this.currentUser$.pipe(
-    map((user) => !!user)
-  );
+  // Señal reactiva para el usuario autenticado
+  private readonly _currentUser = signal<firebase.User | null>(null);
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
+  // Computed para saber si está autenticado
+  readonly isAuthenticated = computed(() => !!this._currentUser());
+  readonly currentUser = computed(() => this._currentUser());
+
+  // Inyección moderna
+  private readonly afAuth = inject(AngularFireAuth);
+  private readonly router = inject(Router);
+
+  constructor() {
+    // Sincroniza el usuario autenticado con la señal reactiva
     this.afAuth.authState.subscribe((user) => {
-      this.authStateSubject.next(user);
+      this._currentUser.set(user);
     });
   }
 
   /**
-   * Inicia sesión con email y contraseña usando async/await.
+   * Inicia sesión con email y contraseña
    */
-  async login(
-    email: string,
-    password: string
-  ): Promise<firebase.auth.UserCredential> {
+  async login(email: string, password: string): Promise<firebase.auth.UserCredential> {
     try {
-      const credential = await this.afAuth.signInWithEmailAndPassword(
-        email,
-        password
-      );
-      // El observable authState se actualizará automáticamente por la suscripción en el constructor
-      // No es necesario llamar a this.authStateSubject.next(true) aquí
+      const credential = await this.afAuth.signInWithEmailAndPassword(email, password);
+      // La señal se actualiza automáticamente por el observable authState
       return credential;
     } catch (error) {
       console.error('Login failed:', error);
-      // Relanzar el error para que el componente que llama pueda manejarlo
-      throw error; // O un error más específico/amigable
-    }
-  }
-
-  /**
-   * Cierra la sesión usando async/await y redirige al login.
-   */
-  async logout(): Promise<void> {
-    try {
-      await this.afAuth.signOut();
-      // El observable authState se actualizará automáticamente
-      // Redirigir después del cierre de sesión exitoso
-      await this.router.navigate(['/admin/login']);
-    } catch (error) {
-      console.error('Logout failed:', error);
-      // Considerar si se debe relanzar o manejar aquí
       throw error;
     }
   }
 
   /**
-   * Verifica de forma síncrona si el usuario está autenticado.
-   * Útil para guards síncronos, pero prefiere usar el observable isAuthenticated$ cuando sea posible.
+   * Cierra la sesión y redirige al login
    */
-  checkAuthSync(): boolean {
-    return !!this.authStateSubject.value;
+  async logout(): Promise<void> {
+    try {
+      await this.afAuth.signOut();
+      await this.router.navigate(['/admin/login']);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      throw error;
+    }
   }
 
-  // Eliminar isAuthenticated() ya que isAuthenticated$ es la forma reactiva preferida.
-  // isAuthenticated(): Observable<boolean> { ... }
-
-  // Renombrar checkAuth a checkAuthSync para claridad.
-  // checkAuth(): boolean { ... }
+  /**
+   * Verifica de forma síncrona si el usuario está autenticado
+   */
+  checkAuthSync(): boolean {
+    return !!this._currentUser();
+  }
 }

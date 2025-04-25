@@ -7,12 +7,14 @@ import {
 } from '../../services/project.service';
 import { TechnologyService } from '../../services/technology.service';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-project-list',
-    templateUrl: './project-list.component.html',
-    styleUrls: ['./project-list.component.css'],
-    standalone: false
+  selector: 'app-project-list',
+  templateUrl: './project-list.component.html',
+  styleUrls: ['./project-list.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class ProjectListComponent implements OnInit {
   imageProjects: Project[] = [];

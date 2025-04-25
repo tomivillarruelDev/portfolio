@@ -1,6 +1,23 @@
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { inject, Injectable } from '@angular/core';
+import {
+  Database,
+  ref,
+  get,
+  set,
+  update,
+  remove,
+  push,
+  child,
+  query,
+  orderByChild,
+} from '@angular/fire/database';
+import {
+  Storage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from '@angular/fire/storage';
 
 import { Project } from './project.service';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
@@ -8,7 +25,7 @@ import { Technology } from 'src/app/shared/interfaces/technology.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class TechnologyService {
+export class  TechnologyService {
   private readonly defaultTechnologies: string[] = [
     'javascript',
     'typescript',
@@ -29,19 +46,17 @@ export class TechnologyService {
     'postgresql',
   ];
 
-  constructor(
-    private db: AngularFireDatabase,
-    private storage: AngularFireStorage
-  ) {}
+  // Inyección moderna con inject()
+  private db = inject(Database);
+  private storage = inject(Storage);
 
   /**
    * Obtiene todas las tecnologías ordenadas por el campo 'order'.
    */
   async getTechnologies(): Promise<Technology[]> {
     try {
-      const snapshot = await this.db
-        .list<Technology>('technologies')
-        .query.once('value');
+      const dbRef = ref(this.db, 'technologies');
+      const snapshot = await get(dbRef);
       const techs: Technology[] = [];
       snapshot.forEach((child) => {
         const val = child.val();
@@ -64,9 +79,8 @@ export class TechnologyService {
    */
   async getTechnologyById(id: string): Promise<Technology | undefined> {
     try {
-      const snapshot = await this.db
-        .object<Technology>(`technologies/${id}`)
-        .query.once('value');
+      const dbRef = ref(this.db, `technologies/${id}`);
+      const snapshot = await get(dbRef);
       const val = snapshot.val();
       return val ? { id, ...val } : undefined;
     } catch (error) {
@@ -94,8 +108,10 @@ export class TechnologyService {
         order: maxOrder + 1,
         icon: technology.icon ?? '',
       };
-      const ref = await this.db.list('technologies').push(techWithOrder);
-      return ref.key!;
+      const dbRef = ref(this.db, 'technologies');
+      const newRef = push(dbRef);
+      await set(newRef, techWithOrder);
+      return newRef.key!;
     } catch (error) {
       console.error('Error al crear tecnología:', error);
       throw new Error('No se pudo crear la tecnología');
@@ -110,7 +126,8 @@ export class TechnologyService {
       throw new Error('No se proporcionó un ID para actualizar la tecnología');
     try {
       const { id, ...data } = technology;
-      await this.db.object(`technologies/${id}`).update(data);
+      const dbRef = ref(this.db, `technologies/${id}`);
+      await update(dbRef, data);
     } catch (error) {
       console.error('Error al actualizar tecnología:', error);
       throw new Error('No se pudo actualizar la tecnología');
@@ -126,7 +143,8 @@ export class TechnologyService {
       if (tech?.icon && tech.icon.includes('firebase')) {
         await this.deleteIconFile(tech.icon);
       }
-      await this.db.object(`technologies/${id}`).remove();
+      const dbRef = ref(this.db, `technologies/${id}`);
+      await remove(dbRef);
       await this.reorderTechnologies();
     } catch (error) {
       console.error('Error al eliminar tecnología:', error);
@@ -141,9 +159,8 @@ export class TechnologyService {
     collectionName: string
   ): Promise<number> {
     try {
-      const snapshot = await this.db
-        .list<Project>(collectionName)
-        .query.once('value');
+      const dbRef = ref(this.db, collectionName);
+      const snapshot = await get(dbRef);
       if (!snapshot.exists()) return 0;
       const existingTechs = (await this.getTechnologies()).map((t) =>
         t.name.toLowerCase()
@@ -187,13 +204,14 @@ export class TechnologyService {
     try {
       const updates: any = {};
       this.defaultTechnologies.forEach((techName, index) => {
-        const newKey = this.db.createPushId();
+        const newKey = push(ref(this.db, 'technologies')).key;
         updates[`technologies/${newKey}`] = {
           name: techName,
           order: index + 1,
         };
       });
-      await this.db.object('/').update(updates);
+      const dbRef = ref(this.db, '/');
+      await update(dbRef, updates);
     } catch (error) {
       console.error('Error al inicializar tecnologías predeterminadas:', error);
     }
@@ -206,10 +224,11 @@ export class TechnologyService {
     try {
       const iconPath = iconUrl.split('/').pop();
       if (iconPath) {
-        await this.storage
-          .ref(`technology-icons/${iconPath}`)
-          .delete()
-          .toPromise();
+        const fileRef = storageRef(
+          this.storage,
+          `technology-icons/${iconPath}`
+        );
+        await deleteObject(fileRef);
       }
     } catch (error) {
       console.error('Error al eliminar el icono:', error);
@@ -225,7 +244,8 @@ export class TechnologyService {
     techs.forEach((tech, index) => {
       if (tech.id) updates[`technologies/${tech.id}/order`] = index + 1;
     });
-    await this.db.object('/').update(updates);
+    const dbRef = ref(this.db, '/');
+    await update(dbRef, updates);
   }
 
   /**
@@ -237,8 +257,9 @@ export class TechnologyService {
         .toLowerCase()
         .replace(/\s+/g, '-')}-${Date.now()}.${file.name.split('.').pop()}`;
       const filePath = `technology-icons/${fileName}`;
-      const task = await this.storage.upload(filePath, file);
-      const url = await this.storage.ref(filePath).getDownloadURL().toPromise();
+      const fileRef = storageRef(this.storage, filePath);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
       return url;
     } catch (error) {
       console.error('Error al subir el ícono:', error);

@@ -33,15 +33,16 @@
       </div>
 
       <div class="icons flex">
+        @for (social of socialValues; track $index) {
         <a
           [href]="social[1].url"
           target="_blank"
           class="icons__item"
           [ngStyle]="{ color: social[1].color }"
-          *ngFor="let social of socialValues"
         >
           <img [src]="social[1].icon" alt="social icon" /> {{ social[0] }}
         </a>
+        }
       </div>
     </div>
   </div>
@@ -86,7 +87,7 @@
           href="mailto:tomasadrianvillarruel@gmail.com"
           type="button"
           class="email__button send tippy-email"
-          [ngClass]="{ isActivated: isHovering }"
+          [ngClass]="{ isActivated: isHovering() }"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -111,8 +112,8 @@
           type="button"
           class="email__button tippy-send-email"
           (click)="copyToClipboard()"
-          (mouseover)="isHovering = true"
-          (mouseout)="isHovering = false"
+          (mouseover)="setHovering(true)"
+          (mouseout)="setHovering(false)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

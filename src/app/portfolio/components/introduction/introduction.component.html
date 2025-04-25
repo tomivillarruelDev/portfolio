@@ -1,12 +1,14 @@
-
 <section
   class="w-full lg:w-[740px] mx-auto animate__animated animate__fadeInUp py-16 lg:py-28"
 >
-  <div class="flex flex-col lg:flex-row items-center lg:justify-center lg:gap-x-6 gap-y-6">
+  <div
+    class="flex flex-col lg:flex-row items-center lg:justify-center lg:gap-x-6 gap-y-6"
+  >
     <!-- Contenedor principal con aspecto cuadrado pero que mostrará contenido circular -->
-    <div class="s1__image-container relative w-[200px] h-[200px] aspect-square ">
+    <div class="s1__image-container relative w-[200px] h-[200px] aspect-square">
       <!-- Contenedor para el skeleton loader con posición absoluta y forma circular -->
-      <div class="absolute inset-0 z-10 rounded-full overflow-hidden" *ngIf="!imageLoaded">
+      @if (!imageLoaded()) {
+      <div class="absolute inset-0 z-10 rounded-full overflow-hidden">
         <ngx-skeleton-loader
           [theme]="{
             height: '100%',
@@ -20,14 +22,15 @@
           appearance="circle"
         ></ngx-skeleton-loader>
       </div>
+      }
 
       <!-- Imagen con forma circular -->
       <img
-        [src]="profileImageUrl"
+        [src]="profileImageUrl()"
         alt="Tomás Villarruel photo"
         class="s2__profile-img rounded-full transition-opacity duration-500 w-full h-full object-cover"
-        [class.opacity-0]="!imageLoaded"
-        [class.opacity-100]="imageLoaded"
+        [class.opacity-0]="!imageLoaded()"
+        [class.opacity-100]="imageLoaded()"
         (load)="onImageLoad()"
         loading="lazy"
       />
@@ -88,7 +91,7 @@
           <img src="./assets/icons/linkedIn.svg" alt="LinkedIn" /> LinkedIn
         </a>
 
-        <a [href]="cvUrl" target="_blank" class="btn-red"> Curriculum </a>
+        <a [href]="cvUrl()" target="_blank" class="btn-red"> Curriculum </a>
       </div>
     </div>
   </div>

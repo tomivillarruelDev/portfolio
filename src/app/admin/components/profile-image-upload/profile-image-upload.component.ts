@@ -1,12 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileImageService } from '../../../shared/services/profile-image.service';
+import { CommonModule } from '@angular/common';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
-    selector: 'app-profile-image-upload',
-    templateUrl: './profile-image-upload.component.html',
-    styleUrls: ['./profile-image-upload.component.css'],
-    standalone: false
+  selector: 'app-profile-image-upload',
+  templateUrl: './profile-image-upload.component.html',
+  styleUrls: ['./profile-image-upload.component.css'],
+  standalone: true,
+  imports: [CommonModule, NgxSkeletonLoaderModule],
 })
 export class ProfileImageUploadComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;

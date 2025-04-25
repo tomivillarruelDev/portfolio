@@ -10,46 +10,17 @@
     >
       <nav class="admin-nav">
         <ul class="flex flex-col gap-2">
+          @for (item of navItems(); track item.route) {
           <li class="w-full">
             <a
-              routerLink="/admin/dashboard"
+              [routerLink]="item.route"
               routerLinkActive="active"
               class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-              >Dashboard</a
             >
+              {{ item.label }}
+            </a>
           </li>
-          <li class="w-full">
-            <a
-              routerLink="/admin/projects"
-              routerLinkActive="active"
-              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-              >Proyectos</a
-            >
-          </li>
-          <li class="w-full">
-            <a
-              routerLink="/admin/technologies"
-              routerLinkActive="active"
-              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-              >Tecnologías</a
-            >
-          </li>
-          <li class="w-full">
-            <a
-              routerLink="/admin/upload-cv"
-              routerLinkActive="active"
-              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-              >Curriculum Vitae</a
-            >
-          </li>
-          <li class="w-full">
-            <a
-              routerLink="/admin/upload-profile-image"
-              routerLinkActive="active"
-              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-              >Imagen de Perfil</a
-            >
-          </li>
+          }
         </ul>
       </nav>
     </div>
@@ -66,57 +37,21 @@
         <div
           class="dashboard-cards grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
         >
+          @for (card of dashboardCards(); track card.title) {
           <div
             class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
           >
-            <h3 class="font-semibold text-lg mb-1">Proyectos</h3>
-            <p class="mb-2">Administra tus proyectos</p>
-            <button
-              routerLink="/admin/projects"
-              class="btn-red px-4 py-2 mt-auto"
-            >
-              Ir a Proyectos
+            <h3 class="font-semibold text-lg mb-1">{{ card.title }}</h3>
+            <p class="mb-2">{{ card.description }}</p>
+            <button [routerLink]="card.route" class="btn-red px-4 py-2 mt-auto">
+              {{ card.buttonText }}
             </button>
           </div>
-
-          <div
-            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
-          >
-            <h3 class="font-semibold text-lg mb-1">Tecnologías</h3>
-            <p class="mb-2">Gestiona las tecnologías disponibles</p>
-            <button
-              routerLink="/admin/technologies"
-              class="btn-red px-4 py-2 mt-auto"
-            >
-              Ir a Tecnologías
-            </button>
+          } @empty {
+          <div class="text-center p-4 w-full">
+            No hay tarjetas disponibles en este momento.
           </div>
-
-          <div
-            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
-          >
-            <h3 class="font-semibold text-lg mb-1">Curriculum Vitae</h3>
-            <p class="mb-2">Sube o actualiza tu CV</p>
-            <button
-              routerLink="/admin/upload-cv"
-              class="btn-red px-4 py-2 mt-auto"
-            >
-              Gestionar CV
-            </button>
-          </div>
-
-          <div
-            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
-          >
-            <h3 class="font-semibold text-lg mb-1">Imagen de Perfil</h3>
-            <p class="mb-2">Actualiza tu foto de perfil</p>
-            <button
-              routerLink="/admin/upload-profile-image"
-              class="btn-red px-4 py-2 mt-auto"
-            >
-              Gestionar Imagen
-            </button>
-          </div>
+          }
         </div>
       </div>
     </main>

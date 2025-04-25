@@ -3,7 +3,6 @@ import { firstValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { firebaseConfig } from '../../firebase.config';
-import { finalize } from 'rxjs/operators';
 
 export interface Project {
   id?: string;
@@ -39,11 +38,24 @@ export class ProjectService {
     projectType: ProjectType = ProjectType.IMAGE
   ): Promise<Project[]> {
     try {
-      const projectsObject = await firstValueFrom(
-        this.db.object<{ [key: string]: Project }>(projectType).valueChanges()
-      );
-      const projectsArray = this.mapObjectToArray(projectsObject || {});
-      return this.sortProjectsByOrder(projectsArray);
+      // Usamos promise-based API en lugar de observables
+      const snapshot = await this.db.database.ref(projectType).once('value');
+      const projectsObject = snapshot.val() || {};
+
+      // Convertir objeto a array
+      const projectsArray = Object.entries(projectsObject).map(
+        ([key, value]) => ({
+          ...(value as object),
+          id: key,
+        })
+      ) as Project[];
+
+      // Ordenar por el campo order
+      return projectsArray.sort((a, b) => {
+        const orderA = a.order ?? Infinity;
+        const orderB = b.order ?? Infinity;
+        return orderA - orderB;
+      });
     } catch (error) {
       console.error(`Error fetching projects (${projectType}):`, error);
       throw new Error(`Could not fetch projects (${projectType})`);
@@ -58,9 +70,10 @@ export class ProjectService {
     projectType: ProjectType = ProjectType.IMAGE
   ): Promise<Project | null> {
     try {
-      const project = await firstValueFrom(
-        this.db.object<Project>(`${projectType}/${id}`).valueChanges()
-      );
+      const snapshot = await this.db.database
+        .ref(`${projectType}/${id}`)
+        .once('value');
+      const project = snapshot.val();
       return project ? { ...project, id } : null;
     } catch (error) {
       console.error(
@@ -80,17 +93,24 @@ export class ProjectService {
     projectType: ProjectType = ProjectType.IMAGE
   ): Promise<Project> {
     try {
-      const key = this.db.createPushId();
+      // Crear una nueva referencia con ID único
+      const newRef = this.db.database.ref(projectType).push();
+      const key = newRef.key!;
 
       // Clonar los datos para no modificar el objeto original
       let sanitizedData = { ...projectData };
 
-      // Reemplazar cualquier valor undefined con null o valor por defecto según el tipo
-      // Firebase no acepta undefined pero sí acepta null
+      // Reemplazar cualquier valor undefined con null o valor por defecto
       if (sanitizedData.page === undefined) sanitizedData.page = null;
       if (sanitizedData.photoURL === undefined) sanitizedData.photoURL = null;
       if (sanitizedData.order === undefined) {
-        sanitizedData.order = await this.getNextOrder(projectType);
+        // Obtener el siguiente orden
+        const projects = await this.getProjects(projectType);
+        const maxOrder = projects.reduce(
+          (max, p) => (p.order !== undefined && p.order > max ? p.order : max),
+          -1
+        );
+        sanitizedData.order = maxOrder + 1;
       }
 
       // Asegurar que technologies sea un array
@@ -98,8 +118,8 @@ export class ProjectService {
         sanitizedData.technologies = [];
       }
 
-      // Guardar en Firebase sin valores undefined
-      await this.db.object(`${projectType}/${key}`).set(sanitizedData);
+      // Guardar en Firebase
+      await newRef.set(sanitizedData);
       return { ...sanitizedData, id: key };
     } catch (error) {
       console.error(`Error creating project (${projectType}):`, error);
@@ -119,7 +139,7 @@ export class ProjectService {
     }
     try {
       const { id, ...projectData } = project;
-      await this.db.object(`${projectType}/${id}`).update(projectData);
+      await this.db.database.ref(`${projectType}/${id}`).update(projectData);
       return project;
     } catch (error) {
       console.error(
@@ -148,7 +168,7 @@ export class ProjectService {
           );
         }
       }
-      await this.db.object(`${projectType}/${id}`).remove();
+      await this.db.database.ref(`${projectType}/${id}`).remove();
     } catch (error) {
       console.error(`Error deleting project (${id}, ${projectType}):`, error);
       throw new Error(`Could not delete project (${id}, ${projectType})`);
@@ -164,8 +184,8 @@ export class ProjectService {
     projectType: ProjectType = ProjectType.IMAGE
   ): Promise<void> {
     try {
-      await this.db
-        .object(`${projectType}/${projectId}`)
+      await this.db.database
+        .ref(`${projectType}/${projectId}`)
         .update({ order: newOrder });
     } catch (error) {
       console.error(
@@ -214,31 +234,10 @@ export class ProjectService {
     const fileRef = this.storage.ref(filePath);
 
     try {
-      // 1. Subir la imagen
-      const uploadTask = this.storage.upload(filePath, file);
+      // Subir la imagen y esperar a que se complete
+      await this.storage.upload(filePath, file).task;
 
-      // 2. Esperar a que se complete la subida usando un Promise personalizado
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.snapshotChanges().subscribe({
-          next: (snapshot) => {
-            // Asegurarse de que snapshot no sea undefined antes de acceder a sus propiedades
-            if (snapshot) {
-              // Monitorear el progreso si se desea (opcional)
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log(`Upload progress: ${progress}%`);
-
-              if (snapshot.state === 'success') {
-                resolve();
-              }
-            }
-          },
-          error: (error) => reject(error),
-          complete: () => resolve(),
-        });
-      });
-
-      // 3. Implementar mecanismo de reintento para obtener la URL
+      // Implementar mecanismo de reintento para obtener la URL
       let downloadURL = '';
       let attempts = 0;
       const maxAttempts = 5;
@@ -246,14 +245,16 @@ export class ProjectService {
 
       while (attempts < maxAttempts) {
         try {
-          // Pequeña pausa antes de solicitar la URL (crucial para Firebase Storage)
-          await new Promise((resolve) => setTimeout(resolve, retryDelay));
-          downloadURL = await firstValueFrom(fileRef.getDownloadURL());
+          // Pequeña pausa antes de solicitar la URL
+          await new Promise((r) => setTimeout(r, retryDelay));
+          downloadURL = await this.storage
+            .ref(filePath)
+            .getDownloadURL()
+            .toPromise();
 
           if (downloadURL) {
             console.log(
-              `Image upload successful after ${attempts + 1} attempt(s):`,
-              downloadURL
+              `Image upload successful after ${attempts + 1} attempt(s)`
             );
             return downloadURL;
           }
@@ -289,44 +290,11 @@ export class ProjectService {
     if (!imageUrl) return;
     try {
       const fileRef = this.storage.refFromURL(imageUrl);
-      await firstValueFrom(fileRef.delete());
+      await fileRef.delete().toPromise();
     } catch (error: any) {
       if (error.code !== 'storage/object-not-found') {
         console.error('Error deleting image from storage:', error);
       }
     }
-  }
-
-  /**
-   * Calcula el siguiente número de orden basado en los proyectos existentes.
-   */
-  private async getNextOrder(projectType: ProjectType): Promise<number> {
-    const projects = await this.getProjects(projectType);
-    const maxOrder = projects.reduce(
-      (max, p) => (p.order !== undefined && p.order > max ? p.order : max),
-      -1
-    );
-    return maxOrder + 1;
-  }
-
-  /**
-   * Convierte un objeto de proyectos (clave: valor) en un array de proyectos.
-   */
-  private mapObjectToArray(projectObj: { [key: string]: Project }): Project[] {
-    return Object.entries(projectObj).map(([key, value]) => ({
-      ...value,
-      id: key,
-    }));
-  }
-
-  /**
-   * Ordena un array de proyectos basado en su propiedad 'order'.
-   */
-  private sortProjectsByOrder(projects: Project[]): Project[] {
-    return projects.sort((a, b) => {
-      const orderA = a.order ?? Infinity;
-      const orderB = b.order ?? Infinity;
-      return orderA - orderB;
-    });
   }
 }
