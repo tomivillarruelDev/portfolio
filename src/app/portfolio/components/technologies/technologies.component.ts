@@ -6,7 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 
-import Iconify from '@iconify/iconify';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
 import { TechnologyService } from 'src/app/admin/services/technology.service';
 
