@@ -1,9 +1,10 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyDb3U6ARJJwMyyqXVyr1NS5d3BDl2U67Wg',
-  authDomain: 'tomas-villarruel-portfolio.firebaseapp.com',
-  databaseURL: 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com',
-  projectId: 'tomas-villarruel-portfolio',
-  storageBucket: 'tomas-villarruel-portfolio.appspot.com',
-  messagingSenderId: '360034696014',
-  appId: '1:360034696014:web:8ac6b1bf9b4bc1a9c375c7',
+  apiKey: "AIzaSyBC8T-QfvojZnK92kVrY8TZkRlVMQskCdE",
+  authDomain: "tomas-villarruel-portfolio.firebaseapp.com",
+  databaseURL: "https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com",
+  projectId: "tomas-villarruel-portfolio",
+  storageBucket: "tomas-villarruel-portfolio.appspot.com",
+  messagingSenderId: "353065162885",
+  appId: "1:353065162885:web:c5d20d4b503d8a206af1ec",
+  measurementId: "G-R103VLWNZW"
 };
