@@ -10,16 +10,17 @@
 
   <div class="flex flex-col md:flex-row">
     <div class="flex flex-wrap md:flex-col text-center md:gap-y-1 md:w-4/12">
+      @for (course of courses; track $index) {
       <div
         class="w-6/12 md:w-full s5-btn flex flex-row items-center justify-center"
-        *ngFor="let course of courses; let idx = index"
-        (click)="seeInfo(idx)"
-        [ngClass]="{ 's5__course-active': idx == selected_idx }"
+        (click)="seeInfo($index)"
+        [ngClass]="{ 's5__course-active': $index == selected_idx }"
       >
         <p class="s5__course-title text-sm md:text-balance text-white/60 align-middle">
           {{ course.name }}
         </p>
       </div>
+    }
     </div>
 
     <div class="w-full s5__course-container flex items-center">

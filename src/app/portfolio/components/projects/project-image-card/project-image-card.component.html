@@ -1,7 +1,5 @@
-<article
-  class="flex flex-col md:flex-row gap-6 h-auto md:h-60 mb-10"
-  *ngFor="let project of projects"
->
+@for (project of projects(); track $index) {
+<article class="flex flex-col md:flex-row gap-6 h-auto md:h-60 mb-10">
   <!-- Contenedor de imagen con efecto de carga -->
   <a
     class="image-container relative overflow-hidden"
@@ -9,8 +7,8 @@
     target="_blank"
   >
     <!-- Usar ngx-skeleton-loader con animación pulse -->
+    @if (!imagesLoaded()[project.id || '']) {
     <ngx-skeleton-loader
-      *ngIf="!imagesLoaded[project.id || '']"
       [theme]="{
         height: '100%',
         width: '100%',
@@ -21,12 +19,12 @@
       count="1"
       appearance="line"
     ></ngx-skeleton-loader>
-
+    }
     <!-- Imagen con efecto de fade-in al cargar -->
     <img
       class="slide-image w-full h-full object-cover transition-opacity duration-500"
-      [class.opacity-0]="!imagesLoaded[project.id || '']"
-      [class.opacity-100]="imagesLoaded[project.id || '']"
+      [class.opacity-0]="!imagesLoaded()[project.id || '']"
+      [class.opacity-100]="imagesLoaded()[project.id || '']"
       [src]="project.photoURL"
       [alt]="'Imagen del proyecto ' + project.name"
       (load)="onImageLoad(project.id || '')"
@@ -54,6 +52,7 @@
         class="button-links font-semibold onest"
         >Código</a
       >
+      @if (project.page) {
       <a
         [href]="project.page"
         target="_blank"
@@ -72,6 +71,8 @@
           </svg>
         </span>
       </a>
+      }
     </div>
   </div>
 </article>
+}

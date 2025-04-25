@@ -1,43 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, signal, inject } from '@angular/core';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
+import { TechnologiesComponent } from '../../technologies/technologies.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
     selector: 'portfolio-projects-image-card',
     templateUrl: './project-image-card.component.html',
     styleUrls: ['./project-image-card.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, TechnologiesComponent, NgxSkeletonLoaderModule],
 })
-export class ProjectImageCardComponent implements OnInit {
+export class ProjectImageCardComponent {
+  // Señal reactiva para los proyectos
+  readonly projects = signal<Project[]>([]);
+  // Señal reactiva para el estado de carga de imágenes
+  readonly imagesLoaded = signal<{ [key: string]: boolean }>({});
 
-  public projects: Project[] = [];
+  // Inyección moderna
+  private readonly firebaseService = inject(FirebaseService);
 
-  imagesLoaded: { [key: string]: boolean } = {};
+  constructor() {
+    this.loadProjects();
+  }
 
-  constructor( private firebaseService: FirebaseService ) { }
-
-  async ngOnInit(): Promise<void> {
-    this.projects = await this.getProjects();
-    this.projects.forEach(project => {
-      if (project.id) {
-        this.imagesLoaded[project.id] = false;
-      }
+  private async loadProjects() {
+    const projects = await this.firebaseService.getProjects('projects-image');
+    this.projects.set(projects);
+    // Inicializar el estado de carga de imágenes
+    const loaded: { [key: string]: boolean } = {};
+    projects.forEach(project => {
+      if (project.id) loaded[project.id] = false;
     });
+    this.imagesLoaded.set(loaded);
   }
 
   onImageLoad(projectId: string): void {
-    // Marcar la imagen como cargada
-    this.imagesLoaded[projectId] = true;
+    // Marcar la imagen como cargada de forma reactiva
+    this.imagesLoaded.update(state => ({ ...state, [projectId]: true }));
   }
 
-  public getImageProject( projectName: string ): string {
+  getImageProject(projectName: string): string {
     let nameWithoutSpaces = projectName.replace(/\s/g, '');
-    let nameWithoutAccents = nameWithoutSpaces.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let nameWithoutAccents = nameWithoutSpaces.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     return `./assets/projects/${nameWithoutAccents.toLowerCase()}.png`;
-  }
-
-  private async getProjects(): Promise<Project[]> {
-    const resp = await this.firebaseService.getProjects('projects-image');
-    return resp;
   }
 }
