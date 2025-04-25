@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAEYk9bPrba-FGYe0QqQ23lGiTw4b44ZEo',
+  apiKey: 'AIzaSyDb3U6ARJJwMyyqXVyr1NS5d3BDl2U67Wg',
   authDomain: 'tomas-villarruel-portfolio.firebaseapp.com',
   databaseURL: 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com',
   projectId: 'tomas-villarruel-portfolio',
