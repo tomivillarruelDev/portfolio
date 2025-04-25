@@ -4,9 +4,10 @@ import { Technology } from 'src/app/shared/interfaces/technology.interface';
 import { TechnologyService } from '../../services/technology.service';
 
 @Component({
-  selector: 'app-technology-management',
-  templateUrl: './technology-management.component.html',
-  styleUrls: ['./technology-management.component.css'],
+    selector: 'app-technology-management',
+    templateUrl: './technology-management.component.html',
+    styleUrls: ['./technology-management.component.css'],
+    standalone: false
 })
 export class TechnologyManagementComponent implements OnInit {
   technologies: Technology[] = [];

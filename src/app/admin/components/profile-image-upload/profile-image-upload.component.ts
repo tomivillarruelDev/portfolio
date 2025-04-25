@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { ProfileImageService } from '../../../shared/services/profile-image.service';
 
 @Component({
-  selector: 'app-profile-image-upload',
-  templateUrl: './profile-image-upload.component.html',
-  styleUrls: ['./profile-image-upload.component.css'],
+    selector: 'app-profile-image-upload',
+    templateUrl: './profile-image-upload.component.html',
+    styleUrls: ['./profile-image-upload.component.css'],
+    standalone: false
 })
 export class ProfileImageUploadComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;

@@ -9,9 +9,10 @@ import { TechnologyService } from '../../services/technology.service';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.css'],
+    selector: 'app-project-list',
+    templateUrl: './project-list.component.html',
+    styleUrls: ['./project-list.component.css'],
+    standalone: false
 })
 export class ProjectListComponent implements OnInit {
   imageProjects: Project[] = [];

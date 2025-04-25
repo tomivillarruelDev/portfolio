@@ -5,9 +5,10 @@ import { ProfileImageService } from '../../../shared/services/profile-image.serv
 import tippy from 'tippy.js';
 
 @Component({
-  selector: 'app-introduction',
-  templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.css'],
+    selector: 'app-introduction',
+    templateUrl: './introduction.component.html',
+    styleUrls: ['./introduction.component.css'],
+    standalone: false
 })
 export class IntroductionComponent implements AfterViewInit, OnInit {
   cvUrl: string = ''; // URL por defecto

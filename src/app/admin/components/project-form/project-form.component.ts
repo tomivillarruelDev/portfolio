@@ -15,9 +15,10 @@ import { TechnologyService } from '../../services/technology.service';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
 
 @Component({
-  selector: 'app-project-form',
-  templateUrl: './project-form.component.html',
-  styleUrls: ['./project-form.component.css'],
+    selector: 'app-project-form',
+    templateUrl: './project-form.component.html',
+    styleUrls: ['./project-form.component.css'],
+    standalone: false
 })
 export class ProjectFormComponent implements OnInit {
   projectForm: FormGroup;

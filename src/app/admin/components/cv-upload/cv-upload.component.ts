@@ -10,9 +10,10 @@ import { Router } from '@angular/router';
 import { CvService } from '../../../shared/services/cv.service';
 
 @Component({
-  selector: 'app-cv-upload',
-  templateUrl: './cv-upload.component.html',
-  styleUrls: ['./cv-upload.component.css'],
+    selector: 'app-cv-upload',
+    templateUrl: './cv-upload.component.html',
+    styleUrls: ['./cv-upload.component.css'],
+    standalone: false
 })
 export class CvUploadComponent implements OnInit {
   selectedFile: File | null = null;

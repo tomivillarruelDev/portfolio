@@ -13,9 +13,10 @@ import tippy from 'tippy.js';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
-  selector: 'app-technologies',
-  templateUrl: './technologies.component.html',
-  styleUrls: ['./technologies.component.css'],
+    selector: 'app-technologies',
+    templateUrl: './technologies.component.html',
+    styleUrls: ['./technologies.component.css'],
+    standalone: false
 })
 export class TechnologiesComponent implements OnInit, AfterViewChecked {
   @Input() technologies: string[] = [];

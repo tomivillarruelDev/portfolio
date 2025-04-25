@@ -3,9 +3,10 @@ import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 
 @Component({
-  selector: 'portfolio-card-projects',
-  templateUrl: './project-card.component.html',
-  styleUrls: ['./project-card.component.css'],
+    selector: 'portfolio-card-projects',
+    templateUrl: './project-card.component.html',
+    styleUrls: ['./project-card.component.css'],
+    standalone: false
 })
 export class ProjectCardComponent implements OnInit {
   projects: Project[] = [];

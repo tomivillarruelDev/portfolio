@@ -3,9 +3,10 @@ import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 
 @Component({
-  selector: 'portfolio-projects-image-card',
-  templateUrl: './project-image-card.component.html',
-  styleUrls: ['./project-image-card.component.css']
+    selector: 'portfolio-projects-image-card',
+    templateUrl: './project-image-card.component.html',
+    styleUrls: ['./project-image-card.component.css'],
+    standalone: false
 })
 export class ProjectImageCardComponent implements OnInit {
 
