@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     return this.authService.isAuthenticated$.pipe(
       take(1), // Tomar solo el primer valor emitido para evitar múltiples suscripciones
       map((isAuthenticated) => {
-        if (!isAuthenticated) {
+        if (isAuthenticated) {
           return true;
         } else {
           // Redirigir a la página de login si no está autenticado
