@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 // Imports de Firebase para el almacenamiento
@@ -19,26 +19,20 @@ import { TechnologyManagementComponent } from './components/technology-managemen
 import { CvUploadComponent } from './components/cv-upload/cv-upload.component';
 import { ProfileImageUploadComponent } from './components/profile-image-upload/profile-image-upload.component';
 
-@NgModule({
-  declarations: [
-    LoginComponent,
-    DashboardComponent,
-    ProjectListComponent,
-    ProjectFormComponent,
-    UploadComponent,
-    TechnologyManagementComponent,
-    CvUploadComponent,
-    ProfileImageUploadComponent,
-  ],
-  imports: [
-    CommonModule,
-    AdminRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgxSkeletonLoaderModule,
-    // Configuración de Firebase para el almacenamiento
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideStorage(() => getStorage()),
-  ],
-})
+@NgModule({ declarations: [
+        LoginComponent,
+        DashboardComponent,
+        ProjectListComponent,
+        ProjectFormComponent,
+        UploadComponent,
+        TechnologyManagementComponent,
+        CvUploadComponent,
+        ProfileImageUploadComponent,
+    ], imports: [CommonModule,
+        AdminRoutingModule,
+        ReactiveFormsModule,
+        NgxSkeletonLoaderModule,
+        // Configuración de Firebase para el almacenamiento
+        provideFirebaseApp(() => initializeApp(firebaseConfig)),
+        provideStorage(() => getStorage())], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AdminModule {}
