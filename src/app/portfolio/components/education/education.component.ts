@@ -1,82 +1,32 @@
 import { Component } from '@angular/core';
-import { Education } from '../../interfaces/education.interface';
 import { CommonModule } from '@angular/common';
-// import { Education } from 'src/app/interfaces/education.interface';
+
+interface EducationEntry {
+  year: string;
+  title: string;
+  platform: string;
+}
 
 @Component({
-    selector: 'app-education',
-    templateUrl: './education.component.html',
-    styleUrls: ['./education.component.css'],
-    standalone: true,
-    imports: [CommonModule]
+  selector: 'app-education',
+  templateUrl: './education.component.html',
+  styleUrls: ['./education.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class EducationComponent {
+  educations: EducationEntry[] = [
+    { year: 'Dic 2023', title: 'Angular: De cero a experto', platform: 'Udemy · Fernando Herrera' },
+    { year: '2023', title: 'Análisis de datos con Python', platform: 'Platzi' },
+    { year: '2023', title: 'Testing ágil', platform: 'Udemy' },
+    { year: '2022', title: 'Diplomatura — Programador Web Full Stack', platform: 'Universidad Provincial de Córdoba' },
+    { year: '2022', title: 'Programación web con JavaScript', platform: 'Platzi' },
+    { year: '2021', title: 'CSS avanzado y diseño responsive', platform: 'Udemy' },
+  ];
 
-  courses: Education[] = [
-    {
-      name: 'Angular: De cero a experto',
-      company: 'Udemy',
-      date: 'Diciembre - 2023',
-      teacher: 'Fernando Herrera',
-      description: 'TypeScript, RXJS, SPA, Signals, componentes, directivas, servicios, mapas, JWT, autenticación, despliegues, mongo, Git, GitHub y mucho más'
-    },
-    {
-      name: 'Análisis de datos con Python',
-      company: 'Union Informática',
-      date: 'Agosto - 2023',
-      teacher: 'Federico Fortado',
-      description: 'Python, Pandas, Numpy, Matplotlib, Seaborn, Scipy, Scikit-learn'
-    },
-    {
-      name: 'Testing ágil',
-      company: 'Universidad Tecnológica Nacional Facultad Regional Córdoba',
-      date: 'Junio - 2023',
-      teacher: 'Ing. Fanny Montoya',
-      description: 'Unit Testing, Integration Testing, Metodologías ágiles, Scrum'
-    },
-    {
-      name: 'Programación web con JavaScript',
-      company: 'Universidad Tecnológica Nacional Facultad Regional Resistencia',
-      date: 'Junio - 2023',
-      teacher: 'Lorena Paula Bernis',
-      description: 'Fundamentos de JavaScript, DOM, JSON, etc.'
+  private catClasses = ['c-fe', 'c-dat', 'c-be', 'c-edu', 'c-fe', 'c-fe'];
+  private catLabels  = ['Frontend', 'Data', 'Backend', 'Formal', 'Frontend', 'Frontend'];
 
-
-    },
-    {
-      name: 'Diplomatura de Programador Web Full Stack',
-      company: 'Universidad Tecnológica Nacional Facultad Regional Resistencia',
-      date: 'Enero- 2023',
-      teacher: 'Lorena Paula Bernis',
-      description: 'Consto de tres cursos: Programación Web Inicial, Programación Web Nivel Medio con PHP y MySQL, Programación Web Avanzada con PHP y MySQL. Me proporcionó conocimientos en HTML, CSS, Bootstrap, JavaScript, PHP, POO, SQL, MySQL, etc.'
-    },
-    {
-      name: 'Introducción a la Programación Web',
-      company: 'Escuela de Oficios de la Universidad Nacional de Córdoba',
-      date: 'Noviembre - 2022',
-      teacher: 'Ing. Malena Luján',
-      description: 'Me permitió establecer una base sólida para el desarrollo web con HTML, CSS y JavaScript'
-    },
-  ]
-
-  course: Education = {
-    name: '',
-    company: '',
-    date: '',
-    description: ''
-  }
-  selected_idx: number = 0
-
-  seeInfo( idx: number ) {
-    let course = this.courses[idx]
-    this.selected_idx = idx
-    this.course = course
-  }
-
-  constructor() { }
-
-  ngOnInit(){
-    this.course = this.courses[0]
-  }
-
+  getCatClass(i: number): string { return this.catClasses[i] ?? 'c-fe'; }
+  getCatLabel(i: number): string { return this.catLabels[i]  ?? 'Frontend'; }
 }

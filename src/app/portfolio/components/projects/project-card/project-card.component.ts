@@ -1,7 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
-import { TechnologiesComponent } from '../../technologies/technologies.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,7 +8,7 @@ import { CommonModule } from '@angular/common';
     templateUrl: './project-card.component.html',
     styleUrls: ['./project-card.component.css'],
     standalone: true,
-    imports: [CommonModule, TechnologiesComponent]
+    imports: [CommonModule]
 })
 export class ProjectCardComponent {
   // Señales reactivas para los proyectos y el estado de la UI

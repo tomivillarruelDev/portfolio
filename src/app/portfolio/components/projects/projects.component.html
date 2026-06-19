@@ -1,15 +1,115 @@
+<section id="projects" style="overflow-x:clip;">
 
-
-
-<section id="s2" class="w-full lg:w-[740px] mx-auto pb-24">
-  <div class="col-auto">
-    <p class="text-red mb-6">
-        02. <span class=" font-semibold mb-4 items-center text-2xl onest text-white">Mis proyectos</span>
-    </p>
+  <div class="container">
+    <div class="projects-header reveal">
+      <p class="section-label">Trabajo selecto</p>
+      <h2 class="section-title">Proyectos destacados</h2>
+      <p class="section-desc">Productos reales. Problemas reales. Resultados medibles.</p>
+    </div>
   </div>
 
-  <portfolio-projects-image-card></portfolio-projects-image-card>
+  @for (project of featuredProjects(); track project.name; let i = $index) {
+    @if (i < 2) {
+      <div class="proj-scene" [class.reverse]="i % 2 === 1" [class.reveal]="true" [attr.data-n]="i === 0 ? '01' : '02'">
 
-  <portfolio-card-projects></portfolio-card-projects>
+        <div class="proj-stage">
+          <!-- Orbit rings -->
+          <div class="proj-orbit"></div>
+          <div class="proj-orbit-2"></div>
+
+          <!-- Floating badges -->
+          @for (tech of project.technologies.slice(0,4); track tech; let bi = $index) {
+            <div class="proj-badge" [ngClass]="'pb-' + (bi+1)">
+              <span class="tech-ic {{ getTechClass(tech) }}">{{ getTechAbbr(tech) }}</span>
+              {{ tech }}
+            </div>
+          }
+
+          <!-- Metric chips (static for now — could come from Firebase) -->
+          <div class="proj-chip pc-1">
+            <div class="proj-chip-val">{{ i === 0 ? '&lt;1.2s' : '+180%' }}</div>
+            <div class="proj-chip-lab">{{ i === 0 ? 'Load time' : 'Tráfico' }}</div>
+          </div>
+          <div class="proj-chip pc-2">
+            <div class="proj-chip-val">{{ i === 0 ? '200K+' : '3.1s' }}</div>
+            <div class="proj-chip-lab">{{ i === 0 ? 'Contenidos' : 'FCP' }}</div>
+          </div>
+
+          <!-- Browser mockup -->
+          <div class="proj-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots">
+                <div class="browser-dot dot-r"></div>
+                <div class="browser-dot dot-y"></div>
+                <div class="browser-dot dot-g"></div>
+              </div>
+              <div class="browser-bar">
+                <span style="display:inline-flex;align-items:center;gap:4px;color:#6b7280">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  {{ project.page || 'github.com/' + project.name.toLowerCase() }}
+                </span>
+              </div>
+            </div>
+            <div class="browser-screen">
+              @if (project.photoURL) {
+                <img [src]="project.photoURL" [alt]="project.name"
+                     style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy"/>
+              } @else {
+                <div class="proj-screen-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.25">
+                    <rect x="3" y="3" width="18" height="14" rx="2"/>
+                    <path d="M8 21h8M12 17v4"/>
+                  </svg>
+                </div>
+              }
+            </div>
+            <div class="proj-glow"></div>
+          </div>
+        </div>
+
+        <!-- Narrative -->
+        <div class="proj-narrative">
+          <p class="proj-eyebrow">Proyecto 0{{ i + 1 }}</p>
+          <h3 class="proj-name">{{ project.name }}</h3>
+          <p class="proj-body">{{ project.description }}</p>
+          <div class="proj-stack-row">
+            @for (tech of project.technologies; track tech) {
+              <span class="stack-tag">{{ tech }}</span>
+            }
+          </div>
+          <div class="proj-links">
+            @if (project.page) {
+              <a [href]="project.page" target="_blank" class="proj-link proj-link-primary">Ver proyecto &rarr;</a>
+            }
+            <a [href]="project.github" target="_blank" class="proj-link proj-link-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+      </div>
+    }
+  }
+
+  @if (featuredProjects().length === 0) {
+    <div style="text-align:center;padding:120px 0;color:var(--muted);">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  }
+
+  <!-- Mid CTA -->
+  <div class="mid-cta reveal container" style="padding-top:0;">
+    <p class="mid-cta-text">¿Te convencieron los proyectos? <span>Construyamos el tuyo.</span></p>
+    <a href="#contact" class="btn-primary" style="margin:0 auto;width:fit-content;">Hablemos ahora</a>
+  </div>
+
+  <!-- More projects -->
+  <div class="container" style="margin-top:0;">
+    <div class="small-projects reveal">
+      <p class="small-projects-label">Más proyectos</p>
+      <portfolio-card-projects></portfolio-card-projects>
+    </div>
+  </div>
 
 </section>

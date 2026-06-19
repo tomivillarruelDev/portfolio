@@ -1,98 +1,81 @@
-<section
-  class="w-full lg:w-[740px] mx-auto animate__animated animate__fadeInUp py-16 lg:py-28"
->
-  <div
-    class="flex flex-col lg:flex-row items-center lg:justify-center lg:gap-x-6 gap-y-6"
-  >
-    <!-- Contenedor principal con aspecto cuadrado pero que mostrará contenido circular -->
-    <div class="s1__image-container relative w-[200px] h-[200px] aspect-square">
-      <!-- Contenedor para el skeleton loader con posición absoluta y forma circular -->
-      @if (!imageLoaded()) {
-      <div class="absolute inset-0 z-10 rounded-full overflow-hidden">
-        <ngx-skeleton-loader
-          [theme]="{
-            height: '100%',
-            width: '100%',
-            'border-radius': '50%',
-            'background-color': 'rgba(255, 255, 255, 0.15)',
-            'margin-bottom': '0'
-          }"
-          animation="pulse"
-          count="1"
-          appearance="circle"
-        ></ngx-skeleton-loader>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<section id="hero">
+  <div class="orb hero-orb-1"></div>
+  <div class="orb hero-orb-2"></div>
+  <div class="container">
+    <div class="hero-grid">
+
+      <div class="hero-content">
+        <div class="hero-badge">Disponible para nuevos proyectos</div>
+        <h1 class="hero-title">
+          Código que<br>
+          <span class="gradient-text" id="heroGradient">convierte.</span>
+        </h1>
+        <p class="hero-tagline">
+          Soy Tomás Villarruel, desarrollador Full Stack de Córdoba. Construyo productos digitales que combinan ingeniería sólida con experiencias que la gente quiere usar.
+        </p>
+        <p class="hero-differentiator">No solo escribo código — resuelvo problemas de negocio.</p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary" (click)="scrollToProjects()">
+            Ver mi trabajo
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#contact" class="btn-outline">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 5.5l6 4 6-4" stroke="currentColor" stroke-width="1.5"/></svg>
+            Hablemos
+          </a>
+          <a [href]="cvUrl()" target="_blank" class="btn-outline" aria-label="Descargar CV">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            CV
+          </a>
+        </div>
       </div>
-      }
 
-      <!-- Imagen con forma circular -->
-      <img
-        [src]="profileImageUrl()"
-        alt="Tomás Villarruel photo"
-        class="s2__profile-img rounded-full transition-opacity duration-500 w-full h-full object-cover"
-        [class.opacity-0]="!imageLoaded()"
-        [class.opacity-100]="imageLoaded()"
-        (load)="onImageLoad()"
-        loading="lazy"
-      />
-    </div>
-
-    <div class="w-6/10">
-      <p class="flex row">
-        <span class="text-red"
-          >01.
-          <span class="text-white/85">Hola, soy</span>
-        </span>
-        <span class="onest text-white font-bold text-4xl my-0 pb-6 lg:pb-6">
-          Tomás Villarruel
-        </span>
-      </p>
-
-      <p class="text-xl text-wrap max-w-[700px] text-white/70">
-        <span class="text-white/85"> Desarrollador Web Full Stack.</span>
-        <span class="text-white/80">
-          De <span class="">Córdoba </span>Argentina.</span
-        >
-        <span class="opacity-75">
-          Especializado en crear aplicaciones únicas</span
-        >
-      </p>
-
-      <div
-        class="icons flex justify-center lg:justify-start items-center flex-wrap sm:flex-nowrap"
-      >
-        <span class="icons__item tippy-work">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-mood-check"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M20.925 13.163a8.998 8.998 0 0 0 -8.925 -10.163a9 9 0 0 0 0 18"
-            />
-            <path d="M9 10h.01" />
-            <path d="M15 10h.01" />
-            <path d="M9.5 15c.658 .64 1.56 1 2.5 1s1.842 -.36 2.5 -1" />
-            <path d="M15 19l2 2l4 -4" />
-          </svg>
-        </span>
-        <a
-          href="https://www.linkedin.com/in/tomasvillarruel/"
-          target="_blank"
-          class="icons__item text-white/70"
-        >
-          <img src="./assets/icons/linkedIn.svg" alt="LinkedIn" /> LinkedIn
-        </a>
-
-        <a [href]="cvUrl()" target="_blank" class="btn-red"> Curriculum </a>
+      <div class="hero-avatar-wrap">
+        <div class="hero-avatar-glow"></div>
+        <div class="hero-avatar-ring">
+          <div class="hero-avatar-ring-inner"></div>
+        </div>
+        <div class="hero-avatar">
+          @if (profileImageUrl()) {
+            <img [src]="profileImageUrl()" alt="Tomás Villarruel"
+                 (load)="onImageLoad()" [class.loaded]="imageLoaded()"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+          } @else {
+            <svg width="200" height="210" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1;" aria-label="Tomás Villarruel">
+              <ellipse cx="100" cy="200" rx="70" ry="40" fill="#1a0d3d"/>
+              <rect x="40" y="168" width="120" height="40" rx="20" fill="#2d1a5e"/>
+              <path d="M80 168 Q100 180 120 168" fill="#7c3aed" opacity="0.6"/>
+              <rect x="86" y="148" width="28" height="28" rx="8" fill="#c8a882"/>
+              <ellipse cx="100" cy="118" rx="48" ry="52" fill="#d4a574"/>
+              <path d="M52 110 Q54 64 100 62 Q146 64 148 110 Q144 80 140 72 Q120 58 100 58 Q80 58 60 72 Q56 80 52 110Z" fill="#2c1810"/>
+              <ellipse cx="100" cy="72" rx="42" ry="16" fill="#2c1810"/>
+              <path d="M76 100 Q84 96 92 100" fill="none" stroke="#3d2010" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M108 100 Q116 96 124 100" fill="none" stroke="#3d2010" stroke-width="2.5" stroke-linecap="round"/>
+              <ellipse cx="84" cy="112" rx="10" ry="9" fill="white"/>
+              <ellipse cx="116" cy="112" rx="10" ry="9" fill="white"/>
+              <circle cx="84" cy="113" r="6" fill="#4a2c14"/>
+              <circle cx="116" cy="113" r="6" fill="#4a2c14"/>
+              <circle cx="85" cy="113" r="3" fill="#0d0208"/>
+              <circle cx="117" cy="113" r="3" fill="#0d0208"/>
+              <circle cx="87" cy="111" r="1.5" fill="white" opacity="0.8"/>
+              <circle cx="119" cy="111" r="1.5" fill="white" opacity="0.8"/>
+              <path d="M97 118 Q100 130 103 118" fill="none" stroke="#b8896a" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M94 128 Q100 132 106 128" fill="none" stroke="#b8896a" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M84 138 Q100 150 116 138" fill="none" stroke="#9a6040" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="52" cy="118" rx="8" ry="10" fill="#c8a882"/>
+              <ellipse cx="148" cy="118" rx="8" ry="10" fill="#c8a882"/>
+            </svg>
+          }
+        </div>
       </div>
+
     </div>
+  </div>
+
+  <div class="hero-scroll">
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none"><rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" stroke-width="1.5" opacity="0.4"/><circle cx="8" cy="8" r="2.2" fill="currentColor" opacity="0.6"><animate attributeName="cy" values="8;14;8" dur="1.9s" repeatCount="indefinite"/></circle></svg>
+    Scroll
   </div>
 </section>

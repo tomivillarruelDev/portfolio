@@ -1,43 +1,20 @@
-<nav class="animate__animated animate__fadeIn">
-  <div class="navbar-container">
-    <!-- Botón de menú móvil -->
-    <button
-      type="button"
-      class="menu-toggle"
-      aria-label="Toggle menu"
-      (click)="toggleMenu()"
-    >
-      <div class="menu-icon" [ngClass]="{ active: menuActive() }">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </button>
+<nav id="nav">
+  <a href="#hero" class="nav-logo" style="text-decoration:none;" (click)="scrollTo('hero')">TV.</a>
 
-    <!-- Overlay que aparece detrás del menú en móviles -->
-    <div
-      class="navbar-overlay"
-      [ngClass]="{ active: menuActive() }"
-      (click)="closeMenu()"
-    ></div>
+  <div class="navbar-overlay" [class.active]="menuActive()" (click)="closeMenu()"></div>
 
-    <!-- Enlaces de navegación -->
-    <div class="navbar-links" [ngClass]="{ active: menuActive() }">
-      <a href="home#s1" class="text-white/85 navbar__a" (click)="closeMenu()">
-        <span class="text-red">01. </span>Introducción
-      </a>
-      <a href="home#s2" class="text-white/85 navbar__a" (click)="closeMenu()">
-        <span class="text-red">02. </span>Proyectos
-      </a>
-      <a href="home#s3" class="text-white/85 navbar__a" (click)="closeMenu()">
-        <span class="text-red">03. </span>Estudios
-      </a>
-      <a href="home#s4" class="text-white/85 navbar__a" (click)="closeMenu()">
-        <span class="text-red">04. </span>Contacto
-      </a>
-      <a [href]="cvUrl()" target="_blank" class="btn-red" (click)="closeMenu()">
-        Curriculum
-      </a>
+  <ul class="nav-links" [class.active]="menuActive()">
+    <li><a (click)="scrollTo('about'); closeMenu()">Sobre mí</a></li>
+    <li><a (click)="scrollTo('experience'); closeMenu()">Experiencia</a></li>
+    <li><a (click)="scrollTo('projects'); closeMenu()">Proyectos</a></li>
+    <li><a (click)="scrollTo('contact'); closeMenu()">Contacto</a></li>
+  </ul>
+
+  <a href="#contact" class="nav-cta" (click)="scrollTo('contact'); closeMenu()">Trabajemos juntos →</a>
+
+  <button type="button" class="menu-toggle" aria-label="Toggle menu" (click)="toggleMenu()">
+    <div class="menu-icon" [class.active]="menuActive()">
+      <span></span><span></span><span></span>
     </div>
-  </div>
+  </button>
 </nav>

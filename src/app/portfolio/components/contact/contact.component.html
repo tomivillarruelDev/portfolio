@@ -1,142 +1,109 @@
-<section id="s5" class="w-full lg:w-[740px] mx-auto">
-  <div class="col-auto">
-    <p class="text-red mb-6">
-      04.
-      <span class="font-semibold mb-4 items-center text-2xl onest text-white"
-        >Contacto</span
-      >
-    </p>
-  </div>
+<section id="contact">
+  <div class="orb contact-orb"></div>
+  <div class="container">
 
-  <div class="flex flex-col md:flex-row pb-12">
-    <div class="col-12">
-      <div class="flex gap-x-1 align-items-center text-white/85">
-        <p class="text-1xl text-inherit">Redes</p>
-        <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-at"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-            <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" />
-          </svg>
-        </span>
-      </div>
-
-      <div class="icons flex">
-        @for (social of socialValues; track $index) {
-        <a
-          [href]="social[1].url"
-          target="_blank"
-          class="icons__item"
-          [ngStyle]="{ color: social[1].color }"
-        >
-          <img [src]="social[1].icon" alt="social icon" /> {{ social[0] }}
-        </a>
-        }
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <div class="flex gap-x-1 align-items-center text-white/85">
-        <p class="text-1xl text-inherit">Correo electrónico</p>
-        <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-mail"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"
-            />
-            <path d="M3 7l9 6l9 -6" />
-          </svg>
-        </span>
-      </div>
+    <div class="contact-inner reveal">
+      <p class="section-label">Próximo paso</p>
+      <h2 class="contact-headline">¿Tu proyecto<br>merece el mejor<br><span style="background:linear-gradient(135deg,var(--purple-2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">código posible?</span></h2>
+      <p class="contact-loss">
+        Cada semana que pasa sin el desarrollador correcto es tiempo perdido y dinero en la mesa.
+        <strong>Las oportunidades no esperan.</strong>
+      </p>
     </div>
 
-    <div class="col-12 email">
-      <input
-        type="text"
-        value="tomasvillarruel18@gmail.com"
-        readonly
-        class="form-control email__input"
-        disabled
-      />
-      <div class="email-buttons">
-        <a
-          href="mailto:tomasadrianvillarruel@gmail.com"
-          type="button"
-          class="email__button send tippy-email"
-          [ngClass]="{ isActivated: isHovering() }"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-send-2"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z"
-            />
-            <path d="M6.5 12h14.5" />
-          </svg>
-        </a>
-        <button
-          type="button"
-          class="email__button tippy-send-email"
-          (click)="copyToClipboard()"
-          (mouseover)="setHovering(true)"
-          (mouseout)="setHovering(false)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-copy"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"
-            />
-            <path
-              d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"
-            />
-          </svg>
-        </button>
+    <div class="contact-box reveal">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:28px;">
+        <div class="contact-availability">
+          <div class="avail-dot"></div>
+          Disponible para proyectos desde julio 2025
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a href="mailto:tomasvillarruel18@gmail.com" class="contact-email" style="margin-bottom:0;font-size:14px;">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M2 6.5l8 5 8-5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            tomasvillarruel18&#64;gmail.com
+          </a>
+          <button class="copy-email-btn" (click)="copyEmail()">{{ copyLabel }}</button>
+        </div>
       </div>
+
+      <div class="contact-divider" style="margin-bottom:32px;"></div>
+
+      <div class="contact-form-title" style="margin-bottom:6px;">Contame sobre tu proyecto</div>
+      <div class="contact-form-sub" style="margin-bottom:28px;">
+        Te respondo en <span>menos de 24 horas.</span> Sin compromiso ni letra chica.
+      </div>
+
+      @if (!sent) {
+        <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="cf-name">Nombre</label>
+              <input class="form-input" id="cf-name" name="nombre" type="text"
+                     placeholder="Tu nombre" required [(ngModel)]="form.nombre" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cf-email">Email</label>
+              <input class="form-input" id="cf-email" name="email" type="email"
+                     placeholder="tu@email.com" required [(ngModel)]="form.email" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cf-type">¿Qué tipo de proyecto tenés?</label>
+            <select class="form-select" id="cf-type" name="tipo" required [(ngModel)]="form.tipo">
+              <option value="" disabled>Elegí una opción</option>
+              <option>E-commerce / Tienda online</option>
+              <option>Dashboard / SaaS / Panel interno</option>
+              <option>Landing page / Sitio institucional</option>
+              <option>API / Backend / Integración</option>
+              <option>Otro — te cuento</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cf-msg">Contame más</label>
+            <textarea class="form-textarea" id="cf-msg" name="mensaje"
+              placeholder="¿Cuál es el problema que querés resolver? ¿Tenés un plazo en mente? Cuanto más detalle, mejor puedo ayudarte."
+              required [(ngModel)]="form.mensaje"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Enviar mensaje →</button>
+          <div class="form-reassurance">Sin compromiso &nbsp;·&nbsp; Respuesta en &lt; 24h</div>
+        </form>
+      } @else {
+        <div class="contact-success">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+          <div class="contact-success-title">¡Mensaje enviado!</div>
+          <div class="contact-success-sub">Gracias por escribirme, <strong>Tomás</strong> te contesta antes de las 24 horas.</div>
+        </div>
+      }
     </div>
+
+    <div class="contact-socials reveal">
+      <a href="https://github.com/tomasvillarruel" target="_blank" rel="noopener" class="social-btn">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1C4.13 1 1 4.13 1 8c0 3.09 2 5.71 4.78 6.63.35.064.48-.152.48-.338 0-.166-.006-.606-.01-1.19-1.947.424-2.358-.937-2.358-.937-.318-.808-.777-1.023-.777-1.023-.635-.434.048-.425.048-.425.702.05 1.072.722 1.072.722.624 1.07 1.636.761 2.035.582.063-.452.244-.762.444-.937-1.554-.176-3.188-.777-3.188-3.456 0-.763.272-1.387.72-1.876-.072-.177-.312-.888.068-1.85 0 0 .587-.189 1.924.717A6.7 6.7 0 0 1 8 4.979a6.7 6.7 0 0 1 1.754.236c1.336-.906 1.921-.717 1.921-.717.381.962.141 1.673.069 1.85.449.489.72 1.113.72 1.876 0 2.686-1.637 3.278-3.197 3.45.251.217.475.644.475 1.299 0 .937-.009 1.691-.009 1.921 0 .187.126.406.482.337C13 13.707 15 11.09 15 8c0-3.87-3.13-7-7-7z" fill="currentColor"/>
+        </svg>
+        GitHub
+      </a>
+      <a href="https://linkedin.com/in/tomasvillarruel" target="_blank" rel="noopener" class="social-btn">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M13 1H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-8 11H3.5V6.5H5V12zm-.75-6.25a.875.875 0 1 1 0-1.75.875.875 0 0 1 0 1.75zM13 12h-1.5V9.1c0-.7-.013-1.6-1-1.6s-1.15.76-1.15 1.55V12H8V6.5h1.44v.72h.02c.2-.38.69-.77 1.41-.77 1.51 0 1.79.99 1.79 2.28V12z" fill="currentColor"/>
+        </svg>
+        LinkedIn
+      </a>
+      <a href="mailto:tomasvillarruel18@gmail.com" class="social-btn">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M2 6.5l8 5 8-5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Email directo
+      </a>
+    </div>
+
   </div>
 </section>

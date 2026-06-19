@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, effect, signal } from '@angular/core';
+import { AfterViewInit, Component, effect, NgZone, signal } from '@angular/core';
 import { CvService } from '../../../shared/services/cv.service';
 import { ProfileImageService } from '../../../shared/services/profile-image.service';
 import tippy from 'tippy.js';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
+const HERO_WORDS = ['convierte.', 'impacta.', 'escala.', 'diferencia.'];
 
 @Component({
   selector: 'app-introduction',
@@ -12,29 +14,22 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
   imports: [NgxSkeletonLoaderModule],
 })
 export class IntroductionComponent implements AfterViewInit {
-  cvUrl = signal('');
+  cvUrl           = signal('');
   profileImageUrl = signal('');
-  imageLoaded = signal(false);
+  imageLoaded     = signal(false);
 
   constructor(
     private cvService: CvService,
-    private profileImageService: ProfileImageService
+    private profileImageService: ProfileImageService,
+    private ngZone: NgZone,
   ) {
-    // Efecto reactivo para la URL del CV
     effect(() => {
-      this.cvService.cvUrl$.subscribe((url) => {
-        if (url) this.cvUrl.set(url);
-      });
+      this.cvService.cvUrl$.subscribe(url => { if (url) this.cvUrl.set(url); });
       this.cvService.loadCvUrl().subscribe();
     });
-
-    // Efecto reactivo para la imagen de perfil
     effect(() => {
-      this.profileImageService.imageUrl$.subscribe((url) => {
-        if (url) {
-          this.profileImageUrl.set(url);
-          this.imageLoaded.set(false);
-        }
+      this.profileImageService.imageUrl$.subscribe(url => {
+        if (url) { this.profileImageUrl.set(url); this.imageLoaded.set(false); }
       });
       this.profileImageService.loadImageUrl().subscribe();
     });
@@ -46,9 +41,45 @@ export class IntroductionComponent implements AfterViewInit {
       animation: 'shift-away-extreme',
       theme: 'light-border',
     });
+    this.ngZone.runOutsideAngular(() => {
+      this.initCursorGlow();
+      this.initHeroTextCycle();
+    });
   }
 
-  onImageLoad(): void {
-    this.imageLoaded.set(true);
+  onImageLoad(): void { this.imageLoaded.set(true); }
+
+  scrollToProjects(): void {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── cursor glow ──────────────────────────────────────────────────────────
+  private initCursorGlow(): void {
+    const glow = document.getElementById('cursorGlow');
+    if (!glow) return;
+    let mx = -500, my = -500;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    const tick = () => {
+      glow.style.transform = `translate(${mx - 140}px, ${my - 140}px)`;
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  // ── hero text cycling (CSS transitions, same as HTML) ────────────────────
+  private initHeroTextCycle(): void {
+    const el = document.getElementById('heroGradient');
+    if (!el) return;
+    let wi = 0;
+    setInterval(() => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        wi = (wi + 1) % HERO_WORDS.length;
+        el.textContent = HERO_WORDS[wi];
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 320);
+    }, 2500);
   }
 }
