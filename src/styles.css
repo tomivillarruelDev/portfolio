@@ -452,11 +452,13 @@ footer span { color: var(--purple-3); }
 @media(max-width:600px) { footer { flex-direction: column; gap: 8px; text-align: center; padding: 28px 20px; } }
 
 /* ── ANIMATIONS (scroll) ── */
+/* .reveal: IO-driven, keeps CSS transition for smooth class-toggle */
 .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-36px); transition: opacity 0.7s 0.1s cubic-bezier(0.4,0,0.2,1), transform 0.7s 0.1s cubic-bezier(0.4,0,0.2,1); }
+/* .reveal-left / .reveal-right: GSAP scrub-driven — NO CSS transition (it fights GSAP) */
+.reveal-left { opacity: 0; transform: translateX(-36px); }
 .reveal-left.visible { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(36px); transition: opacity 0.7s 0.1s cubic-bezier(0.4,0,0.2,1), transform 0.7s 0.1s cubic-bezier(0.4,0,0.2,1); }
+.reveal-right { opacity: 0; transform: translateX(36px); }
 .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
 /* ── KEYFRAMES GLOBAL ── */

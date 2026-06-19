@@ -35,13 +35,16 @@ export class HomeComponent implements AfterViewInit {
   constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit(): void {
+    // Wait 2 rAFs then init. Then refresh aggressively — Firebase data loading
+    // changes page height for ~3s after mount, which shifts all trigger positions.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         this.ngZone.runOutsideAngular(() => {
           this.initAllAnimations();
-          // Refresh after Firebase async data loads (projects/skills from Realtime DB)
-          setTimeout(() => ScrollTrigger.refresh(), 1200);
-          setTimeout(() => ScrollTrigger.refresh(), 2500);
+          // Cascade of refreshes to catch Firebase Realtime DB loading at any speed
+          [400, 800, 1400, 2000, 3000, 4500].forEach(ms =>
+            setTimeout(() => ScrollTrigger.refresh(), ms)
+          );
         });
       });
     });
@@ -65,13 +68,33 @@ export class HomeComponent implements AfterViewInit {
     this.initContactCard();
   }
 
-  // ── IO reveal: .reveal / .reveal-left / .reveal-right ──────────────────
+  // ── IO reveal + GSAP fallback for .reveal-left / .reveal-right ────────
+  // These containers wrap GSAP-animated children. If IO doesn't fire fast enough
+  // the container stays at opacity:0, hiding everything inside. We also apply
+  // a GSAP scrub so they animate in/out together with the page scroll.
   private initRevealObserver(): void {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.stagger')
-      .forEach(el => io.observe(el));
+    }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
+    document.querySelectorAll('.reveal,.stagger').forEach(el => io.observe(el));
+
+    // reveal-left / reveal-right: GSAP scrub only — kill any CSS transition first
+    document.querySelectorAll<HTMLElement>('.reveal-left').forEach(el => {
+      el.style.transition = 'none'; // CSS transition fights GSAP scrub updates
+      gsap.fromTo(el,
+        { x: -40, opacity: 0 },
+        { x: 0, opacity: 1,
+          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 88%', end: 'top 48%' } }
+      );
+    });
+    document.querySelectorAll<HTMLElement>('.reveal-right').forEach(el => {
+      el.style.transition = 'none';
+      gsap.fromTo(el,
+        { x: 40, opacity: 0 },
+        { x: 0, opacity: 1,
+          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 88%', end: 'top 48%' } }
+      );
+    });
   }
 
   // ── Nav shrink ──────────────────────────────────────────────────────────
@@ -210,18 +233,40 @@ export class HomeComponent implements AfterViewInit {
   }
 
   // ── Small cards — scale + fade, staggered (scrub) ──────────────────────
+  // Cards are rendered by Firebase async → may not exist at init time.
+  // MutationObserver watches .small-projects for new card elements.
   private initSmallCards(): void {
-    document.querySelectorAll<HTMLElement>('.small-card').forEach(el => {
+    const applyAnim = (el: HTMLElement, i: number) => {
       el.style.transition = 'border-color 0.3s, box-shadow 0.3s, background 0.3s';
-    });
-    document.querySelectorAll<HTMLElement>('.small-card').forEach((el, i) => {
       gsap.fromTo(el,
         { scale: 0.90, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
           scrollTrigger: { trigger: el, scrub: 0.7,
             start: `top ${92 - i * 4}%`, end: `top ${52 - i * 4}%` } }
       );
+    };
+
+    const existing = document.querySelectorAll<HTMLElement>('.small-card');
+    if (existing.length > 0) {
+      existing.forEach((el, i) => applyAnim(el, i));
+      return;
+    }
+
+    // Firebase hasn't loaded yet — watch for cards to appear
+    const container = document.querySelector('.small-projects, portfolio-card-projects');
+    if (!container) return;
+    let done = false;
+    const mo = new MutationObserver(() => {
+      if (done) return;
+      const cards = document.querySelectorAll<HTMLElement>('.small-card');
+      if (cards.length > 0) {
+        done = true;
+        mo.disconnect();
+        cards.forEach((el, i) => applyAnim(el, i));
+        setTimeout(() => ScrollTrigger.refresh(), 80);
+      }
     });
+    mo.observe(container, { childList: true, subtree: true });
   }
 
   // ── Edu rows/cards — rise + fade (scrub) ───────────────────────────────
@@ -251,10 +296,11 @@ export class HomeComponent implements AfterViewInit {
 
   // ── Contact card — scale in (scrub) ────────────────────────────────────
   private initContactCard(): void {
-    // contact-inner: headline + label (replace reveal/IO with GSAP scrub)
+    // contact-inner: headline + label (GSAP scrub — kill CSS transition)
     const inner = document.querySelector<HTMLElement>('.contact-inner');
     if (inner) {
-      // Force visibility — remove opacity:0 set by .reveal CSS
+      // Kill CSS transition (.reveal has 0.7s transition — fights GSAP scrub)
+      inner.style.transition = 'none';
       inner.style.opacity = '1';
       inner.style.transform = 'none';
       const label = inner.querySelector<HTMLElement>('.section-label');
@@ -277,9 +323,10 @@ export class HomeComponent implements AfterViewInit {
       );
     }
 
-    // contact-box: scale in
+    // contact-box: scale in (kill CSS .reveal transition)
     const box = document.querySelector<HTMLElement>('.contact-box, .contact-card');
     if (box) {
+      box.style.transition = 'none';
       box.style.opacity = '1';
       box.style.transform = 'none';
       gsap.fromTo(box,
