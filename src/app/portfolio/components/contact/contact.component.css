@@ -1,4 +1,4 @@
-#contact { padding: 120px 0; }
+#contact { padding: 120px 0 100px; }
 .contact-container { max-width: 1100px; margin: 0 auto; padding: 0 48px; position: relative; }
 
 .contact-orb {
@@ -48,7 +48,7 @@
 }
 .contact-btn-copy:hover { border-color: var(--purple-2); background: var(--glass); }
 
-.contact-socials { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.contact-socials { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 32px; }
 .contact-social-link {
   display: flex; align-items: center; gap: 7px;
   color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
@@ -65,7 +65,8 @@
 }
 
 @media (max-width: 768px) {
-  #contact { padding: 80px 0; }
+  #contact { padding: 80px 0 60px; }
   .contact-container { padding: 0 24px; }
   .contact-card { padding: 36px 28px; }
 }
+.contact-box { max-width: 640px; margin: 0 auto 36px; padding: 40px 44px; border-radius: 24px; border: 1px solid var(--border); background: rgba(11,11,31,0.7); backdrop-filter: blur(24px); box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 60px rgba(124,58,237,0.1); }

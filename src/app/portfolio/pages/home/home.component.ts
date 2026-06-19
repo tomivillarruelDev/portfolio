@@ -251,12 +251,42 @@ export class HomeComponent implements AfterViewInit {
 
   // ── Contact card — scale in (scrub) ────────────────────────────────────
   private initContactCard(): void {
+    // contact-inner: headline + label (replace reveal/IO with GSAP scrub)
+    const inner = document.querySelector<HTMLElement>('.contact-inner');
+    if (inner) {
+      // Force visibility — remove opacity:0 set by .reveal CSS
+      inner.style.opacity = '1';
+      inner.style.transform = 'none';
+      const label = inner.querySelector<HTMLElement>('.section-label');
+      const headline = inner.querySelector<HTMLElement>('.contact-headline');
+      const loss = inner.querySelector<HTMLElement>('.contact-loss');
+      if (label) gsap.fromTo(label,
+        { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
+        { clipPath: 'inset(0 0% 0 0)', opacity: 1,
+          scrollTrigger: { trigger: label, scrub: 0.5, start: 'top 92%', end: 'top 62%' } }
+      );
+      if (headline) gsap.fromTo(headline,
+        { y: 48, opacity: 0 },
+        { y: 0, opacity: 1,
+          scrollTrigger: { trigger: headline, scrub: 0.6, start: 'top 88%', end: 'top 48%' } }
+      );
+      if (loss) gsap.fromTo(loss,
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1,
+          scrollTrigger: { trigger: loss, scrub: 0.5, start: 'top 90%', end: 'top 55%' } }
+      );
+    }
+
+    // contact-box: scale in
     const box = document.querySelector<HTMLElement>('.contact-box, .contact-card');
-    if (!box) return;
-    gsap.fromTo(box,
-      { scale: 0.94, opacity: 0 },
-      { scale: 1, opacity: 1,
-        scrollTrigger: { trigger: box, scrub: 0.7, start: 'top 85%', end: 'top 40%' } }
-    );
+    if (box) {
+      box.style.opacity = '1';
+      box.style.transform = 'none';
+      gsap.fromTo(box,
+        { scale: 0.94, opacity: 0 },
+        { scale: 1, opacity: 1,
+          scrollTrigger: { trigger: box, scrub: 0.7, start: 'top 85%', end: 'top 40%' } }
+      );
+    }
   }
 }

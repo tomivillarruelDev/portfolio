@@ -1,43 +1,59 @@
 import { Injectable } from '@angular/core';
 import { Project } from '../interfaces/project.interface';
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Technology } from 'src/app/shared/interfaces/technology.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService {
-  private url: string =
-    'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com/';
+  private url = 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com';
 
   public projects: Project[] = [];
 
+  // Cache de tecnologías ID → nombre
+  private techCache: Record<string, string> | null = null;
+
   constructor(private http: HttpClient) {}
 
-  async getProjects(projectType: string): Promise<Project[]> {
-    const resp: { [key: string]: Project } = await firstValueFrom(
-      this.http.get<{ [key: string]: Project }>(
-        `${this.url}/${projectType}.json`
-      )
-    );
-    this.projects = this.createArrayProjects(resp);
-    return this.projects;
+  // ── Resuelve el mapa de tecnologías (ID → name) ──────────────────────────
+  private async getTechMap(): Promise<Record<string, string>> {
+    if (this.techCache) return this.techCache;
+    try {
+      const raw = await firstValueFrom(
+        this.http.get<Record<string, { name: string }>>(`${this.url}/technologies.json`)
+      );
+      this.techCache = {};
+      if (raw) {
+        Object.entries(raw).forEach(([id, val]) => {
+          if (val?.name) this.techCache![id] = val.name;
+        });
+      }
+    } catch {
+      this.techCache = {};
+    }
+    return this.techCache!;
   }
 
-  private createArrayProjects(projectObj: {
-    [key: string]: Project;
-  }): Project[] {
-    if (!projectObj) {
-      return [];
-    }
+  // ── Obtiene proyectos y resuelve IDs de tecnologías a nombres ────────────
+  async getProjects(projectType: string): Promise<Project[]> {
+    const [raw, techMap] = await Promise.all([
+      firstValueFrom(
+        this.http.get<Record<string, Project>>(`${this.url}/${projectType}.json`)
+      ),
+      this.getTechMap(),
+    ]);
 
-    const projects = Object.entries(projectObj).map(([key, value]) => {
-      const project: Project = value;
-      project.id = key;
-      return project;
-    });
+    if (!raw) return [];
 
-    return projects;
+    this.projects = Object.entries(raw).map(([key, value]) => ({
+      ...value,
+      id: key,
+      technologies: Array.isArray(value.technologies)
+        ? value.technologies.map(t => techMap[t] ?? techMap[t.replace(/^-/, '')] ?? t)
+        : [],
+    }));
+
+    return this.projects;
   }
 }

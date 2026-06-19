@@ -9,16 +9,41 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const TECH_MAP: Record<string, [string, string]> = {
-  'Angular':    ['ic-ng',  'A'],
-  'TypeScript': ['ic-ts',  'T'],
-  'Firebase':   ['ic-fb',  'F'],
-  'Node.js':    ['ic-no',  'N'],
-  'MongoDB':    ['ic-mo',  'M'],
-  'Docker':     ['ic-dk',  'D'],
-  'PostgreSQL': ['ic-pg',  'Pg'],
-  'Git':        ['ic-git', 'G'],
-  'AWS':        ['ic-aws', 'A'],
-  'RxJS':       ['ic-ng',  'R'],
+  'Angular':     ['ic-ng',  'Ng'],
+  'angular':     ['ic-ng',  'Ng'],
+  'TypeScript':  ['ic-ts',  'TS'],
+  'typescript':  ['ic-ts',  'TS'],
+  'JavaScript':  ['ic-js',  'JS'],
+  'javascript':  ['ic-js',  'JS'],
+  'Firebase':    ['ic-fb',  'FB'],
+  'firebase':    ['ic-fb',  'FB'],
+  'Node.js':     ['ic-no',  'No'],
+  'nodejs':      ['ic-no',  'No'],
+  'MongoDB':     ['ic-mo',  'Mo'],
+  'mongodb':     ['ic-mo',  'Mo'],
+  'Docker':      ['ic-dk',  'Do'],
+  'docker':      ['ic-dk',  'Do'],
+  'PostgreSQL':  ['ic-pg',  'PG'],
+  'postgresql':  ['ic-pg',  'PG'],
+  'Git':         ['ic-git', 'Gi'],
+  'git':         ['ic-git', 'Gi'],
+  'AWS':         ['ic-aws', 'AW'],
+  'aws':         ['ic-aws', 'AW'],
+  'RxJS':        ['ic-ng',  'Rx'],
+  'React':       ['ic-ng',  'Re'],
+  'react':       ['ic-ng',  'Re'],
+  'Vue':         ['ic-ng',  'Vu'],
+  'vue':         ['ic-ng',  'Vu'],
+  'CSS':         ['ic-ng',  'CS'],
+  'css':         ['ic-ng',  'CS'],
+  'Sass':        ['ic-ng',  'Sa'],
+  'sass':        ['ic-ng',  'Sa'],
+  'HTML':        ['ic-ng',  'HT'],
+  'html':        ['ic-ng',  'HT'],
+  'Python':      ['ic-ng',  'Py'],
+  'python':      ['ic-ng',  'Py'],
+  'MySQL':       ['ic-pg',  'My'],
+  'mysql':       ['ic-pg',  'My'],
 };
 
 @Component({
@@ -50,7 +75,8 @@ export class ProjectsComponent {
   }
 
   private async loadProjects() {
-    const resp = await this.firebaseService.getProjects('featuredProjects');
+    const all = await this.firebaseService.getProjects('projects');
+    const resp = all.slice(0, 2);
     this.featuredProjects.set(resp);
   }
 
