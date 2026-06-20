@@ -35,13 +35,10 @@ export class HomeComponent implements AfterViewInit {
   constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit(): void {
-    // Wait 2 rAFs then init. Then refresh aggressively — Firebase data loading
-    // changes page height for ~3s after mount, which shifts all trigger positions.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         this.ngZone.runOutsideAngular(() => {
           this.initAllAnimations();
-          // Cascade of refreshes to catch Firebase Realtime DB loading at any speed
           [400, 800, 1400, 2000, 3000, 4500].forEach(ms =>
             setTimeout(() => ScrollTrigger.refresh(), ms)
           );
@@ -68,19 +65,14 @@ export class HomeComponent implements AfterViewInit {
     this.initContactCard();
   }
 
-  // ── IO reveal + GSAP fallback for .reveal-left / .reveal-right ────────
-  // These containers wrap GSAP-animated children. If IO doesn't fire fast enough
-  // the container stays at opacity:0, hiding everything inside. We also apply
-  // a GSAP scrub so they animate in/out together with the page scroll.
   private initRevealObserver(): void {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
     document.querySelectorAll('.reveal,.stagger').forEach(el => io.observe(el));
 
-    // reveal-left / reveal-right: GSAP scrub only — kill any CSS transition first
     document.querySelectorAll<HTMLElement>('.reveal-left').forEach(el => {
-      el.style.transition = 'none'; // CSS transition fights GSAP scrub updates
+      el.style.transition = 'none';
       gsap.fromTo(el,
         { x: -40, opacity: 0 },
         { x: 0, opacity: 1,
@@ -97,7 +89,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Nav shrink ──────────────────────────────────────────────────────────
   private initNavShrink(): void {
     const nav = document.getElementById('nav');
     if (!nav) return;
@@ -112,7 +103,6 @@ export class HomeComponent implements AfterViewInit {
     }, { passive: true });
   }
 
-  // ── Hero cinematic exit (scrub) ─────────────────────────────────────────
   private initHeroExit(): void {
     const tl = gsap.timeline();
     tl.to('.hero-content',     { y: -70, opacity: 0, ease: 'none', duration: 0.6 })
@@ -124,7 +114,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Stat columns — scrub entrance ──────────────────────────────────────
   private initStatCols(): void {
     document.querySelectorAll<HTMLElement>('.stat-col').forEach(el => {
       gsap.fromTo(el,
@@ -135,7 +124,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Stat count-up (scrub) ───────────────────────────────────────────────
   private initStatCounters(): void {
     document.querySelectorAll<HTMLElement>('.count').forEach(el => {
       const target = +(el.dataset['target'] ?? 0);
@@ -148,7 +136,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Section labels — horizontal clip reveal (scrub) ─────────────────────
   private initSectionLabels(): void {
     document.querySelectorAll<HTMLElement>('.section-label').forEach(el => {
       gsap.fromTo(el,
@@ -159,7 +146,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Section titles — rise + fade (scrub) ────────────────────────────────
   private initSectionTitles(): void {
     document.querySelectorAll<HTMLElement>('.section-title').forEach(el => {
       gsap.fromTo(el,
@@ -170,7 +156,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Section descriptions (scrub) ────────────────────────────────────────
   private initSectionDescs(): void {
     document.querySelectorAll<HTMLElement>('.section-desc').forEach(el => {
       gsap.fromTo(el,
@@ -181,7 +166,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Experience entries (scrub) ───────────────────────────────────────────
   private initExperienceEntries(): void {
     document.querySelectorAll('.exp-entry').forEach(entry => {
       const headline = entry.querySelector('.exp-headline');
@@ -206,7 +190,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Skill pills — scale + cascade (scrub) ─────────────────────────────
   private initSkillPills(): void {
     document.querySelectorAll<HTMLElement>('.about-value, .skill-pill').forEach(el => {
       el.style.transition = 'border-color 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s';
@@ -221,7 +204,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── About value cards — scale + fade (scrub) ───────────────────────────
   private initAboutValues(): void {
     document.querySelectorAll<HTMLElement>('.about-value').forEach(el => {
       gsap.fromTo(el,
@@ -232,9 +214,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Small cards — scale + fade, staggered (scrub) ──────────────────────
-  // Cards are rendered by Firebase async → may not exist at init time.
-  // MutationObserver watches .small-projects for new card elements.
   private initSmallCards(): void {
     const applyAnim = (el: HTMLElement, i: number) => {
       el.style.transition = 'border-color 0.3s, box-shadow 0.3s, background 0.3s';
@@ -242,7 +221,7 @@ export class HomeComponent implements AfterViewInit {
         { scale: 0.90, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
           scrollTrigger: { trigger: el, scrub: 0.7,
-            start: `top ${92 - i * 4}%`, end: `top ${52 - i * 4}%` } }
+            start: 'top 90%', end: 'top 50%' } }
       );
     };
 
@@ -252,7 +231,6 @@ export class HomeComponent implements AfterViewInit {
       return;
     }
 
-    // Firebase hasn't loaded yet — watch for cards to appear
     const container = document.querySelector('.small-projects, portfolio-card-projects');
     if (!container) return;
     let done = false;
@@ -269,10 +247,8 @@ export class HomeComponent implements AfterViewInit {
     mo.observe(container, { childList: true, subtree: true });
   }
 
-  // ── Edu rows/cards — rise + fade (scrub) ───────────────────────────────
   private initEduCards(): void {
-    const rows = document.querySelectorAll<HTMLElement>('.edu-row, .edu-card');
-    rows.forEach(el => {
+    document.querySelectorAll<HTMLElement>('.edu-row, .edu-card').forEach(el => {
       gsap.fromTo(el,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1,
@@ -281,7 +257,6 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Orbs — slow parallax ────────────────────────────────────────────────
   private initOrbParallax(): void {
     document.querySelectorAll('.orb').forEach((orb, i) => {
       gsap.to(orb, {
@@ -294,18 +269,15 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  // ── Contact card — scale in (scrub) ────────────────────────────────────
   private initContactCard(): void {
-    // contact-inner: headline + label (GSAP scrub — kill CSS transition)
     const inner = document.querySelector<HTMLElement>('.contact-inner');
     if (inner) {
-      // Kill CSS transition (.reveal has 0.7s transition — fights GSAP scrub)
       inner.style.transition = 'none';
       inner.style.opacity = '1';
       inner.style.transform = 'none';
-      const label = inner.querySelector<HTMLElement>('.section-label');
+      const label    = inner.querySelector<HTMLElement>('.section-label');
       const headline = inner.querySelector<HTMLElement>('.contact-headline');
-      const loss = inner.querySelector<HTMLElement>('.contact-loss');
+      const loss     = inner.querySelector<HTMLElement>('.contact-loss');
       if (label) gsap.fromTo(label,
         { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
         { clipPath: 'inset(0 0% 0 0)', opacity: 1,
@@ -323,7 +295,6 @@ export class HomeComponent implements AfterViewInit {
       );
     }
 
-    // contact-box: scale in (kill CSS .reveal transition)
     const box = document.querySelector<HTMLElement>('.contact-box, .contact-card');
     if (box) {
       box.style.transition = 'none';
