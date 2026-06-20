@@ -1,0 +1,23 @@
+:host { --p: #7c3aed; --border: #e5e7eb; --text: #111827; --muted: #6b7280; }
+
+.container { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 2.5rem !important; max-width: 720px !important; }
+
+.bg-white { background: #fff; border: 1px solid var(--border) !important; border-radius: 12px !important; box-shadow: none !important; }
+
+h1.text-2xl { font-size: 1.4rem !important; font-weight: 800 !important; color: var(--text) !important; }
+h2.text-xl  { font-size: 1rem !important; font-weight: 700 !important; color: var(--text) !important; margin-bottom: 0.8rem !important; }
+
+button.bg-gray-300 { background: #f3f4f6 !important; color: #374151 !important; border: 1px solid var(--border) !important; border-radius: 7px !important; font-weight: 600 !important; }
+
+button.bg-blue-500,
+a.bg-blue-500,
+label.bg-blue-500 { background: var(--p) !important; border-radius: 7px !important; font-weight: 600 !important; }
+button.bg-blue-500:hover { background: #6d28d9 !important; }
+
+button.bg-red-500 { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fca5a5 !important; border-radius: 7px !important; }
+
+.border-dashed { border-color: #d1d5db !important; border-radius: 10px !important; }
+.border-dashed:hover { border-color: var(--p) !important; }
+
+.bg-gray-50  { background: #f9fafb !important; border-radius: 8px !important; border: 1px solid var(--border) !important; }
+.bg-green-50 { background: #d1fae5 !important; border-radius: 8px !important; }

@@ -1,59 +1,17 @@
-<div class="admin-dashboard">
-  <header class="admin-header">
-    <h1>Panel de Administración</h1>
-    <button class="logout-btn" (click)="logout()">Cerrar Sesión</button>
-  </header>
-
-  <div class="admin-content flex flex-col md:flex-row w-full min-h-screen">
-    <div
-      class="admin-sidebar w-full md:w-1/4 lg:w-1/5 bg-gray-900 text-white p-4 md:min-h-screen flex-shrink-0"
-    >
-      <nav class="admin-nav">
-        <ul class="flex flex-col gap-2">
-          @for (item of navItems(); track item.route) {
-          <li class="w-full">
-            <a
-              [routerLink]="item.route"
-              routerLinkActive="active"
-              class="block py-2 px-4 rounded hover:bg-gray-800 transition"
-            >
-              {{ item.label }}
-            </a>
-          </li>
-          }
-        </ul>
-      </nav>
-    </div>
-
-    <main class="admin-main flex-1 w-full p-2 md:p-8">
-      <div class="dashboard-content w-full">
-        <h2 class="text-xl md:text-2xl font-bold mb-2">
-          Bienvenido a tu panel de administración
-        </h2>
-        <p class="mb-4">
-          Desde aquí podrás gestionar el contenido de tu portfolio:
-        </p>
-
-        <div
-          class="dashboard-cards grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
-        >
-          @for (card of dashboardCards(); track card.title) {
-          <div
-            class="dashboard-card bg-white rounded shadow p-4 flex flex-col items-start w-full"
-          >
-            <h3 class="font-semibold text-lg mb-1">{{ card.title }}</h3>
-            <p class="mb-2">{{ card.description }}</p>
-            <button [routerLink]="card.route" class="btn-red px-4 py-2 mt-auto">
-              {{ card.buttonText }}
-            </button>
-          </div>
-          } @empty {
-          <div class="text-center p-4 w-full">
-            No hay tarjetas disponibles en este momento.
-          </div>
-          }
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">Gestion del contenido de tu portfolio</p>
+  </div>
+  <div class="cards-grid">
+    @for (card of dashboardCards(); track card.title) {
+      <a class="dash-card" [routerLink]="card.route">
+        <div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.description }}</p>
         </div>
-      </div>
-    </main>
+        <span class="arrow">→</span>
+      </a>
+    }
   </div>
 </div>

@@ -11,12 +11,11 @@ export class FirebaseService {
 
   public projects: Project[] = [];
 
-  // Cache de tecnologías ID → nombre
   private techCache: Record<string, string> | null = null;
 
   constructor(private http: HttpClient) {}
 
-  // ── Resuelve el mapa de tecnologías (ID → name) ──────────────────────────
+  // ── Resuelve el mapa de tecnologías (ID → name) ───────────────────────────
   private async getTechMap(): Promise<Record<string, string>> {
     if (this.techCache) return this.techCache;
     try {
@@ -33,6 +32,19 @@ export class FirebaseService {
       this.techCache = {};
     }
     return this.techCache!;
+  }
+
+  // ── Obtiene cualquier nodo como array (devuelve [] si vacío/error) ─────────
+  async getList<T>(node: string): Promise<T[]> {
+    try {
+      const raw = await firstValueFrom(
+        this.http.get<Record<string, T> | null>(`${this.url}/${node}.json`)
+      );
+      if (!raw) return [];
+      return Object.values(raw);
+    } catch {
+      return [];
+    }
   }
 
   // ── Obtiene proyectos y resuelve IDs de tecnologías a nombres ────────────

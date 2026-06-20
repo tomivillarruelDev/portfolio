@@ -1,0 +1,129 @@
+<div class="admin-section">
+  <div class="admin-section-header">
+    <h2>Gestión de Experiencia Laboral</h2>
+    <button class="btn-primary" (click)="openCreate()" [disabled]="showForm">
+      + Nueva experiencia
+    </button>
+  </div>
+
+  @if (successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+  @if (error && !showForm) {
+    <div class="alert alert-error">{{ error }}</div>
+  }
+
+  <!-- ── FORMULARIO ── -->
+  @if (showForm) {
+    <div class="admin-form-card">
+      <h3>{{ editingId ? 'Editar' : 'Nueva' }} Experiencia</h3>
+      @if (error) { <div class="alert alert-error">{{ error }}</div> }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Rol / Cargo *</label>
+            <input formControlName="name" placeholder="Ej: Desarrollador Frontend" />
+            @if (form.get('name')?.invalid && form.get('name')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Empresa *</label>
+            <input formControlName="company" placeholder="Ej: Grupo EON" />
+            @if (form.get('company')?.invalid && form.get('company')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Período *</label>
+            <input formControlName="date" placeholder="Ej: Feb 2024 — Actualidad" />
+            @if (form.get('date')?.invalid && form.get('date')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Ubicación *</label>
+            <input formControlName="address" placeholder="Ej: Córdoba, Argentina (Remoto)" />
+            @if (form.get('address')?.invalid && form.get('address')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción general *</label>
+          <textarea formControlName="description" rows="3"
+            placeholder="Descripción resumida del rol y logros principales"></textarea>
+          @if (form.get('description')?.invalid && form.get('description')?.touched) {
+            <span class="field-error">Campo requerido</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Tareas / Logros</label>
+          <div formArrayName="tasks" class="tasks-list">
+            @for (ctrl of tasksArray.controls; track $index; let i = $index) {
+              <div class="task-row">
+                <input [formControlName]="i" placeholder="Ej: Migré la plataforma de Angular 12 a Angular 19..." />
+                <button type="button" class="btn-icon-danger" (click)="removeTask(i)"
+                  [disabled]="tasksArray.length === 1" title="Eliminar">✕</button>
+              </div>
+            }
+          </div>
+          <button type="button" class="btn-secondary btn-sm" (click)="addTask()">
+            + Agregar tarea
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="saving">
+            {{ saving ? 'Guardando...' : (editingId ? 'Actualizar' : 'Crear') }}
+          </button>
+          <button type="button" class="btn-ghost" (click)="cancelForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- ── LISTA ── -->
+  @if (loading) {
+    <div class="admin-loading">Cargando...</div>
+  } @else if (entries.length === 0 && !showForm) {
+    <div class="admin-empty">
+      <p>No hay experiencias cargadas. Los datos del portafolio usarán los hardcodeados.</p>
+      <button class="btn-primary" (click)="openCreate()">+ Crear primera experiencia</button>
+    </div>
+  } @else {
+    <div class="entries-list">
+      @for (entry of entries; track entry.id; let i = $index) {
+        <div class="entry-card">
+          <div class="entry-order-btns">
+            <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0" title="Subir">▲</button>
+            <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === entries.length - 1" title="Bajar">▼</button>
+          </div>
+          <div class="entry-info">
+            <div class="entry-title">{{ entry.name }}</div>
+            <div class="entry-subtitle">{{ entry.company }} · {{ entry.date }}</div>
+            <div class="entry-address">{{ entry.address }}</div>
+            <div class="entry-desc">{{ entry.description }}</div>
+            @if (entry.tasks.length) {
+              <ul class="entry-tasks">
+                @for (task of entry.tasks; track $index) {
+                  <li>{{ task }}</li>
+                }
+              </ul>
+            }
+          </div>
+          <div class="entry-actions">
+            <button class="btn-secondary btn-sm" (click)="openEdit(entry)">Editar</button>
+            <button class="btn-danger btn-sm" (click)="delete(entry)">Eliminar</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,101 @@
+<div class="admin-section">
+  <div class="admin-section-header">
+    <h2>Gestión de Educación</h2>
+    <button class="btn-primary" (click)="openCreate()" [disabled]="showForm">
+      + Nueva entrada
+    </button>
+  </div>
+
+  @if (successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+  @if (error && !showForm) {
+    <div class="alert alert-error">{{ error }}</div>
+  }
+
+  <!-- ── FORMULARIO ── -->
+  @if (showForm) {
+    <div class="admin-form-card">
+      <h3>{{ editingId ? 'Editar' : 'Nueva' }} Entrada de Educación</h3>
+      @if (error) { <div class="alert alert-error">{{ error }}</div> }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Año / Fecha *</label>
+            <input formControlName="year" placeholder="Ej: 2023 o Dic 2023" />
+            @if (form.get('year')?.invalid && form.get('year')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Categoría *</label>
+            <select formControlName="category">
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Título del curso / programa *</label>
+          <input formControlName="title" placeholder="Ej: Angular: De cero a experto" />
+          @if (form.get('title')?.invalid && form.get('title')?.touched) {
+            <span class="field-error">Campo requerido</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Plataforma / Institución *</label>
+          <input formControlName="platform" placeholder="Ej: Udemy · Fernando Herrera" />
+          @if (form.get('platform')?.invalid && form.get('platform')?.touched) {
+            <span class="field-error">Campo requerido</span>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="saving">
+            {{ saving ? 'Guardando...' : (editingId ? 'Actualizar' : 'Crear') }}
+          </button>
+          <button type="button" class="btn-ghost" (click)="cancelForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- ── LISTA ── -->
+  @if (loading) {
+    <div class="admin-loading">Cargando...</div>
+  } @else if (entries.length === 0 && !showForm) {
+    <div class="admin-empty">
+      <p>No hay entradas de educación en Firebase. Se usan los datos hardcodeados.</p>
+      <button class="btn-primary" (click)="openCreate()">+ Agregar primera entrada</button>
+    </div>
+  } @else {
+    <div class="entries-list">
+      @for (entry of entries; track entry.id; let i = $index) {
+        <div class="entry-card">
+          <div class="entry-order-btns">
+            <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0">▲</button>
+            <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === entries.length - 1">▼</button>
+          </div>
+          <div class="entry-info">
+            <div class="entry-year">{{ entry.year }}</div>
+            <div class="entry-title">{{ entry.title }}</div>
+            <div class="entry-platform">{{ entry.platform }}</div>
+          </div>
+          <span class="cat-badge" [style.background]="getCatColor(entry.category) + '22'"
+                [style.color]="getCatColor(entry.category)"
+                [style.borderColor]="getCatColor(entry.category) + '55'">
+            {{ entry.category }}
+          </span>
+          <div class="entry-actions">
+            <button class="btn-secondary btn-sm" (click)="openEdit(entry)">Editar</button>
+            <button class="btn-danger btn-sm" (click)="delete(entry)">Eliminar</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

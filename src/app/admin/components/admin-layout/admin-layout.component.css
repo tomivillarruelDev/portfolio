@@ -1,0 +1,99 @@
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────── */
+.admin-sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  background: #0d0a1a;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1.2rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.brand-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #7c3aed;
+  box-shadow: 0 0 8px #7c3aed99;
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 1rem 0.6rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-item:hover  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: rgba(124,58,237,0.25);  color: #c4b5fd; }
+
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.7; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+.sidebar-logout {
+  margin: 0 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.38);
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.sidebar-logout:hover { border-color: rgba(255,255,255,0.28); color: rgba(255,255,255,0.75); }
+
+/* ── Main ─────────────────────────────────────────────────────── */
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .admin-shell { flex-direction: column; }
+  .admin-sidebar { width: 100%; height: auto; position: static; }
+  .sidebar-nav { flex-direction: row; flex-wrap: wrap; padding: 0.5rem; gap: 4px; }
+  .nav-item { font-size: 0.75rem; padding: 0.4rem 0.6rem; }
+  .sidebar-logout { margin: 0.5rem; }
+}

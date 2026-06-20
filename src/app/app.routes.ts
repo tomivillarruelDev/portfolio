@@ -1,13 +1,15 @@
-// app.routes.ts
 import { Routes } from '@angular/router';
 import { HomeComponent } from './portfolio/pages/home/home.component';
 import { LoginComponent } from './admin/components/login/login.component';
+import { AdminLayoutComponent } from './admin/components/admin-layout/admin-layout.component';
 import { DashboardComponent } from './admin/components/dashboard/dashboard.component';
 import { ProjectListComponent } from './admin/components/project-list/project-list.component';
 import { ProjectFormComponent } from './admin/components/project-form/project-form.component';
 import { TechnologyManagementComponent } from './admin/components/technology-management/technology-management.component';
 import { CvUploadComponent } from './admin/components/cv-upload/cv-upload.component';
 import { ProfileImageUploadComponent } from './admin/components/profile-image-upload/profile-image-upload.component';
+import { ExperienceManagementComponent } from './admin/components/experience-management/experience-management.component';
+import { EducationManagementComponent } from './admin/components/education-management/education-management.component';
 import { AuthGuard } from './admin/services/auth.guard';
 
 export const routes: Routes = [
@@ -17,41 +19,22 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: LoginComponent },
       {
-        path: 'dashboard',
-        component: DashboardComponent,
+        path: '',
+        component: AdminLayoutComponent,
         canActivate: [AuthGuard],
+        children: [
+          { path: 'dashboard',            component: DashboardComponent },
+          { path: 'projects',             component: ProjectListComponent },
+          { path: 'projects/create',      component: ProjectFormComponent },
+          { path: 'projects/edit/:id',    component: ProjectFormComponent },
+          { path: 'technologies',         component: TechnologyManagementComponent },
+          { path: 'upload-cv',            component: CvUploadComponent },
+          { path: 'upload-profile-image', component: ProfileImageUploadComponent },
+          { path: 'experience',           component: ExperienceManagementComponent },
+          { path: 'education',            component: EducationManagementComponent },
+          { path: '',                     redirectTo: 'dashboard', pathMatch: 'full' },
+        ],
       },
-      {
-        path: 'projects',
-        component: ProjectListComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'projects/create',
-        component: ProjectFormComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'projects/edit/:id',
-        component: ProjectFormComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'technologies',
-        component: TechnologyManagementComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'upload-cv',
-        component: CvUploadComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'upload-profile-image',
-        component: ProfileImageUploadComponent,
-        canActivate: [AuthGuard],
-      },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' },

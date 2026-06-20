@@ -23,15 +23,15 @@ interface DashboardCard {
   imports: [CommonModule, RouterLink, RouterLinkActive],
 })
 export class DashboardComponent {
-  // Inyección moderna
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Signals para datos reactivos
   readonly navItems = signal<NavItem[]>([
     { label: 'Dashboard', route: '/admin/dashboard' },
     { label: 'Proyectos', route: '/admin/projects' },
-    { label: 'Tecnologías', route: '/admin/technologies' },
+    { label: 'Tecnologias', route: '/admin/technologies' },
+    { label: 'Experiencia', route: '/admin/experience' },
+    { label: 'Educacion', route: '/admin/education' },
     { label: 'Curriculum Vitae', route: '/admin/upload-cv' },
     { label: 'Imagen de Perfil', route: '/admin/upload-profile-image' },
   ]);
@@ -44,10 +44,22 @@ export class DashboardComponent {
       buttonText: 'Ir a Proyectos',
     },
     {
-      title: 'Tecnologías',
-      description: 'Gestiona las tecnologías disponibles',
+      title: 'Tecnologias',
+      description: 'Gestiona las tecnologias disponibles',
       route: '/admin/technologies',
-      buttonText: 'Ir a Tecnologías',
+      buttonText: 'Ir a Tecnologias',
+    },
+    {
+      title: 'Experiencia',
+      description: 'Carga y edita tu experiencia laboral',
+      route: '/admin/experience',
+      buttonText: 'Gestionar Experiencia',
+    },
+    {
+      title: 'Educacion',
+      description: 'Carga y edita tus cursos y certificados',
+      route: '/admin/education',
+      buttonText: 'Gestionar Educacion',
     },
     {
       title: 'Curriculum Vitae',
@@ -66,10 +78,8 @@ export class DashboardComponent {
   async logout(): Promise<void> {
     try {
       await this.authService.logout();
-      console.log('Logout exitoso');
-      // La redirección ya se maneja en el servicio
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error('Error al cerrar sesion:', error);
     }
   }
 }
