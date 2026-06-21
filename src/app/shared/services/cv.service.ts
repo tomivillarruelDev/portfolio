@@ -1,14 +1,8 @@
-import { Injectable, NgZone } from '@angular/core';
-import {
-  Storage,
-  ref,
-  getDownloadURL,
-  StorageReference,
-  getMetadata,
-} from '@angular/fire/storage';
+import { Injectable, inject } from '@angular/core';
+import { Database, ref as dbRef, get, set } from '@angular/fire/database';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { Injector } from '@angular/core';
+import { catchError, map } from 'rxjs/operators';
+import { CloudinaryService } from '../../admin/services/cloudinary.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,96 +11,65 @@ export class CvService {
   private cvUrlSubject = new BehaviorSubject<string | null>(null);
   public cvUrl$: Observable<string | null> = this.cvUrlSubject.asObservable();
 
-  private readonly CV_FILE_PATH = 'cv/tomasvillarruelCV.pdf';
+  private readonly FALLBACK_CV_PATH = '/assets/tomasvillarruelCV.pdf';
   private cachedUrl: string | null = null;
 
-  constructor(
-    private storage: Storage,
-    private injector: Injector,
-    private ngZone: NgZone
-  ) {
-    // Inicializar la URL del CV al cargar el servicio
+  private db = inject(Database);
+  private cloudinaryService = inject(CloudinaryService);
+
+  constructor() {
     this.loadCvUrl().subscribe();
   }
 
   /**
-   * Carga la URL del CV desde Firebase Storage
+   * Carga la URL del CV desde la base de datos de Firebase
    */
   loadCvUrl(): Observable<string | null> {
-    // Si ya tenemos la URL en cache, la devolvemos
     if (this.cachedUrl) {
       return of(this.cachedUrl);
     }
 
-    // Ejecutar fuera de la zona de Angular para evitar problemas de detección de cambios
-    return this.runFirebaseOperation(() => {
-      // Obtenemos la referencia al archivo en Firebase Storage
-      const cvRef = ref(this.storage, this.CV_FILE_PATH);
-
-      // Convertimos la promesa en observable
-      return from(getDownloadURL(cvRef));
-    }).pipe(
-      map((url) => {
-        this.cachedUrl = url;
-        this.cvUrlSubject.next(url);
-        return url;
+    const pathRef = dbRef(this.db, 'cv/url');
+    return from(get(pathRef)).pipe(
+      map((snapshot) => {
+        const url = snapshot.val();
+        if (url) {
+          this.cachedUrl = url;
+          this.cvUrlSubject.next(url);
+          return url;
+        } else {
+          this.cachedUrl = this.FALLBACK_CV_PATH;
+          this.cvUrlSubject.next(this.FALLBACK_CV_PATH);
+          return this.FALLBACK_CV_PATH;
+        }
       }),
-      catchError((error) => {
-        console.error('Error al obtener la URL del CV:', error);
-        // Si hay un error, usamos la ruta local como fallback
-        const fallbackUrl = '/assets/tomasvillarruelCV.pdf';
-        this.cvUrlSubject.next(fallbackUrl);
-        return of(fallbackUrl);
+      catchError(() => {
+        this.cachedUrl = this.FALLBACK_CV_PATH;
+        this.cvUrlSubject.next(this.FALLBACK_CV_PATH);
+        return of(this.FALLBACK_CV_PATH);
       })
     );
   }
 
   /**
-   * Obtiene los metadatos del archivo CV
+   * Obtiene la fecha de última actualización del CV desde la base de datos
    */
   getMetadata(): Observable<any> {
-    return this.runFirebaseOperation(() => {
-      const cvRef = ref(this.storage, this.CV_FILE_PATH);
-      return from(getMetadata(cvRef));
-    }).pipe(
-      catchError((error) => {
-        console.error('Error al obtener los metadatos del CV:', error);
-        return of(null);
-      })
+    const pathRef = dbRef(this.db, 'cv/lastUpdated');
+    return from(get(pathRef)).pipe(
+      map((snapshot) => {
+        const lastUpdated = snapshot.val();
+        return lastUpdated ? { updated: lastUpdated } : null;
+      }),
+      catchError(() => of(null))
     );
-  }
-
-  /**
-   * Método auxiliar para ejecutar operaciones de Firebase fuera de la zona de Angular
-   */
-  private runFirebaseOperation<T>(
-    operation: () => Observable<T>
-  ): Observable<T> {
-    return new Observable<T>((observer) => {
-      this.ngZone.runOutsideAngular(() => {
-        operation().subscribe({
-          next: (result) => {
-            // Volvemos a la zona de Angular para actualizar la UI
-            this.ngZone.run(() => {
-              observer.next(result);
-              observer.complete();
-            });
-          },
-          error: (error) => {
-            this.ngZone.run(() => {
-              observer.error(error);
-            });
-          },
-        });
-      });
-    });
   }
 
   /**
    * Obtiene la URL actual del CV
    */
   getCurrentCvUrl(): string | null {
-    return this.cachedUrl || '/assets/tomasvillarruelCV.pdf';
+    return this.cachedUrl || this.FALLBACK_CV_PATH;
   }
 
   /**
@@ -118,9 +81,44 @@ export class CvService {
   }
 
   /**
-   * Obtiene la referencia al archivo del CV
+   * Sube una nueva versión del CV a Cloudinary y guarda su URL en Firebase
    */
-  getCvReference(): StorageReference {
-    return ref(this.storage, this.CV_FILE_PATH);
+  uploadCv(file: File): Observable<number | string> {
+    const progressSubject = new BehaviorSubject<number | string>(0);
+
+    this.cloudinaryService.uploadImageWithProgress(file).subscribe({
+      next: (progress) => {
+        if (typeof progress === 'number') {
+          progressSubject.next(progress);
+        } else if (typeof progress === 'string') {
+          const finalUrl = progress;
+          
+          const pathRef = dbRef(this.db, 'cv');
+          const cvData = {
+            url: finalUrl,
+            lastUpdated: new Date().toISOString()
+          };
+
+          from(set(pathRef, cvData)).subscribe({
+            next: () => {
+              this.cachedUrl = finalUrl;
+              this.cvUrlSubject.next(finalUrl);
+              progressSubject.next(finalUrl);
+              progressSubject.complete();
+            },
+            error: (err) => {
+              console.error('Error al guardar los datos del CV en la base de datos:', err);
+              progressSubject.error('Error al guardar la información del CV en la base de datos');
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error al subir el CV a Cloudinary:', error);
+        progressSubject.error('Error al subir el CV a Cloudinary');
+      }
+    });
+
+    return progressSubject.asObservable();
   }
 }

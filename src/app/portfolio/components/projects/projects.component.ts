@@ -86,7 +86,7 @@ export class ProjectsComponent {
   }
 
   private async loadProjects() {
-    const all = await this.firebaseService.getProjects('projects');
+    const all = await this.firebaseService.getProjects('projects-image');
     this.featuredProjects.set(all.slice(0, 2));
   }
 
@@ -106,12 +106,10 @@ export class ProjectsComponent {
     return STATIC_FALLBACK[i]?.metrics ?? [];
   }
 
-  getChip(i: number, slot: 0|1|2|3, project: Project): string {
-    if (project.chipVals?.length) return project.chipVals[slot] ?? '';
-    return STATIC_FALLBACK[i]?.chipVals[slot] ?? '';
-  }
-
   private initGsap(): void {
+    // Skip pin animation on mobile/tablet — GSAP sets inline styles that fight CSS
+    if (window.innerWidth < 900) return;
+
     const section = document.querySelector<HTMLElement>('#projects');
     if (!section) return;
     const scenes = Array.from(section.querySelectorAll<HTMLElement>('.proj-scene'));

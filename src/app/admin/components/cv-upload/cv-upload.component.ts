@@ -1,21 +1,14 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import {
-  Storage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from '@angular/fire/storage';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CvService } from '../../../shared/services/cv.service';
 import { CommonModule } from '@angular/common';
-import { Observable, from, lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-cv-upload',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './cv-upload.component.html',
   styleUrls: ['./cv-upload.component.css'],
-  imports: [CommonModule],
 })
 export class CvUploadComponent implements OnInit {
   selectedFile: File | null = null;
@@ -27,10 +20,8 @@ export class CvUploadComponent implements OnInit {
   lastUpdateDate: Date | null = null;
 
   constructor(
-    private storage: Storage,
     private router: Router,
-    private cvService: CvService,
-    private ngZone: NgZone
+    private cvService: CvService
   ) {}
 
   ngOnInit(): void {
@@ -63,56 +54,33 @@ export class CvUploadComponent implements OnInit {
     this.errorMessage = null;
     this.uploadProgress = 0;
 
-    // Ejecutar la subida fuera de la zona de Angular para evitar problemas de detección de cambios
-    this.ngZone.runOutsideAngular(() => {
-      // Crear una referencia única para evitar sobrescrituras
-      const fileName = 'tomasvillarruelCV.pdf';
-      const storageRef = ref(this.storage, `cv/${fileName}`);
-      const uploadTask = uploadBytesResumable(storageRef, this.selectedFile!);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          // Actualizar progreso dentro de la zona para actualizar la UI
-          this.ngZone.run(() => {
-            this.uploadProgress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          });
-        },
-        (error) => {
-          // Manejar error dentro de la zona para actualizar la UI
-          this.ngZone.run(() => {
-            console.error('Error al subir el archivo:', error);
-            this.errorMessage =
-              'Error al subir el archivo. Por favor intenta nuevamente.';
-            this.isUploading = false;
-          });
-        },
-        () => {
-          // Completado exitosamente
-          // Usar from para convertir la promesa en observable y ejecutarlo fuera de la zona
-          from(getDownloadURL(uploadTask.snapshot.ref)).subscribe(
-            (downloadURL) => {
-              // Volver a la zona para actualizar la UI
-              this.ngZone.run(() => {
-                this.currentCvUrl = downloadURL;
-                this.isUploading = false;
-                this.uploadSuccessful = true;
-                this.selectedFile = null;
-                // Actualizar la fecha de última modificación
-                this.lastUpdateDate = new Date();
-
-                // Refrescar la URL del CV en el servicio
-                this.cvService.refreshCvUrl();
-
-                setTimeout(() => {
-                  this.uploadSuccessful = false;
-                }, 5000);
-              });
-            }
-          );
+    this.cvService.uploadCv(this.selectedFile).subscribe({
+      next: (progress) => {
+        if (typeof progress === 'number') {
+          this.uploadProgress = progress;
         }
-      );
+      },
+      error: (error) => {
+        console.error('Error al subir el CV:', error);
+        this.errorMessage =
+          'Error al subir el archivo. Por favor intenta nuevamente.';
+        this.isUploading = false;
+      },
+      complete: () => {
+        this.isUploading = false;
+        this.uploadSuccessful = true;
+        this.selectedFile = null;
+        this.lastUpdateDate = new Date();
+
+        // Refrescar la URL del CV en la interfaz
+        this.cvService.loadCvUrl().subscribe((url) => {
+          this.currentCvUrl = url;
+        });
+
+        setTimeout(() => {
+          this.uploadSuccessful = false;
+        }, 5000);
+      },
     });
   }
 
@@ -121,15 +89,12 @@ export class CvUploadComponent implements OnInit {
     this.cvService.loadCvUrl().subscribe((url) => {
       this.currentCvUrl = url;
 
-      // Obtener los metadatos del archivo para saber su fecha de última modificación
-      if (url && !url.includes('assets')) {
-        // Solo si es una URL de Firebase, usamos el servicio para obtener los metadatos
-        this.cvService.getMetadata().subscribe((metadata) => {
-          if (metadata && metadata.updated) {
-            this.lastUpdateDate = new Date(metadata.updated);
-          }
-        });
-      }
+      // Obtener los metadatos de actualización del CV desde la base de datos
+      this.cvService.getMetadata().subscribe((metadata) => {
+        if (metadata && metadata.updated) {
+          this.lastUpdateDate = new Date(metadata.updated);
+        }
+      });
     });
   }
 

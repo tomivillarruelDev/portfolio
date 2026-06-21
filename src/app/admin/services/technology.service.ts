@@ -66,8 +66,13 @@ export class  TechnologyService {
       });
       techs.sort((a, b) => (a.order || 0) - (b.order || 0));
       if (techs.length === 0) {
-        await this.initDefaultTechnologies();
-        return this.getTechnologies();
+        // Retornamos las tecnologías por defecto en memoria para evitar bucles de recursión infinita
+        // si el usuario no tiene permisos de escritura en la base de datos (por ejemplo, en el inicio de la app).
+        return this.defaultTechnologies.map((name, index) => ({
+          id: `default-${index}`,
+          name: name,
+          order: index + 1,
+        }));
       }
       return techs;
     } catch (error) {

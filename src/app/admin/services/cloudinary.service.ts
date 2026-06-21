@@ -6,23 +6,17 @@ import { firstValueFrom, Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class CloudinaryService {
-  // Configuración de tu cuenta de Cloudinary
-  private cloudName = 'dcfcee5za';
-
-  // IMPORTANTE: Debes crear un Upload Preset de tipo "Unsigned" en la configuración de Cloudinary
-  // y colocar su nombre aquí (por ejemplo, 'portfolio_preset' o 'ml_default')
-  private uploadPreset = 'preset_portfolio';
+  private cloudName = 'dagxp85fl';
+  private uploadPreset = 'ml_default';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Sube una imagen directamente a Cloudinary y retorna su URL segura.
-   * @param file El archivo de imagen a subir.
-   * @returns Promesa con la URL segura de la imagen.
+   * Sube una imagen directamente a Cloudinary y retorna su URL.
    */
   async uploadImage(file: File): Promise<string> {
     const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-
+    
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', this.uploadPreset);
@@ -31,7 +25,7 @@ export class CloudinaryService {
       const response = await firstValueFrom(
         this.http.post<{ secure_url: string }>(url, formData)
       );
-
+      
       if (response && response.secure_url) {
         return response.secure_url;
       }
@@ -44,8 +38,6 @@ export class CloudinaryService {
 
   /**
    * Sube una imagen a Cloudinary reportando el progreso de la carga.
-   * @param file El archivo de imagen a subir.
-   * @returns Observable que emite números (porcentaje de 0 a 100) y finalmente la URL segura de la imagen (string).
    */
   uploadImageWithProgress(file: File): Observable<number | string> {
     const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;

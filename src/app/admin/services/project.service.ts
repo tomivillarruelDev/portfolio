@@ -143,8 +143,8 @@ export class ProjectService {
     try {
       return await this.cloudinaryService.uploadImage(file);
     } catch (error) {
-      console.error('Error uploading image to Cloudinary:', error);
-      throw new Error('Could not upload image to Cloudinary');
+      console.error('Error al subir la imagen a Cloudinary:', error);
+      throw new Error('No se pudo subir la imagen a Cloudinary');
     }
   }
 
