@@ -7,31 +7,41 @@
         <h2 class="section-title">Tecnologías<br>que domino</h2>
         <p class="section-desc">Mi stack principal con el que construyo productos rápidos, escalables y mantenibles.</p>
         <div class="skills-list">
-          <span class="skill-pill"><span class="tech-ic ic-ng">Ng</span> Angular</span>
-          <span class="skill-pill"><span class="tech-ic ic-ts">TS</span> TypeScript</span>
-          <span class="skill-pill"><span class="tech-ic ic-no">N</span> Node.js</span>
-          <span class="skill-pill"><span class="tech-ic ic-fb">F</span> Firebase</span>
-          <span class="skill-pill"><span class="tech-ic ic-mo">M</span> MongoDB</span>
-          <span class="skill-pill"><span class="tech-ic ic-pg">Pg</span> PostgreSQL</span>
-          <span class="skill-pill"><span class="tech-ic ic-dk">Dk</span> Docker</span>
-          <span class="skill-pill"><span class="tech-ic ic-git">Git</span> Git</span>
-          <span class="skill-pill"><span class="tech-ic ic-aws">AWS</span> AWS</span>
-          <span class="skill-pill"><span class="tech-ic ic-cs">Css</span> CSS / Sass</span>
+          @for (tech of technologies(); track tech.id) {
+            <span class="skill-pill">
+              @if (tech.icon) {
+                <img [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon" />
+              } @else {
+                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
+              }
+              {{ tech.name }}
+            </span>
+          }
         </div>
       </div>
 
       <div class="skills-orb-wrap reveal-right">
         <div class="orbit orbit-2">
-          <div class="orbit-dot o2-d1"><span class="tech-ic ic-dk">Dk</span></div>
-          <div class="orbit-dot o2-d2"><span class="tech-ic ic-mo">M</span></div>
-          <div class="orbit-dot o2-d3"><span class="tech-ic ic-aws">AWS</span></div>
-          <div class="orbit-dot o2-d4"><span class="tech-ic ic-git">Git</span></div>
+          @for (tech of orbitOuter(); track tech.id; let i = $index) {
+            <div class="orbit-dot" [ngClass]="'o2-d' + (i + 1)">
+              @if (tech.icon) {
+                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon" />
+              } @else {
+                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
+              }
+            </div>
+          }
         </div>
         <div class="orbit orbit-1">
-          <div class="orbit-dot o1-d1"><span class="tech-ic ic-ng">Ng</span></div>
-          <div class="orbit-dot o1-d2"><span class="tech-ic ic-no">N</span></div>
-          <div class="orbit-dot o1-d3"><span class="tech-ic ic-ts">TS</span></div>
-          <div class="orbit-dot o1-d4"><span class="tech-ic ic-fb">F</span></div>
+          @for (tech of orbitInner(); track tech.id; let i = $index) {
+            <div class="orbit-dot" [ngClass]="'o1-d' + (i + 1)">
+              @if (tech.icon) {
+                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon" />
+              } @else {
+                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
+              }
+            </div>
+          }
         </div>
         <div class="skills-central-orb" style="color:var(--purple-3)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
