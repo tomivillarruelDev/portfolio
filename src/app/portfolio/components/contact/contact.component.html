@@ -68,7 +68,12 @@
               placeholder="¿Cuál es el problema que querés resolver? ¿Tenés un plazo en mente? Cuanto más detalle, mejor puedo ayudarte."
               required [(ngModel)]="form.mensaje"></textarea>
           </div>
-          <button type="submit" class="form-submit">Enviar mensaje →</button>
+          <button type="submit" class="form-submit" [disabled]="sending">
+            @if (sending) { Enviando… } @else { Enviar mensaje → }
+          </button>
+          @if (error) {
+            <div class="form-error">{{ error }}</div>
+          }
           <div class="form-reassurance">Sin compromiso &nbsp;·&nbsp; Respuesta en &lt; 24h</div>
         </form>
       } @else {
