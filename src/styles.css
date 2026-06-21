@@ -25,6 +25,21 @@ body {
   background: var(--bg); color: var(--text);
   overflow-x: hidden; line-height: 1.6;
 }
+
+/* ── ADMIN LIGHT OVERRIDE ── */
+body.admin-mode {
+  background: #f4f5f7;
+  color: #111827;
+  color-scheme: light;
+}
+body.admin-mode::before { display: none; }
+body.admin-mode *,
+body.admin-mode input,
+body.admin-mode select,
+body.admin-mode textarea,
+body.admin-mode button {
+  color-scheme: light;
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   html { scroll-behavior: auto; }

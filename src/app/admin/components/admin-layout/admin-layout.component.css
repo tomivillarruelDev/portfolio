@@ -1,8 +1,26 @@
+/* Reset dark theme from portfolio globals */
+:host {
+  display: block;
+  color-scheme: light;
+}
+
 .admin-shell {
   display: flex;
   min-height: 100vh;
   background: #f4f5f7;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #111827;
+  /* isolate from body::before noise overlay */
+  isolation: isolate;
+}
+
+/* Hard-reset all form elements inside admin */
+.admin-shell input,
+.admin-shell select,
+.admin-shell textarea,
+.admin-shell button {
+  color-scheme: light;
+  font-family: inherit;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────────── */
@@ -18,6 +36,7 @@
   height: 100vh;
   overflow-y: auto;
   z-index: 10;
+  color-scheme: dark;
 }
 
 .sidebar-brand {
@@ -36,7 +55,7 @@
   width: 9px; height: 9px;
   border-radius: 50%;
   background: #7c3aed;
-  box-shadow: 0 0 8px #7c3aed99;
+  box-shadow: 0 0 8px rgba(124,58,237,0.6);
   flex-shrink: 0;
 }
 
@@ -88,6 +107,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  background: #f4f5f7;
+  color: #111827;
 }
 
 @media (max-width: 768px) {

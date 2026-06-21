@@ -1,4 +1,4 @@
-import { Component, signal, computed, effect, inject } from '@angular/core';
+import { Component, signal, computed, effect, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -11,32 +11,35 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.css'],
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class LoginComponent {
-  // Señales para el estado reactivo
+export class LoginComponent implements OnInit, OnDestroy {
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  // Inyección moderna
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Formulario reactivo como señal
   readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  // Computed para saber si el formulario es inválido
   readonly isFormInvalid = computed(() => this.loginForm.invalid);
 
   constructor() {
-    // Limpiar error al cambiar campos
     effect(() => {
       this.loginForm.valueChanges.subscribe(() => {
         if (this.errorMessage()) this.errorMessage.set(null);
       });
     });
+  }
+
+  ngOnInit(): void {
+    document.body.classList.add('admin-mode');
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('admin-mode');
   }
 
   async onSubmit(): Promise<void> {
@@ -51,15 +54,12 @@ export class LoginComponent {
       await this.authService.login(email!, password!);
       this.router.navigate(['/admin/dashboard']);
     } catch (err: any) {
-      if (
-        err.code === 'auth/user-not-found' ||
-        err.code === 'auth/wrong-password'
-      ) {
-        this.errorMessage.set('Email o contraseña incorrectos.');
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        this.errorMessage.set('Email o contrasena incorrectos.');
       } else if (err.code === 'auth/too-many-requests') {
-        this.errorMessage.set('Demasiados intentos. Inténtelo más tarde.');
+        this.errorMessage.set('Demasiados intentos. Intentelo mas tarde.');
       } else {
-        this.errorMessage.set('Error al iniciar sesión. Inténtelo de nuevo.');
+        this.errorMessage.set('Error al iniciar sesion. Intentelo de nuevo.');
       }
     } finally {
       this.loading.set(false);
