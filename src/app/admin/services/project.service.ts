@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { firebaseConfig } from '../../firebase.config';
+import { CloudinaryService } from './cloudinary.service';
 
 export interface Project {
   id?: string;
@@ -28,7 +29,8 @@ export class ProjectService {
 
   constructor(
     private storage: AngularFireStorage,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private cloudinaryService: CloudinaryService
   ) {}
 
   /**
@@ -221,80 +223,33 @@ export class ProjectService {
   }
 
   /**
-   * Sube una imagen al storage de Firebase y retorna la URL de descarga.
-   * Incluye mecanismo de reintentos para evitar errores 404 justo después de la subida.
+   * Sube una imagen a Cloudinary y retorna la URL de descarga.
    */
   async uploadImage(file: File, projectName: string): Promise<string> {
-    const safeFileName = `${projectName
-      .toLowerCase()
-      .replace(/\s+/g, '-')}-${Date.now()}`;
-    const fileExtension = file.name.split('.').pop() || '';
-    const fileName = `${safeFileName}.${fileExtension}`; // Añadir extensión al archivo
-    const filePath = `project-images/${fileName}`;
-    const fileRef = this.storage.ref(filePath);
-
     try {
-      // Subir la imagen y esperar a que se complete
-      await this.storage.upload(filePath, file).task;
-
-      // Implementar mecanismo de reintento para obtener la URL
-      let downloadURL = '';
-      let attempts = 0;
-      const maxAttempts = 5;
-      const retryDelay = 700; // milisegundos
-
-      while (attempts < maxAttempts) {
-        try {
-          // Pequeña pausa antes de solicitar la URL
-          await new Promise((r) => setTimeout(r, retryDelay));
-          downloadURL = await this.storage
-            .ref(filePath)
-            .getDownloadURL()
-            .toPromise();
-
-          if (downloadURL) {
-            console.log(
-              `Image upload successful after ${attempts + 1} attempt(s)`
-            );
-            return downloadURL;
-          }
-
-          attempts++;
-        } catch (error) {
-          console.log(
-            `Retry attempt ${attempts + 1}/${maxAttempts} failed:`,
-            error
-          );
-          attempts++;
-
-          // Si es el último intento, propagar el error
-          if (attempts >= maxAttempts) {
-            throw error;
-          }
-        }
-      }
-
-      throw new Error(
-        `Failed to get download URL after ${maxAttempts} attempts`
-      );
+      return await this.cloudinaryService.uploadImage(file);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      throw new Error('Could not upload image to Firebase Storage');
+      console.error('Error uploading image to Cloudinary:', error);
+      throw new Error('Could not upload image to Cloudinary');
     }
   }
 
   /**
-   * Elimina una imagen del storage de Firebase usando su URL.
+   * Elimina una imagen del storage de Firebase usando su URL si corresponde.
    */
   private async deleteImage(imageUrl: string): Promise<void> {
     if (!imageUrl) return;
-    try {
-      const fileRef = this.storage.refFromURL(imageUrl);
-      await fileRef.delete().toPromise();
-    } catch (error: any) {
-      if (error.code !== 'storage/object-not-found') {
-        console.error('Error deleting image from storage:', error);
+    if (imageUrl.includes('firebasestorage.googleapis.com')) {
+      try {
+        const fileRef = this.storage.refFromURL(imageUrl);
+        await fileRef.delete().toPromise();
+      } catch (error: any) {
+        if (error.code !== 'storage/object-not-found') {
+          console.error('Error deleting image from storage:', error);
+        }
       }
+    } else {
+      console.log('La imagen está alojada externamente (ej: Cloudinary). No se requiere borrar de Firebase Storage.');
     }
   }
 }

@@ -21,6 +21,7 @@ import {
 
 import { Project } from './project.service';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
+import { CloudinaryService } from './cloudinary.service';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,7 @@ export class  TechnologyService {
   // Inyección moderna con inject()
   private db = inject(Database);
   private storage = inject(Storage);
+  private cloudinaryService = inject(CloudinaryService);
 
   /**
    * Obtiene todas las tecnologías ordenadas por el campo 'order'.
@@ -218,20 +220,25 @@ export class  TechnologyService {
   }
 
   /**
-   * Elimina el archivo de icono del storage si existe.
+   * Elimina el archivo de icono del storage si existe y corresponde a Firebase.
    */
   private async deleteIconFile(iconUrl: string): Promise<void> {
-    try {
-      const iconPath = iconUrl.split('/').pop();
-      if (iconPath) {
-        const fileRef = storageRef(
-          this.storage,
-          `technology-icons/${iconPath}`
-        );
-        await deleteObject(fileRef);
+    if (!iconUrl) return;
+    if (iconUrl.includes('firebasestorage.googleapis.com')) {
+      try {
+        const iconPath = iconUrl.split('/').pop();
+        if (iconPath) {
+          const fileRef = storageRef(
+            this.storage,
+            `technology-icons/${iconPath}`
+          );
+          await deleteObject(fileRef);
+        }
+      } catch (error) {
+        console.error('Error al eliminar el icono:', error);
       }
-    } catch (error) {
-      console.error('Error al eliminar el icono:', error);
+    } else {
+      console.log('El ícono está alojado externamente (ej: Cloudinary). No se requiere borrar de Firebase Storage.');
     }
   }
 
@@ -253,16 +260,9 @@ export class  TechnologyService {
    */
   async uploadIcon(file: File, technologyName: string): Promise<string> {
     try {
-      const fileName = `${technologyName
-        .toLowerCase()
-        .replace(/\s+/g, '-')}-${Date.now()}.${file.name.split('.').pop()}`;
-      const filePath = `technology-icons/${fileName}`;
-      const fileRef = storageRef(this.storage, filePath);
-      await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(fileRef);
-      return url;
+      return await this.cloudinaryService.uploadImage(file);
     } catch (error) {
-      console.error('Error al subir el ícono:', error);
+      console.error('Error al subir el ícono a Cloudinary:', error);
       throw new Error('No se pudo subir el ícono');
     }
   }

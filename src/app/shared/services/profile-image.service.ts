@@ -1,13 +1,8 @@
-import { Injectable } from '@angular/core';
-import {
-  Storage,
-  ref,
-  getDownloadURL,
-  uploadBytesResumable,
-  getMetadata,
-} from '@angular/fire/storage';
+import { Injectable, inject } from '@angular/core';
+import { Database, ref as dbRef, get, set } from '@angular/fire/database';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { CloudinaryService } from '../../admin/services/cloudinary.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,48 +12,18 @@ export class ProfileImageService {
   public imageUrl$: Observable<string | null> =
     this.imageUrlSubject.asObservable();
 
-  private readonly IMAGE_FILE_PATH = 'profile/profileImage.png';
   private readonly FALLBACK_IMAGE_PATH = './assets/img/tomas.png';
   private cachedUrl: string | null = null;
 
-  // Flag para recordar si ya verificamos que la imagen no existe
-  private imageChecked: boolean = false;
-  private imageExists: boolean = false;
+  private db = inject(Database);
+  private cloudinaryService = inject(CloudinaryService);
 
-  constructor(private storage: Storage) {
+  constructor() {
     this.loadImageUrl().subscribe();
   }
 
   /**
-   * Verifica si la imagen de perfil existe en Firebase Storage
-   */
-  private checkIfImageExists(): Observable<boolean> {
-    // Si ya verificamos anteriormente, devolvemos el resultado almacenado
-    if (this.imageChecked) {
-      return of(this.imageExists);
-    }
-
-    const imageRef = ref(this.storage, this.IMAGE_FILE_PATH);
-
-    return from(
-      getMetadata(imageRef)
-        .then(() => {
-          // La imagen existe
-          this.imageChecked = true;
-          this.imageExists = true;
-          return true;
-        })
-        .catch(() => {
-          // La imagen no existe
-          this.imageChecked = true;
-          this.imageExists = false;
-          return false;
-        })
-    );
-  }
-
-  /**
-   * Carga la URL de la imagen de perfil desde Firebase Storage
+   * Carga la URL de la imagen de perfil desde Firebase Database
    */
   loadImageUrl(): Observable<string | null> {
     // Si ya tenemos la URL en cache, la devolvemos
@@ -66,34 +31,22 @@ export class ProfileImageService {
       return of(this.cachedUrl);
     }
 
-    // Primero verificamos si la imagen existe
-    return this.checkIfImageExists().pipe(
-      switchMap((exists) => {
-        if (exists) {
-          // La imagen existe, obtenemos su URL
-          const imageRef = ref(this.storage, this.IMAGE_FILE_PATH);
-          return from(getDownloadURL(imageRef)).pipe(
-            tap((url) => {
-              this.cachedUrl = url;
-              this.imageUrlSubject.next(url);
-            }),
-            catchError(() => {
-              // En caso de error, usamos la imagen por defecto
-              this.cachedUrl = this.FALLBACK_IMAGE_PATH;
-              this.imageUrlSubject.next(this.FALLBACK_IMAGE_PATH);
-              return of(this.FALLBACK_IMAGE_PATH);
-            })
-          );
+    const pathRef = dbRef(this.db, 'profile/imageUrl');
+    return from(get(pathRef)).pipe(
+      map((snapshot) => {
+        const url = snapshot.val();
+        if (url) {
+          this.cachedUrl = url;
+          this.imageUrlSubject.next(url);
+          return url;
         } else {
-          // La imagen no existe, usamos la imagen por defecto sin intentar cargarla de nuevo
-          console.log('La imagen no existe, usando imagen por defecto');
           this.cachedUrl = this.FALLBACK_IMAGE_PATH;
           this.imageUrlSubject.next(this.FALLBACK_IMAGE_PATH);
-          return of(this.FALLBACK_IMAGE_PATH);
+          return this.FALLBACK_IMAGE_PATH;
         }
       }),
       catchError(() => {
-        // En caso de error general, usamos la imagen por defecto
+        // En caso de error, usamos la imagen por defecto
         this.cachedUrl = this.FALLBACK_IMAGE_PATH;
         this.imageUrlSubject.next(this.FALLBACK_IMAGE_PATH);
         return of(this.FALLBACK_IMAGE_PATH);
@@ -113,45 +66,43 @@ export class ProfileImageService {
    */
   refreshImageUrl(): void {
     this.cachedUrl = null;
-    this.imageChecked = false; // Resetear el flag para volver a verificar
     this.loadImageUrl().subscribe();
   }
 
   /**
-   * Sube una nueva imagen de perfil a Firebase Storage
+   * Sube una nueva imagen de perfil a Cloudinary y guarda su URL en Firebase Database
    */
   uploadProfileImage(file: File): Observable<number | string> {
-    const progressSubject = new BehaviorSubject<number>(0);
-    const storageRef = ref(this.storage, this.IMAGE_FILE_PATH);
+    const progressSubject = new BehaviorSubject<number | string>(0);
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        // Actualizar progreso
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        progressSubject.next(progress);
+    this.cloudinaryService.uploadImageWithProgress(file).subscribe({
+      next: (progress) => {
+        if (typeof progress === 'number') {
+          progressSubject.next(progress);
+        } else if (typeof progress === 'string') {
+          const finalUrl = progress; // Es la URL segura de Cloudinary
+          
+          // Guardar esta URL en Firebase Realtime Database
+          const pathRef = dbRef(this.db, 'profile/imageUrl');
+          from(set(pathRef, finalUrl)).subscribe({
+            next: () => {
+              this.cachedUrl = finalUrl;
+              this.imageUrlSubject.next(finalUrl);
+              progressSubject.next(finalUrl);
+              progressSubject.complete();
+            },
+            error: (err) => {
+              console.error('Error saving profile image URL to database:', err);
+              progressSubject.error('Error al guardar la URL en la base de datos');
+            }
+          });
+        }
       },
-      (error) => {
-        // Manejar error
-        console.error('Error al subir la imagen de perfil:', error);
-        progressSubject.error('Error al subir la imagen');
-      },
-      () => {
-        // Completado exitosamente
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          this.cachedUrl = downloadURL;
-          this.imageUrlSubject.next(downloadURL);
-          // Actualizar el estado de verificación
-          this.imageChecked = true;
-          this.imageExists = true;
-          progressSubject.next(100);
-          progressSubject.complete();
-        });
+      error: (error) => {
+        console.error('Error uploading profile image to Cloudinary:', error);
+        progressSubject.error(error);
       }
-    );
+    });
 
     return progressSubject.asObservable();
   }
