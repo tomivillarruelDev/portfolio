@@ -68,6 +68,18 @@
 @media (max-width: 768px) {
   #experience { padding: 80px 0; }
   .exp-container { padding: 0 24px; }
+  .exp-entry { padding: 44px 0; }
   .exp-content { grid-template-columns: 1fr; gap: 32px; }
   .exp-pullquote { border-left: none; border-top: 1px solid var(--border); padding: 20px 0 0; }
+}
+@media (max-width: 600px) {
+  #experience { padding: 64px 0; }
+  .exp-container { padding: 0 20px; }
+  .exp-entry { padding: 36px 0; }
+  .exp-headline { font-size: clamp(32px, 12vw, 60px); }
+  .exp-byline { flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px 0 18px; }
+  .exp-header { margin-bottom: 40px; }
+}
+@media (max-width: 400px) {
+  .exp-entry { padding: 28px 0; }
 }

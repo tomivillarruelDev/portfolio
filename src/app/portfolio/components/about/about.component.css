@@ -1,1 +1,14 @@
-/* about uses global styles */
+/* about uses global styles — responsive overrides below */
+@media (max-width: 1024px) {
+  .about-inner { gap: 48px; }
+}
+@media (max-width: 768px) {
+  #about { padding: 80px 0; }
+  .about-inner { gap: 40px; }
+  .about-image { aspect-ratio: 5/4; }
+}
+@media (max-width: 600px) {
+  #about { padding: 64px 0; }
+  .about-story { font-size: 15px; }
+  .about-values { gap: 10px; }
+}

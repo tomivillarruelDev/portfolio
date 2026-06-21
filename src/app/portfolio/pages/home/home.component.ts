@@ -48,11 +48,16 @@ export class HomeComponent implements AfterViewInit {
   }
 
   private initAllAnimations(): void {
-    this.initRevealObserver();
-    this.initNavShrink();
+    this.initRevealObserver();  // always: handles .reveal via IntersectionObserver
+    this.initNavShrink();       // always
+    this.initStatCounters();    // always: number counters work on all screens
+
+    // GSAP scrub animations set opacity:0 inline — skip on mobile where
+    // scroll triggers don't complete reliably, leaving content invisible
+    if (window.innerWidth < 900) return;
+
     this.initHeroExit();
     this.initStatCols();
-    this.initStatCounters();
     this.initSectionLabels();
     this.initSectionTitles();
     this.initSectionDescs();
@@ -70,6 +75,16 @@ export class HomeComponent implements AfterViewInit {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
     document.querySelectorAll('.reveal,.stagger').forEach(el => io.observe(el));
+
+    if (window.innerWidth < 900) {
+      // On mobile, make reveal-left/right immediately visible instead of scrub-animating
+      document.querySelectorAll<HTMLElement>('.reveal-left, .reveal-right').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.transition = 'none';
+      });
+      return;
+    }
 
     document.querySelectorAll<HTMLElement>('.reveal-left').forEach(el => {
       el.style.transition = 'none';

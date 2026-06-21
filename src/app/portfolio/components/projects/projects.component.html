@@ -23,14 +23,16 @@
             </div>
           }
 
-          <div class="proj-chip pc-1">
-            <div class="proj-chip-val">{{ getChip(i, 0, project) }}</div>
-            <div class="proj-chip-lab">{{ getChip(i, 1, project) }}</div>
-          </div>
-          <div class="proj-chip pc-2">
-            <div class="proj-chip-val">{{ getChip(i, 2, project) }}</div>
-            <div class="proj-chip-lab">{{ getChip(i, 3, project) }}</div>
-          </div>
+          @if (project.chipVals?.length) {
+            <div class="proj-chip pc-1">
+              <div class="proj-chip-val">{{ project.chipVals![0] }}</div>
+              <div class="proj-chip-lab">{{ project.chipVals![1] }}</div>
+            </div>
+            <div class="proj-chip pc-2">
+              <div class="proj-chip-val">{{ project.chipVals![2] }}</div>
+              <div class="proj-chip-lab">{{ project.chipVals![3] }}</div>
+            </div>
+          }
 
           <div class="proj-frame">
             <div class="browser-chrome">
@@ -50,7 +52,7 @@
             @if (project.photoURL) {
               <div class="browser-screen" style="padding:0;overflow:hidden;">
                 <img [src]="project.photoURL" [alt]="project.name"
-                     style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy"/>
+                     style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" loading="lazy"/>
               </div>
             } @else if (i === 0) {
               <div class="browser-screen" style="background:#060d1a;padding:0;overflow:hidden;">

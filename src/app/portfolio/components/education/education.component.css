@@ -45,7 +45,17 @@
 @media (max-width: 768px) {
   #education { padding: 80px 0; }
   .edu-container { padding: 0 24px; }
-  .edu-table-head { grid-template-columns: 1fr; display: none; }
-  .edu-row { grid-template-columns: 1fr; gap: 6px; }
+  .edu-table-head { display: none; }
+  .edu-row { grid-template-columns: 1fr; gap: 6px; padding: 16px 12px; }
   .edu-row-year { font-size: 11px; }
+}
+@media (max-width: 600px) {
+  #education { padding: 64px 0; }
+  .edu-container { padding: 0 20px; }
+  .edu-header { margin-bottom: 32px; }
+  .edu-row { padding: 14px 10px; gap: 5px; }
+  .edu-row-title { font-size: 13.5px; }
+}
+@media (max-width: 400px) {
+  .edu-container { padding: 0 16px; }
 }
