@@ -6,22 +6,23 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  // Inyección moderna
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  canActivate(
+  // Async para esperar a que Firebase restaure la sesión antes de decidir
+  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree {
-    // Uso reactivo: consulta la señal directamente
-    if (this.authService.isAuthenticated()) {
+  ): Promise<boolean | UrlTree> {
+    const user = await firstValueFrom(this.authService.getAuthState());
+    if (user) {
       return true;
     }
     return this.router.createUrlTree(['/admin/login']);

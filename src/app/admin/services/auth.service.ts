@@ -1,6 +1,7 @@
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
 
 @Injectable({
@@ -57,5 +58,13 @@ export class AuthService {
    */
   checkAuthSync(): boolean {
     return !!this._currentUser();
+  }
+
+  /**
+   * Observable del estado de autenticación — el guard debe esperar el primer emit
+   * para evitar redirigir al login antes de que Firebase restaure la sesión
+   */
+  getAuthState(): Observable<firebase.User | null> {
+    return this.afAuth.authState;
   }
 }
