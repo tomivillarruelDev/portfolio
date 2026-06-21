@@ -1,29 +1,35 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { firebaseConfig } from '../../firebase.config';
 import { CloudinaryService } from './cloudinary.service';
 
+export interface ProjectMetric {
+  val: string;
+  lab: string;
+}
+
 export interface Project {
   id?: string;
   name: string;
+  nameHtml?: string | null;
   description: string;
+  tagline?: string | null;
+  metrics?: ProjectMetric[] | null;
+  chipVals?: string[] | null;
   technologies: string[];
   github: string;
-  page?: string | null; // Permitir null
-  photoURL?: string | null; // Permitir null
+  page?: string | null;
+  photoURL?: string | null;
   order?: number;
 }
 
 export enum ProjectType {
-  CARD = 'projects',
+  CARD  = 'projects',
   IMAGE = 'projects-image',
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ProjectService {
   private readonly databaseUrl: string = firebaseConfig.databaseURL;
 
@@ -33,139 +39,74 @@ export class ProjectService {
     private cloudinaryService: CloudinaryService
   ) {}
 
-  /**
-   * Obtiene todos los proyectos de un tipo específico, ordenados.
-   */
-  async getProjects(
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<Project[]> {
+  async getProjects(projectType: ProjectType = ProjectType.IMAGE): Promise<Project[]> {
     try {
-      // Usamos promise-based API en lugar de observables
       const snapshot = await this.db.database.ref(projectType).once('value');
-      const projectsObject = snapshot.val() || {};
-
-      // Convertir objeto a array
-      const projectsArray = Object.entries(projectsObject).map(
-        ([key, value]) => ({
-          ...(value as object),
-          id: key,
-        })
-      ) as Project[];
-
-      // Ordenar por el campo order
-      return projectsArray.sort((a, b) => {
-        const orderA = a.order ?? Infinity;
-        const orderB = b.order ?? Infinity;
-        return orderA - orderB;
-      });
+      const obj = snapshot.val() || {};
+      const arr = Object.entries(obj).map(([key, value]) => ({
+        ...(value as object), id: key,
+      })) as Project[];
+      return arr.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
     } catch (error) {
       console.error(`Error fetching projects (${projectType}):`, error);
       throw new Error(`Could not fetch projects (${projectType})`);
     }
   }
 
-  /**
-   * Obtiene un proyecto por su ID.
-   */
-  async getProjectById(
-    id: string,
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<Project | null> {
+  async getProjectById(id: string, projectType: ProjectType = ProjectType.IMAGE): Promise<Project | null> {
     try {
-      const snapshot = await this.db.database
-        .ref(`${projectType}/${id}`)
-        .once('value');
+      const snapshot = await this.db.database.ref(`${projectType}/${id}`).once('value');
       const project = snapshot.val();
       return project ? { ...project, id } : null;
     } catch (error) {
-      console.error(
-        `Error fetching project by ID (${id}, ${projectType}):`,
-        error
-      );
+      console.error(`Error fetching project by ID (${id}, ${projectType}):`, error);
       throw new Error(`Could not fetch project (${id}, ${projectType})`);
     }
   }
 
-  /**
-   * Crea un nuevo proyecto, asignando un orden si no se proporciona.
-   * Reemplaza cualquier valor undefined con null para evitar problemas con Firebase.
-   */
-  async createProject(
-    projectData: Omit<Project, 'id'>,
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<Project> {
+  async createProject(projectData: Omit<Project, 'id'>, projectType: ProjectType = ProjectType.IMAGE): Promise<Project> {
     try {
-      // Crear una nueva referencia con ID único
       const newRef = this.db.database.ref(projectType).push();
       const key = newRef.key!;
-
-      // Clonar los datos para no modificar el objeto original
-      let sanitizedData = { ...projectData };
-
-      // Reemplazar cualquier valor undefined con null o valor por defecto
-      if (sanitizedData.page === undefined) sanitizedData.page = null;
-      if (sanitizedData.photoURL === undefined) sanitizedData.photoURL = null;
-      if (sanitizedData.order === undefined) {
-        // Obtener el siguiente orden
+      let data = { ...projectData };
+      if (data.page      === undefined) data.page      = null;
+      if (data.photoURL  === undefined) data.photoURL  = null;
+      if (data.nameHtml  === undefined) data.nameHtml  = null;
+      if (data.tagline   === undefined) data.tagline   = null;
+      if (data.metrics   === undefined) data.metrics   = null;
+      if (data.chipVals  === undefined) data.chipVals  = null;
+      if (data.order === undefined) {
         const projects = await this.getProjects(projectType);
-        const maxOrder = projects.reduce(
-          (max, p) => (p.order !== undefined && p.order > max ? p.order : max),
-          -1
-        );
-        sanitizedData.order = maxOrder + 1;
+        const maxOrder = projects.reduce((max, p) => (p.order !== undefined && p.order > max ? p.order : max), -1);
+        data.order = maxOrder + 1;
       }
-
-      // Asegurar que technologies sea un array
-      if (!Array.isArray(sanitizedData.technologies)) {
-        sanitizedData.technologies = [];
-      }
-
-      // Guardar en Firebase
-      await newRef.set(sanitizedData);
-      return { ...sanitizedData, id: key };
+      if (!Array.isArray(data.technologies)) data.technologies = [];
+      await newRef.set(data);
+      return { ...data, id: key };
     } catch (error) {
       console.error(`Error creating project (${projectType}):`, error);
       throw new Error(`Could not create project (${projectType})`);
     }
   }
 
-  /**
-   * Actualiza un proyecto existente.
-   */
-  async updateProject(
-    project: Project,
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<Project> {
-    if (!project.id) {
-      throw new Error('Project ID is required for update');
-    }
+  async updateProject(project: Project, projectType: ProjectType = ProjectType.IMAGE): Promise<Project> {
+    if (!project.id) throw new Error('Project ID is required for update');
     try {
       const { id, ...projectData } = project;
       await this.db.database.ref(`${projectType}/${id}`).update(projectData);
       return project;
     } catch (error) {
-      console.error(
-        `Error updating project (${project.id}, ${projectType}):`,
-        error
-      );
-      throw new Error(
-        `Could not update project (${project.id}, ${projectType})`
-      );
+      console.error(`Error updating project (${project.id}, ${projectType}):`, error);
+      throw new Error(`Could not update project (${project.id}, ${projectType})`);
     }
   }
 
-  /**
-   * Elimina un proyecto y su imagen asociada si es de tipo IMAGE.
-   */
-  async deleteProject(
-    id: string,
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<void> {
+  async deleteProject(id: string, projectType: ProjectType = ProjectType.IMAGE): Promise<void> {
     try {
       if (projectType === ProjectType.IMAGE) {
         const project = await this.getProjectById(id, projectType);
         if (project?.photoURL) {
-          this.deleteImage(project.photoURL).catch((err) =>
+          this.deleteImage(project.photoURL).catch(err =>
             console.warn(`Failed to delete image for project ${id}:`, err)
           );
         }
@@ -177,44 +118,20 @@ export class ProjectService {
     }
   }
 
-  /**
-   * Actualiza el orden de un proyecto específico.
-   */
-  async updateProjectOrder(
-    projectId: string,
-    newOrder: number,
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<void> {
+  async updateProjectOrder(projectId: string, newOrder: number, projectType: ProjectType = ProjectType.IMAGE): Promise<void> {
     try {
-      await this.db.database
-        .ref(`${projectType}/${projectId}`)
-        .update({ order: newOrder });
+      await this.db.database.ref(`${projectType}/${projectId}`).update({ order: newOrder });
     } catch (error) {
-      console.error(
-        `Error updating project order (${projectId}, ${projectType}):`,
-        error
-      );
-      throw new Error(
-        `Could not update project order (${projectId}, ${projectType})`
-      );
+      console.error(`Error updating project order (${projectId}, ${projectType}):`, error);
+      throw new Error(`Could not update project order (${projectId}, ${projectType})`);
     }
   }
 
-  /**
-   * Reordena múltiples proyectos eficientemente usando una actualización por lotes.
-   */
-  async reorderProjects(
-    projectIds: string[],
-    projectType: ProjectType = ProjectType.IMAGE
-  ): Promise<void> {
-    if (!projectIds || projectIds.length === 0) {
-      return;
-    }
+  async reorderProjects(projectIds: string[], projectType: ProjectType = ProjectType.IMAGE): Promise<void> {
+    if (!projectIds?.length) return;
     try {
       const batchUpdate: { [key: string]: number } = {};
-      projectIds.forEach((id, index) => {
-        batchUpdate[`/${projectType}/${id}/order`] = index;
-      });
+      projectIds.forEach((id, index) => { batchUpdate[`/${projectType}/${id}/order`] = index; });
       await this.db.database.ref().update(batchUpdate);
     } catch (error) {
       console.error(`Error reordering projects (${projectType}):`, error);
@@ -222,9 +139,6 @@ export class ProjectService {
     }
   }
 
-  /**
-   * Sube una imagen a Cloudinary y retorna la URL de descarga.
-   */
   async uploadImage(file: File, projectName: string): Promise<string> {
     try {
       return await this.cloudinaryService.uploadImage(file);
@@ -234,9 +148,6 @@ export class ProjectService {
     }
   }
 
-  /**
-   * Elimina una imagen del storage de Firebase usando su URL si corresponde.
-   */
   private async deleteImage(imageUrl: string): Promise<void> {
     if (!imageUrl) return;
     if (imageUrl.includes('firebasestorage.googleapis.com')) {
@@ -248,8 +159,6 @@ export class ProjectService {
           console.error('Error deleting image from storage:', error);
         }
       }
-    } else {
-      console.log('La imagen está alojada externamente (ej: Cloudinary). No se requiere borrar de Firebase Storage.');
     }
   }
 }

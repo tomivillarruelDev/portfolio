@@ -27,3 +27,25 @@
   object-fit: contain;
   border-radius: 4px;
 }
+
+.brain-icon {
+  color: #c084fc;
+  animation: brain-pulse 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.85)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.45));
+}
+
+@keyframes brain-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.75))
+            drop-shadow(0 0 18px rgba(168, 85, 247, 0.4))
+            drop-shadow(0 0 32px rgba(124, 58, 237, 0.2));
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(216, 180, 254, 1))
+            drop-shadow(0 0 36px rgba(168, 85, 247, 0.85))
+            drop-shadow(0 0 60px rgba(124, 58, 237, 0.45))
+            drop-shadow(0 0 90px rgba(109, 40, 217, 0.2));
+    opacity: 0.93;
+  }
+}

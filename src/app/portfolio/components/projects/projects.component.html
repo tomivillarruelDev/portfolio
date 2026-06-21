@@ -24,12 +24,12 @@
           }
 
           <div class="proj-chip pc-1">
-            <div class="proj-chip-val">{{ getChip(i, 0) }}</div>
-            <div class="proj-chip-lab">{{ getChip(i, 1) }}</div>
+            <div class="proj-chip-val">{{ getChip(i, 0, project) }}</div>
+            <div class="proj-chip-lab">{{ getChip(i, 1, project) }}</div>
           </div>
           <div class="proj-chip pc-2">
-            <div class="proj-chip-val">{{ getChip(i, 2) }}</div>
-            <div class="proj-chip-lab">{{ getChip(i, 3) }}</div>
+            <div class="proj-chip-val">{{ getChip(i, 2, project) }}</div>
+            <div class="proj-chip-lab">{{ getChip(i, 3, project) }}</div>
           </div>
 
           <div class="proj-frame">
@@ -53,96 +53,19 @@
                      style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy"/>
               </div>
             } @else if (i === 0) {
-              <!-- Óptica San Nicolás mockup -->
               <div class="browser-screen" style="background:#060d1a;padding:0;overflow:hidden;">
                 <div class="proj-glow" style="background:radial-gradient(circle,rgba(59,130,246,0.4),transparent);top:-20px;right:-20px;width:140px;height:140px;"></div>
                 <div class="proj-glow" style="background:radial-gradient(circle,rgba(124,58,237,0.3),transparent);bottom:-20px;left:-20px;width:140px;height:140px;"></div>
                 <svg width="100%" height="100%" viewBox="0 0 480 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                  <rect width="480" height="38" fill="#06101e"/>
-                  <rect x="16" y="13" width="72" height="14" rx="3" fill="#1e40af" opacity="0.9"/>
-                  <text x="20" y="24" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white">ÓPTICA SN</text>
-                  <rect x="120" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/>
-                  <rect x="166" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/>
-                  <rect x="212" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/>
-                  <rect x="430" y="12" width="16" height="14" rx="3" fill="#1e40af" opacity="0.7"/>
-                  <rect y="38" width="480" height="28" fill="#08121e"/>
-                  <rect x="16" y="44" width="56" height="16" rx="8" fill="#3b82f6"/>
-                  <text x="26" y="55" font-family="Inter,sans-serif" font-size="7" fill="white">Todos</text>
-                  <rect x="80" y="44" width="60" height="16" rx="8" fill="#0f2a47"/>
-                  <text x="88" y="55" font-family="Inter,sans-serif" font-size="7" fill="#93c5fd">Lentes</text>
-                  <rect x="148" y="44" width="70" height="16" rx="8" fill="#0f2a47"/>
-                  <text x="156" y="55" font-family="Inter,sans-serif" font-size="7" fill="#93c5fd">Armazones</text>
-                  <rect y="66" width="480" height="224" fill="#07101c"/>
-                  <text x="16" y="84" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#60a5fa">EN TENDENCIA</text>
-                  <rect x="16" y="92" width="96" height="112" rx="8" fill="#0c1c30"/>
-                  <rect x="16" y="92" width="96" height="66" rx="8" fill="#0f2847"/>
-                  <ellipse cx="44" cy="125" rx="13" ry="10" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
-                  <ellipse cx="70" cy="125" rx="13" ry="10" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
-                  <line x1="57" y1="125" x2="57" y2="125" stroke="#60a5fa" stroke-width="1"/>
-                  <line x1="31" y1="122" x2="24" y2="118" stroke="#60a5fa" stroke-width="1.5"/>
-                  <line x1="83" y1="122" x2="90" y2="118" stroke="#60a5fa" stroke-width="1.5"/>
-                  <text x="24" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Ray-Ban</text>
-                  <text x="24" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$12.990</text>
-                  <rect x="64" y="181" width="40" height="14" rx="7" fill="#3b82f6"/>
-                  <text x="68" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text>
-                  <rect x="120" y="92" width="96" height="112" rx="8" fill="#0c1c30"/>
-                  <rect x="120" y="92" width="96" height="66" rx="8" fill="#0c2236"/>
-                  <ellipse cx="148" cy="125" rx="13" ry="10" fill="none" stroke="#a78bfa" stroke-width="2.5"/>
-                  <ellipse cx="174" cy="125" rx="13" ry="10" fill="none" stroke="#a78bfa" stroke-width="2.5"/>
-                  <line x1="135" y1="122" x2="128" y2="118" stroke="#a78bfa" stroke-width="1.5"/>
-                  <line x1="187" y1="122" x2="194" y2="118" stroke="#a78bfa" stroke-width="1.5"/>
-                  <text x="128" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Oakley Sport</text>
-                  <text x="128" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$18.500</text>
-                  <rect x="168" y="181" width="40" height="14" rx="7" fill="#3b82f6"/>
-                  <text x="172" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text>
-                  <rect x="224" y="92" width="96" height="112" rx="8" fill="#0c1c30"/>
-                  <rect x="224" y="92" width="96" height="66" rx="8" fill="#0c2236"/>
-                  <rect x="224" y="90" width="28" height="10" rx="4" fill="#059669"/>
-                  <text x="226" y="98" font-family="Inter,sans-serif" font-size="6" fill="white">-20%</text>
-                  <ellipse cx="252" cy="125" rx="15" ry="11" fill="none" stroke="#34d399" stroke-width="2.5"/>
-                  <ellipse cx="280" cy="125" rx="15" ry="11" fill="none" stroke="#34d399" stroke-width="2.5"/>
-                  <line x1="237" y1="122" x2="230" y2="118" stroke="#34d399" stroke-width="1.5"/>
-                  <line x1="295" y1="122" x2="302" y2="118" stroke="#34d399" stroke-width="1.5"/>
-                  <text x="232" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Vogue Elegance</text>
-                  <text x="232" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$9.800</text>
-                  <rect x="272" y="181" width="40" height="14" rx="7" fill="#3b82f6"/>
-                  <text x="276" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text>
+                  <rect width="480" height="38" fill="#06101e"/><rect x="16" y="13" width="72" height="14" rx="3" fill="#1e40af" opacity="0.9"/><text x="20" y="24" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white">ÓPTICA SN</text><rect x="120" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/><rect x="166" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/><rect x="212" y="15" width="38" height="8" rx="2" fill="#1e3a5f" opacity="0.5"/><rect x="430" y="12" width="16" height="14" rx="3" fill="#1e40af" opacity="0.7"/><rect y="38" width="480" height="28" fill="#08121e"/><rect x="16" y="44" width="56" height="16" rx="8" fill="#3b82f6"/><text x="26" y="55" font-family="Inter,sans-serif" font-size="7" fill="white">Todos</text><rect x="80" y="44" width="60" height="16" rx="8" fill="#0f2a47"/><text x="88" y="55" font-family="Inter,sans-serif" font-size="7" fill="#93c5fd">Lentes</text><rect x="148" y="44" width="70" height="16" rx="8" fill="#0f2a47"/><text x="156" y="55" font-family="Inter,sans-serif" font-size="7" fill="#93c5fd">Armazones</text><rect y="66" width="480" height="224" fill="#07101c"/><text x="16" y="84" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#60a5fa">EN TENDENCIA</text><rect x="16" y="92" width="96" height="112" rx="8" fill="#0c1c30"/><rect x="16" y="92" width="96" height="66" rx="8" fill="#0f2847"/><ellipse cx="44" cy="125" rx="13" ry="10" fill="none" stroke="#60a5fa" stroke-width="2.5"/><ellipse cx="70" cy="125" rx="13" ry="10" fill="none" stroke="#60a5fa" stroke-width="2.5"/><line x1="31" y1="122" x2="24" y2="118" stroke="#60a5fa" stroke-width="1.5"/><line x1="83" y1="122" x2="90" y2="118" stroke="#60a5fa" stroke-width="1.5"/><text x="24" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Ray-Ban</text><text x="24" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$12.990</text><rect x="64" y="181" width="40" height="14" rx="7" fill="#3b82f6"/><text x="68" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text><rect x="120" y="92" width="96" height="112" rx="8" fill="#0c1c30"/><rect x="120" y="92" width="96" height="66" rx="8" fill="#0c2236"/><ellipse cx="148" cy="125" rx="13" ry="10" fill="none" stroke="#a78bfa" stroke-width="2.5"/><ellipse cx="174" cy="125" rx="13" ry="10" fill="none" stroke="#a78bfa" stroke-width="2.5"/><line x1="135" y1="122" x2="128" y2="118" stroke="#a78bfa" stroke-width="1.5"/><line x1="187" y1="122" x2="194" y2="118" stroke="#a78bfa" stroke-width="1.5"/><text x="128" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Oakley Sport</text><text x="128" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$18.500</text><rect x="168" y="181" width="40" height="14" rx="7" fill="#3b82f6"/><text x="172" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text><rect x="224" y="92" width="96" height="112" rx="8" fill="#0c1c30"/><rect x="224" y="92" width="96" height="66" rx="8" fill="#0c2236"/><rect x="224" y="90" width="28" height="10" rx="4" fill="#059669"/><text x="226" y="98" font-family="Inter,sans-serif" font-size="6" fill="white">-20%</text><ellipse cx="252" cy="125" rx="15" ry="11" fill="none" stroke="#34d399" stroke-width="2.5"/><ellipse cx="280" cy="125" rx="15" ry="11" fill="none" stroke="#34d399" stroke-width="2.5"/><line x1="237" y1="122" x2="230" y2="118" stroke="#34d399" stroke-width="1.5"/><line x1="295" y1="122" x2="302" y2="118" stroke="#34d399" stroke-width="1.5"/><text x="232" y="174" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Vogue Elegance</text><text x="232" y="186" font-family="Inter,sans-serif" font-size="8" font-weight="800" fill="#60a5fa">$9.800</text><rect x="272" y="181" width="40" height="14" rx="7" fill="#3b82f6"/><text x="276" y="191" font-family="Inter,sans-serif" font-size="6" fill="white">+ carrito</text>
                 </svg>
               </div>
             } @else {
-              <!-- SpotiApp mockup -->
               <div class="browser-screen" style="background:#0d0820;padding:0;overflow:hidden;">
                 <div class="proj-glow" style="background:radial-gradient(circle,rgba(29,185,84,0.4),transparent);top:-20px;left:-20px;width:140px;height:140px;"></div>
                 <div class="proj-glow" style="background:radial-gradient(circle,rgba(124,58,237,0.35),transparent);bottom:-20px;right:-20px;width:140px;height:140px;"></div>
                 <svg width="100%" height="100%" viewBox="0 0 480 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                  <rect width="480" height="36" fill="#0a0a0a"/>
-                  <circle cx="16" cy="18" r="7" fill="#1db954"/>
-                  <text x="30" y="23" font-family="Inter,sans-serif" font-size="10" font-weight="800" fill="white">SpotiApp</text>
-                  <rect x="160" y="10" width="160" height="16" rx="8" fill="#1a1a1a"/>
-                  <text x="172" y="22" font-family="Inter,sans-serif" font-size="8" fill="#6b7280">Buscar artistas...</text>
-                  <rect x="440" y="8" width="32" height="20" rx="10" fill="#1db954"/>
-                  <rect y="36" width="480" height="254" fill="#121212"/>
-                  <text x="16" y="58" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="white">En tendencia</text>
-                  <rect x="16" y="66" width="80" height="80" rx="6" fill="url(#sp1)"/>
-                  <defs><linearGradient id="sp1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs>
-                  <text x="16" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Bad Bunny</text>
-                  <text x="16" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">2.1B streams</text>
-                  <rect x="108" y="66" width="80" height="80" rx="6" fill="url(#sp2)"/>
-                  <defs><linearGradient id="sp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1db954"/><stop offset="100%" stop-color="#0d7a35"/></linearGradient></defs>
-                  <text x="108" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">The Weeknd</text>
-                  <text x="108" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">1.8B streams</text>
-                  <rect x="200" y="66" width="80" height="80" rx="6" fill="url(#sp3)"/>
-                  <defs><linearGradient id="sp3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs>
-                  <text x="200" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Taylor Swift</text>
-                  <text x="200" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">1.6B streams</text>
-                  <text x="16" y="196" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="white">Reproduciendo ahora</text>
-                  <rect x="0" y="256" width="480" height="34" fill="#1a1a1a"/>
-                  <circle cx="16" cy="273" r="8" fill="url(#sp1)"/>
-                  <text x="30" y="270" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white">MONTERO</text>
-                  <text x="30" y="281" font-family="Inter,sans-serif" font-size="7" fill="#6b7280">Lil Nas X</text>
-                  <rect x="180" y="265" width="120" height="4" rx="2" fill="#333"/>
-                  <rect x="180" y="265" width="72" height="4" rx="2" fill="#1db954"/>
-                  <circle cx="430" cy="273" r="8" fill="#1db954"/>
+                  <rect width="480" height="36" fill="#0a0a0a"/><circle cx="16" cy="18" r="7" fill="#1db954"/><text x="30" y="23" font-family="Inter,sans-serif" font-size="10" font-weight="800" fill="white">SpotiApp</text><rect x="160" y="10" width="160" height="16" rx="8" fill="#1a1a1a"/><text x="172" y="22" font-family="Inter,sans-serif" font-size="8" fill="#6b7280">Buscar artistas...</text><rect x="440" y="8" width="32" height="20" rx="10" fill="#1db954"/><rect y="36" width="480" height="254" fill="#121212"/><text x="16" y="58" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="white">En tendencia</text><rect x="16" y="66" width="80" height="80" rx="6" fill="url(#sp1)"/><defs><linearGradient id="sp1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><text x="16" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Bad Bunny</text><text x="16" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">2.1B streams</text><rect x="108" y="66" width="80" height="80" rx="6" fill="url(#sp2)"/><defs><linearGradient id="sp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1db954"/><stop offset="100%" stop-color="#0d7a35"/></linearGradient></defs><text x="108" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">The Weeknd</text><text x="108" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">1.8B streams</text><rect x="200" y="66" width="80" height="80" rx="6" fill="url(#sp3)"/><defs><linearGradient id="sp3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><text x="200" y="162" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white">Taylor Swift</text><text x="200" y="172" font-family="Inter,sans-serif" font-size="6" fill="#6b7280">1.6B streams</text><text x="16" y="196" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="white">Reproduciendo ahora</text><rect x="0" y="256" width="480" height="34" fill="#1a1a1a"/><circle cx="16" cy="273" r="8" fill="url(#sp1)"/><text x="30" y="270" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white">MONTERO</text><text x="30" y="281" font-family="Inter,sans-serif" font-size="7" fill="#6b7280">Lil Nas X</text><rect x="180" y="265" width="120" height="4" rx="2" fill="#333"/><rect x="180" y="265" width="72" height="4" rx="2" fill="#1db954"/><circle cx="430" cy="273" r="8" fill="#1db954"/>
                 </svg>
               </div>
             }
@@ -151,12 +74,12 @@
 
         <div class="proj-narrative">
           <p class="proj-eyebrow">Proyecto 0{{ i + 1 }}</p>
-          <h3 class="proj-name" [innerHTML]="getNameHtml(i) || project.name"></h3>
-          <p class="proj-tagline" [innerHTML]="getTagline(i)"></p>
+          <h3 class="proj-name" [innerHTML]="getNameHtml(i, project)"></h3>
+          <p class="proj-tagline" [innerHTML]="getTagline(i, project)"></p>
           <p class="proj-body">{{ project.description }}</p>
 
           <div class="proj-metrics">
-            @for (m of getMetrics(i); track m.val) {
+            @for (m of getMetrics(i, project); track m.val) {
               <div class="proj-metric">
                 <div class="proj-metric-val">{{ m.val }}</div>
                 <div class="proj-metric-lab">{{ m.lab }}</div>

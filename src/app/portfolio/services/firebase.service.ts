@@ -8,14 +8,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FirebaseService {
   private url = 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com';
-
   public projects: Project[] = [];
-
   private techCache: Record<string, string> | null = null;
 
   constructor(private http: HttpClient) {}
 
-  // ── Resuelve el mapa de tecnologías (ID → name) ───────────────────────────
   private async getTechMap(): Promise<Record<string, string>> {
     if (this.techCache) return this.techCache;
     try {
@@ -34,7 +31,6 @@ export class FirebaseService {
     return this.techCache!;
   }
 
-  // ── Obtiene cualquier nodo como array (devuelve [] si vacío/error) ─────────
   async getList<T>(node: string): Promise<T[]> {
     try {
       const raw = await firstValueFrom(
@@ -47,7 +43,6 @@ export class FirebaseService {
     }
   }
 
-  // ── Obtiene proyectos y resuelve IDs de tecnologías a nombres ────────────
   async getProjects(projectType: string): Promise<Project[]> {
     const [raw, techMap] = await Promise.all([
       firstValueFrom(
@@ -62,7 +57,9 @@ export class FirebaseService {
       ...value,
       id: key,
       technologies: Array.isArray(value.technologies)
-        ? value.technologies.map(t => techMap[t] ?? techMap[t.replace(/^-/, '')] ?? t)
+        ? value.technologies
+            .map((t: string) => techMap[t] ?? t)
+            .filter((t: string) => !(t.startsWith('-') && t.length > 14))
         : [],
     }));
 

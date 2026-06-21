@@ -20,17 +20,9 @@ export class ProjectListComponent implements OnInit {
   imageProjects: Project[] = [];
   cardProjects: Project[] = [];
   allTechnologies: Technology[] = [];
-  loading: { [key: string]: boolean } = {
-    image: true,
-    card: true,
-  };
-  error: { [key: string]: string } = {
-    image: '',
-    card: '',
-  };
+  loading: { [key: string]: boolean } = { image: true, card: true };
+  error: { [key: string]: string } = { image: '', card: '' };
   activeTab: 'image' | 'card' = 'image';
-
-  // Enum para usar en la plantilla
   projectTypes = ProjectType;
 
   constructor(
@@ -39,8 +31,8 @@ export class ProjectListComponent implements OnInit {
     private technologyService: TechnologyService
   ) {}
 
-  ngOnInit(): void {
-    this.loadAllTechnologies();
+  async ngOnInit(): Promise<void> {
+    await this.loadAllTechnologies();
     this.loadAllProjects();
   }
 
@@ -52,13 +44,10 @@ export class ProjectListComponent implements OnInit {
   async loadImageProjects(): Promise<void> {
     try {
       this.loading['image'] = true;
-      this.imageProjects = await this.projectService.getProjects(
-        ProjectType.IMAGE
-      );
+      this.imageProjects = await this.projectService.getProjects(ProjectType.IMAGE);
     } catch (error) {
       console.error('Error al cargar proyectos con imagen:', error);
-      this.error['image'] =
-        'Error al cargar los proyectos con imagen. Intente nuevamente.';
+      this.error['image'] = 'Error al cargar los proyectos con imagen. Intente nuevamente.';
     } finally {
       this.loading['image'] = false;
     }
@@ -67,13 +56,10 @@ export class ProjectListComponent implements OnInit {
   async loadCardProjects(): Promise<void> {
     try {
       this.loading['card'] = true;
-      this.cardProjects = await this.projectService.getProjects(
-        ProjectType.CARD
-      );
+      this.cardProjects = await this.projectService.getProjects(ProjectType.CARD);
     } catch (error) {
       console.error('Error al cargar proyectos tipo tarjeta:', error);
-      this.error['card'] =
-        'Error al cargar los proyectos tipo tarjeta. Intente nuevamente.';
+      this.error['card'] = 'Error al cargar los proyectos tipo tarjeta. Intente nuevamente.';
     } finally {
       this.loading['card'] = false;
     }
@@ -83,14 +69,19 @@ export class ProjectListComponent implements OnInit {
     try {
       this.allTechnologies = await this.technologyService.getTechnologies();
     } catch (error) {
-      console.error('Error al cargar tecnologías:', error);
+      console.error('Error al cargar tecnologias:', error);
       this.allTechnologies = [];
     }
   }
 
   getTechnologyNameById(id: string): string {
-    const tech = this.allTechnologies.find((t) => t.id === id);
-    return tech ? tech.name : id;
+    const tech = this.allTechnologies.find(
+      (t) => t.id === id || t.name.toLowerCase() === id.toLowerCase()
+    );
+    if (tech) return tech.name;
+    // Filtrar IDs huerfanos de Firebase (ej: -OOdo3a0eGl6dX_QbhkG)
+    if (id.startsWith('-') && id.length > 14) return '';
+    return id;
   }
 
   setActiveTab(tab: 'image' | 'card'): void {
@@ -104,34 +95,24 @@ export class ProjectListComponent implements OnInit {
   }
 
   async deleteProject(id: string, type: ProjectType): Promise<void> {
-    if (!confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+    if (!confirm('Estas seguro de que deseas eliminar este proyecto?')) {
       return;
     }
-
     try {
       await this.projectService.deleteProject(id, type);
-
       if (type === ProjectType.IMAGE) {
-        this.imageProjects = this.imageProjects.filter(
-          (project) => project.id !== id
-        );
-        // Reordenar después de eliminar
+        this.imageProjects = this.imageProjects.filter((p) => p.id !== id);
         this.reorderProjects(this.imageProjects, type);
       } else {
-        this.cardProjects = this.cardProjects.filter(
-          (project) => project.id !== id
-        );
-        // Reordenar después de eliminar
+        this.cardProjects = this.cardProjects.filter((p) => p.id !== id);
         this.reorderProjects(this.cardProjects, type);
       }
     } catch (error) {
       console.error('Error al eliminar proyecto:', error);
       if (type === ProjectType.IMAGE) {
-        this.error['image'] =
-          'Error al eliminar el proyecto. Intente nuevamente.';
+        this.error['image'] = 'Error al eliminar el proyecto. Intente nuevamente.';
       } else {
-        this.error['card'] =
-          'Error al eliminar el proyecto. Intente nuevamente.';
+        this.error['card'] = 'Error al eliminar el proyecto. Intente nuevamente.';
       }
     }
   }
@@ -142,72 +123,42 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // Mover un proyecto hacia arriba (orden menor)
   async moveProjectUp(index: number, type: ProjectType): Promise<void> {
-    if (index <= 0) return; // Ya está en la parte superior
-
-    const projects =
-      type === ProjectType.IMAGE ? this.imageProjects : this.cardProjects;
-
-    // Intercambiar posición con el elemento anterior
-    [projects[index], projects[index - 1]] = [
-      projects[index - 1],
-      projects[index],
-    ];
-
-    // Guardar el nuevo orden
+    if (index <= 0) return;
+    const projects = type === ProjectType.IMAGE ? this.imageProjects : this.cardProjects;
+    [projects[index], projects[index - 1]] = [projects[index - 1], projects[index]];
     await this.saveProjectsOrder(projects, type);
   }
 
-  // Mover un proyecto hacia abajo (orden mayor)
   async moveProjectDown(index: number, type: ProjectType): Promise<void> {
-    const projects =
-      type === ProjectType.IMAGE ? this.imageProjects : this.cardProjects;
-
-    if (index >= projects.length - 1) return; // Ya está en la parte inferior
-
-    // Intercambiar posición con el elemento siguiente
-    [projects[index], projects[index + 1]] = [
-      projects[index + 1],
-      projects[index],
-    ];
-
-    // Guardar el nuevo orden
+    const projects = type === ProjectType.IMAGE ? this.imageProjects : this.cardProjects;
+    if (index >= projects.length - 1) return;
+    [projects[index], projects[index + 1]] = [projects[index + 1], projects[index]];
     await this.saveProjectsOrder(projects, type);
   }
 
-  // Guardar el orden actual de los proyectos
-  private async saveProjectsOrder(
-    projects: Project[],
-    type: ProjectType
-  ): Promise<void> {
+  private async saveProjectsOrder(projects: Project[], type: ProjectType): Promise<void> {
     try {
       const projectIds = projects.map((p) => p.id!);
       await this.projectService.reorderProjects(projectIds, type);
     } catch (error) {
       console.error('Error al guardar el orden de los proyectos:', error);
       if (type === ProjectType.IMAGE) {
-        this.error['image'] =
-          'Error al actualizar el orden. Intente nuevamente.';
-        this.loadImageProjects(); // Recargar para restaurar el orden original
+        this.error['image'] = 'Error al actualizar el orden. Intente nuevamente.';
+        this.loadImageProjects();
       } else {
-        this.error['card'] =
-          'Error al actualizar el orden. Intente nuevamente.';
-        this.loadCardProjects(); // Recargar para restaurar el orden original
+        this.error['card'] = 'Error al actualizar el orden. Intente nuevamente.';
+        this.loadCardProjects();
       }
     }
   }
 
-  private async reorderProjects(
-    projects: Project[],
-    type: ProjectType
-  ): Promise<void> {
-    // Actualizar el orden de los proyectos después de eliminar uno
+  private async reorderProjects(projects: Project[], type: ProjectType): Promise<void> {
     try {
       const projectIds = projects.map((p) => p.id!);
       await this.projectService.reorderProjects(projectIds, type);
     } catch (error) {
-      console.error('Error al reordenar proyectos después de eliminar:', error);
+      console.error('Error al reordenar proyectos despues de eliminar:', error);
     }
   }
 }

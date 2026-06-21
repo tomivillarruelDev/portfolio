@@ -27,7 +27,8 @@ const TECH_MAP: Record<string, [string, string]> = {
   'Django':     ['ic-ng',  'Dj'], 'django':     ['ic-ng',  'Dj'],
 };
 
-const STATIC: {
+// Fallback data for projects without extended fields in Firebase
+const STATIC_FALLBACK: {
   nameHtml: string;
   tagline:  string;
   metrics:  { val: string; lab: string }[];
@@ -91,10 +92,24 @@ export class ProjectsComponent {
 
   getTechClass(tech: string): string { return TECH_MAP[tech]?.[0] ?? 'ic-ng'; }
   getTechAbbr(tech: string):  string { return TECH_MAP[tech]?.[1] ?? tech.slice(0, 2).toUpperCase(); }
-  getNameHtml(i: number): string     { return STATIC[i]?.nameHtml ?? ''; }
-  getTagline(i: number): string      { return STATIC[i]?.tagline ?? ''; }
-  getMetrics(i: number)              { return STATIC[i]?.metrics ?? []; }
-  getChip(i: number, slot: 0|1|2|3): string { return STATIC[i]?.chipVals[slot] ?? ''; }
+
+  getNameHtml(i: number, project: Project): string {
+    return project.nameHtml || STATIC_FALLBACK[i]?.nameHtml || project.name;
+  }
+
+  getTagline(i: number, project: Project): string {
+    return project.tagline || STATIC_FALLBACK[i]?.tagline || '';
+  }
+
+  getMetrics(i: number, project: Project): { val: string; lab: string }[] {
+    if (project.metrics?.length) return project.metrics;
+    return STATIC_FALLBACK[i]?.metrics ?? [];
+  }
+
+  getChip(i: number, slot: 0|1|2|3, project: Project): string {
+    if (project.chipVals?.length) return project.chipVals[slot] ?? '';
+    return STATIC_FALLBACK[i]?.chipVals[slot] ?? '';
+  }
 
   private initGsap(): void {
     const section = document.querySelector<HTMLElement>('#projects');
@@ -163,7 +178,6 @@ export class ProjectsComponent {
       start: 'top top', end: '+=130%', animation: tl,
     });
 
-    // Refresh so pin position is correct after Firebase load
     setTimeout(() => ScrollTrigger.refresh(), 100);
     setTimeout(() => ScrollTrigger.refresh(), 600);
 
@@ -177,18 +191,11 @@ export class ProjectsComponent {
         const r = frame.getBoundingClientRect();
         const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
         const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-        gsap.to(frame, {
-          rotationX: -dy * 6, rotationY: dx * 8, scale: 1.03,
-          transformPerspective: 1100, duration: 0.3,
-          ease: 'power2.out', overwrite: 'auto',
-        });
+        gsap.to(frame, { rotationX: -dy * 6, rotationY: dx * 8, scale: 1.03, transformPerspective: 1100, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
       });
       frame.addEventListener('mouseleave', () => {
         on = false;
-        gsap.to(frame, {
-          rotationX: 0, rotationY: 0, scale: 1,
-          duration: 0.55, ease: 'power3.out', overwrite: 'auto',
-        });
+        gsap.to(frame, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
       });
     });
   }

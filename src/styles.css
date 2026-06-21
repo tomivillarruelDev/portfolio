@@ -319,8 +319,8 @@ section[id] { scroll-margin-top: 80px; }
 .orbit-dot.o2-d2 { bottom: -22px; left: calc(50% - 22px); }
 .orbit-dot.o2-d3 { left: -22px; top: calc(50% - 22px); }
 .orbit-dot.o2-d4 { right: -22px; top: calc(50% - 22px); }
-.orbit-1 .orbit-dot { animation: counter-spin 24s linear infinite; }
-.orbit-2 .orbit-dot { animation: counter-spin-slow 44s linear infinite; }
+.orbit-1 .orbit-dot { animation: counter-spin 20s linear infinite; }
+.orbit-2 .orbit-dot { animation: counter-spin-slow 32s linear infinite; }
 @keyframes counter-spin { from{transform:rotate(0)} to{transform:rotate(-360deg)} }
 @keyframes counter-spin-slow { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 .skills-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }

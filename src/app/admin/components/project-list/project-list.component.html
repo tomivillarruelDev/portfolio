@@ -113,12 +113,12 @@
             <td>{{ project.name }}</td>
             <td class="project-description">{{ project.description }}</td>
             <td class="project-technologies">
-              <span
-                *ngFor="let techId of project.technologies"
-                class="technology-tag"
-              >
-                {{ getTechnologyNameById(techId) }}
-              </span>
+              <ng-container *ngFor="let techId of project.technologies">
+                <span
+                  *ngIf="getTechnologyNameById(techId)"
+                  class="technology-tag"
+                >{{ getTechnologyNameById(techId) }}</span>
+              </ng-container>
             </td>
             <td class="project-actions">
               <button
@@ -215,12 +215,12 @@
             <td>{{ project.name }}</td>
             <td class="project-description">{{ project.description }}</td>
             <td class="project-technologies">
-              <span
-                *ngFor="let techId of project.technologies"
-                class="technology-tag"
-              >
-                {{ getTechnologyNameById(techId) }}
-              </span>
+              <ng-container *ngFor="let techId of project.technologies">
+                <span
+                  *ngIf="getTechnologyNameById(techId)"
+                  class="technology-tag"
+                >{{ getTechnologyNameById(techId) }}</span>
+              </ng-container>
             </td>
             <td>
               <a [href]="project.github" target="_blank" class="github-link">{{
