@@ -18,7 +18,11 @@
 
           @for (tech of project.technologies.slice(0,4); track tech; let bi = $index) {
             <div class="proj-badge" [ngClass]="'pb-' + (bi+1)">
-              <span class="tech-ic {{ getTechClass(tech) }}">{{ getTechAbbr(tech) }}</span>
+              @if (getTechIcon(tech)) {
+                <img [src]="getTechIcon(tech)" [alt]="tech" style="width:16px;height:16px;object-fit:contain;flex-shrink:0;border-radius:4px;"/>
+              } @else {
+                <span class="tech-ic {{ getTechClass(tech) }}">{{ getTechAbbr(tech) }}</span>
+              }
               {{ tech }}
             </div>
           }

@@ -104,6 +104,11 @@ export class ProjectsComponent {
     }
   }
 
+  getTechIcon(techName: string): string | null {
+    if (!techName) return null;
+    return this.firebaseService.techIconCache[techName.trim().toLowerCase()] || null;
+  }
+
   getTechClass(tech: string): string { return TECH_MAP[tech]?.[0] ?? 'ic-ng'; }
   getTechAbbr(tech: string):  string { return TECH_MAP[tech]?.[1] ?? tech.slice(0, 2).toUpperCase(); }
 

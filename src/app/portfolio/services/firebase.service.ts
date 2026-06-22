@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class FirebaseService {
   private url = 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com';
   public projects: Project[] = [];
+  public techIconCache: Record<string, string> = {};
   private techCache: Record<string, string> | null = null;
 
   constructor(private http: HttpClient) {}
@@ -17,12 +18,18 @@ export class FirebaseService {
     if (this.techCache) return this.techCache;
     try {
       const raw = await firstValueFrom(
-        this.http.get<Record<string, { name: string }>>(`${this.url}/technologies.json`)
+        this.http.get<Record<string, { name: string; icon?: string }>>(`${this.url}/technologies.json`)
       );
       this.techCache = {};
+      this.techIconCache = {};
       if (raw) {
         Object.entries(raw).forEach(([id, val]) => {
-          if (val?.name) this.techCache![id] = val.name;
+          if (val?.name) {
+            this.techCache![id] = val.name;
+            if (val.icon) {
+              this.techIconCache[val.name.trim().toLowerCase()] = val.icon;
+            }
+          }
         });
       }
     } catch {
