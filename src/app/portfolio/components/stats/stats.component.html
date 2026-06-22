@@ -1,20 +1,25 @@
-<section id="stats">
-  <div class="stats-strip">
-    <div class="stat-col" style="flex:1.45">
-      <span class="stat-n is-hero"><span class="count" data-target="15">0</span><span class="stat-sfx">+</span></span>
-      <div class="stat-desc">proyectos · <span class="stat-desc-accent">entregados</span><br>en tiempo y en presupuesto</div>
+@if (loaded && visibleStats.length > 0) {
+  <section id="stats">
+    <div class="stats-strip">
+      @for (stat of visibleStats; track stat.label) {
+        <div class="stat-col" [style.flex]="stat.flex">
+          <span class="stat-n" [class.is-hero]="stat.size === 'hero'" [class.is-major]="stat.size === 'major'">
+            <span class="count" [attr.data-target]="stat.number">0</span>
+            @if (stat.suffix) {
+              <span class="stat-sfx">{{ stat.suffix }}</span>
+            }
+          </span>
+          <div class="stat-desc">
+            {{ stat.label }}
+            @if (stat.labelAccent) {
+              &nbsp;<span class="stat-desc-accent">{{ stat.labelAccent }}</span>
+            }
+            @if (stat.sublabel) {
+              <br>{{ stat.sublabel }}
+            }
+          </div>
+        </div>
+      }
     </div>
-    <div class="stat-col" style="flex:1.25">
-      <span class="stat-n is-major"><span class="count" data-target="8">0</span><span class="stat-sfx">+</span></span>
-      <div class="stat-desc">clientes · <span class="stat-desc-accent">renovaron</span><br>o refirieron el trabajo</div>
-    </div>
-    <div class="stat-col" style="flex:0.85">
-      <span class="stat-n"><span class="count" data-target="3">0</span></span>
-      <div class="stat-desc">años<br>en producción real</div>
-    </div>
-    <div class="stat-col" style="flex:0.85">
-      <span class="stat-n"><span class="count" data-target="12">0</span><span class="stat-sfx">+</span></span>
-      <div class="stat-desc">tecnologías<br>en producción</div>
-    </div>
-  </div>
-</section>
+  </section>
+}

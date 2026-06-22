@@ -10,6 +10,7 @@ import { CvUploadComponent } from './admin/components/cv-upload/cv-upload.compon
 import { ProfileImageUploadComponent } from './admin/components/profile-image-upload/profile-image-upload.component';
 import { ExperienceManagementComponent } from './admin/components/experience-management/experience-management.component';
 import { EducationManagementComponent } from './admin/components/education-management/education-management.component';
+import { StatsManagementComponent } from './admin/components/stats-management/stats-management.component';
 import { AuthGuard } from './admin/services/auth.guard';
 
 export const routes: Routes = [
@@ -32,6 +33,7 @@ export const routes: Routes = [
           { path: 'upload-profile-image', component: ProfileImageUploadComponent },
           { path: 'experience',           component: ExperienceManagementComponent },
           { path: 'education',            component: EducationManagementComponent },
+          { path: 'stats',                component: StatsManagementComponent },
           { path: '',                     redirectTo: 'dashboard', pathMatch: 'full' },
         ],
       },
