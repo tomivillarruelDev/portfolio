@@ -4,7 +4,7 @@
       @for (stat of visibleStats; track stat.label) {
         <div class="stat-col" [style.flex]="stat.flex">
           <span class="stat-n" [class.is-hero]="stat.size === 'hero'" [class.is-major]="stat.size === 'major'">
-            <span class="count" [attr.data-target]="stat.number">0</span>
+            <span class="count" [attr.data-target]="stat.number">{{ stat.number }}</span>
             @if (stat.suffix) {
               <span class="stat-sfx">{{ stat.suffix }}</span>
             }

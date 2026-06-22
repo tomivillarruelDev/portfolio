@@ -1,8 +1,10 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatsService, Stat } from '../../../shared/services/stats.service';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-declare const gsap: any;
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'portfolio-stats',
