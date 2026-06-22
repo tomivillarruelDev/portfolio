@@ -162,8 +162,8 @@ export class ProjectsComponent {
       isRev:  sc.classList.contains('reverse'),
     }));
 
-    gsap.set(scenes[0], { opacity: 1 });
-    gsap.set(scenes[1], { opacity: 0 });
+    gsap.set(scenes[0], { autoAlpha: 1 });
+    gsap.set(scenes[1], { autoAlpha: 0 });
 
     els.forEach(({ frame, narr, badges, chips, orbits, isRev }) => {
       if (frame)         gsap.set(frame,  { scale: 1.20, y: 90, opacity: 0 });
@@ -181,8 +181,8 @@ export class ProjectsComponent {
       .to(e1.chips,  { y: 0, opacity: 1, stagger: 0.04, duration: 0.14 }, 0.16)
       .to(e1.badges, { opacity: 1, stagger: 0.05, duration: 0.14 }, 0.20)
       .to({}, { duration: 0.14 })
-      .to(scenes[0], { opacity: 0, duration: 0.12 })
-      .to(scenes[1], { opacity: 1, duration: 0.10 }, '<0.04')
+      .to(scenes[0], { autoAlpha: 0, duration: 0.12 })
+      .to(scenes[1], { autoAlpha: 1, duration: 0.10 }, '<0.04')
       .to(e2.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, '<0.04')
       .to(e2.orbits, { opacity: 0.95, duration: 0.14 }, '<0.04')
       .to(e2.narr!,   { x: 0, opacity: 1, duration: 0.18, ease: 'power2.out' }, '<0.10')
