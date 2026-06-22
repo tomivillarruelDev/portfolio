@@ -37,12 +37,23 @@
           <div class="hero-avatar-ring-inner"></div>
         </div>
         <div class="hero-avatar">
-          @if (profileImageUrl()) {
+          @if (isLoading()) {
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '100%',
+                width: '100%',
+                'border-radius': '50%',
+                'background-color': 'rgba(255, 255, 255, 0.08)',
+                margin: '0',
+                display: 'block'
+              }"
+              animation="pulse"
+            ></ngx-skeleton-loader>
+          } @else if (profileImageUrl()) {
             <img [src]="profileImageUrl()" alt="Tomás Villarruel"
-                 (load)="onImageLoad()" [class.loaded]="imageLoaded()"
-                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>
           } @else {
-            <svg width="200" height="210" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1;" aria-label="Tomás Villarruel">
+            <svg width="200" height="210" viewBox="0 0 200 210" xmlns="http://www.w3.orxg/2000/svg" style="position:relative;z-index:1;" aria-label="Tomás Villarruel">
               <ellipse cx="100" cy="200" rx="70" ry="40" fill="#1a0d3d"/>
               <rect x="40" y="168" width="120" height="40" rx="20" fill="#2d1a5e"/>
               <path d="M80 168 Q100 180 120 168" fill="#7c3aed" opacity="0.6"/>

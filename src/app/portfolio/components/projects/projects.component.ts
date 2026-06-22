@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 import { ProjectCardComponent } from './project-card/project-card.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -61,10 +62,11 @@ const STATIC_FALLBACK: {
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css'],
   standalone: true,
-  imports: [CommonModule, ProjectCardComponent],
+  imports: [CommonModule, ProjectCardComponent, NgxSkeletonLoaderModule],
 })
 export class ProjectsComponent {
   readonly featuredProjects = signal<Project[]>([]);
+  readonly imagesLoaded = signal<Record<string, boolean>>({});
   private gsapInited = false;
 
   private readonly firebaseService = inject(FirebaseService);
@@ -102,6 +104,10 @@ export class ProjectsComponent {
         behavior: 'smooth'
       });
     }
+  }
+
+  onImageLoad(projectId: string): void {
+    this.imagesLoaded.update(state => ({ ...state, [projectId]: true }));
   }
 
   getTechIcon(techName: string): string | null {

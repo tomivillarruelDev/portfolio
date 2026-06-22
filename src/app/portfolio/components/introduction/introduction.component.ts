@@ -16,23 +16,25 @@ const HERO_WORDS = ['convierte.', 'impacta.', 'escala.', 'diferencia.'];
 export class IntroductionComponent implements AfterViewInit {
   cvUrl           = signal('');
   profileImageUrl = signal('');
-  imageLoaded     = signal(false);
+  isLoading       = signal(true);
 
   constructor(
     private cvService: CvService,
     private profileImageService: ProfileImageService,
     private ngZone: NgZone,
   ) {
-    effect(() => {
-      this.cvService.cvUrl$.subscribe(url => { if (url) this.cvUrl.set(url); });
-      this.cvService.loadCvUrl().subscribe();
+    this.cvService.cvUrl$.subscribe(url => { 
+      if (url) this.cvUrl.set(url); 
     });
-    effect(() => {
-      this.profileImageService.imageUrl$.subscribe(url => {
-        if (url) { this.profileImageUrl.set(url); this.imageLoaded.set(false); }
-      });
-      this.profileImageService.loadImageUrl().subscribe();
+    this.cvService.loadCvUrl().subscribe();
+
+    this.profileImageService.imageUrl$.subscribe(url => {
+      if (url) { 
+        this.profileImageUrl.set(url); 
+        this.isLoading.set(false); 
+      }
     });
+    this.profileImageService.loadImageUrl().subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -46,8 +48,6 @@ export class IntroductionComponent implements AfterViewInit {
       this.initHeroTextCycle();
     });
   }
-
-  onImageLoad(): void { this.imageLoaded.set(true); }
 
   scrollToProjects(event: Event): void {
     event.preventDefault();

@@ -18,10 +18,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private scrollListener!: () => void;
 
   constructor() {
-    effect(() => {
-      this.cvService.cvUrl$.subscribe((url) => {
-        if (url) this.cvUrl.set(url);
-      });
+    this.cvService.cvUrl$.subscribe((url) => {
+      if (url) this.cvUrl.set(url);
     });
     this.cvService.loadCvUrl().subscribe();
   }

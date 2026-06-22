@@ -3,6 +3,30 @@
 @import "tippy.js/animations/shift-away-extreme.css";
 @import "tippy.js/themes/light-border.css";
 
+/* ── SKELETON DIRECT CUSTOM ── */
+ngx-skeleton-loader {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.ngx-skeleton-loader {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 4px;
+}
+.ngx-skeleton-loader.circle {
+  border-radius: 50% !important;
+}
+.ngx-skeleton-loader.pulse {
+  animation: skeleton-pulse 1.6s ease-in-out infinite !important;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+
 /* ── RESET & ROOT ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

@@ -8,9 +8,24 @@
         <p class="section-desc">Mi stack principal con el que construyo productos rápidos, escalables y mantenibles.</p>
         <div class="skills-list">
           @for (tech of technologies(); track tech.id) {
-            <span class="skill-pill">
+            <span class="skill-pill" style="display:inline-flex;align-items:center;">
               @if (tech.icon) {
-                <img [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon" />
+                @if (!imagesLoaded()[tech.id || '']) {
+                  <ngx-skeleton-loader
+                    [theme]="{
+                      height: '18px',
+                      width: '18px',
+                      'border-radius': '3px',
+                      'background-color': 'rgba(255, 255, 255, 0.12)',
+                      margin: '0 8px 0 0',
+                      display: 'inline-block'
+                    }"
+                    animation="pulse"
+                  ></ngx-skeleton-loader>
+                }
+                <img [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
+                     (load)="onImageLoad(tech.id || '')"
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }
@@ -25,7 +40,22 @@
           @for (tech of orbitOuter(); track tech.id; let i = $index) {
             <div class="orbit-dot" [ngClass]="'o2-d' + (i + 1)">
               @if (tech.icon) {
-                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon" />
+                @if (!imagesLoaded()[tech.id || '']) {
+                  <ngx-skeleton-loader
+                    [theme]="{
+                      height: '22px',
+                      width: '22px',
+                      'border-radius': '4px',
+                      'background-color': 'rgba(255, 255, 255, 0.12)',
+                      margin: '0',
+                      display: 'block'
+                    }"
+                    animation="pulse"
+                  ></ngx-skeleton-loader>
+                }
+                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                     (load)="onImageLoad(tech.id || '')"
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }
@@ -36,7 +66,22 @@
           @for (tech of orbitInner(); track tech.id; let i = $index) {
             <div class="orbit-dot" [ngClass]="'o1-d' + (i + 1)">
               @if (tech.icon) {
-                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon" />
+                @if (!imagesLoaded()[tech.id || '']) {
+                  <ngx-skeleton-loader
+                    [theme]="{
+                      height: '22px',
+                      width: '22px',
+                      'border-radius': '4px',
+                      'background-color': 'rgba(255, 255, 255, 0.12)',
+                      margin: '0',
+                      display: 'block'
+                    }"
+                    animation="pulse"
+                  ></ngx-skeleton-loader>
+                }
+                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                     (load)="onImageLoad(tech.id || '')"
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }
