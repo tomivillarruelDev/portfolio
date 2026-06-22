@@ -90,6 +90,20 @@ export class ProjectsComponent {
     this.featuredProjects.set(all.slice(0, 2));
   }
 
+  scrollToContact(event: Event): void {
+    event.preventDefault();
+    const el = document.getElementById('contact');
+    if (el) {
+      const offset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+
   getTechClass(tech: string): string { return TECH_MAP[tech]?.[0] ?? 'ic-ng'; }
   getTechAbbr(tech: string):  string { return TECH_MAP[tech]?.[1] ?? tech.slice(0, 2).toUpperCase(); }
 

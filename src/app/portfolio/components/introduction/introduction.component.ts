@@ -49,8 +49,32 @@ export class IntroductionComponent implements AfterViewInit {
 
   onImageLoad(): void { this.imageLoaded.set(true); }
 
-  scrollToProjects(): void {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  scrollToProjects(event: Event): void {
+    event.preventDefault();
+    const el = document.getElementById('projects');
+    if (el) {
+      const offset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  scrollToContact(event: Event): void {
+    event.preventDefault();
+    const el = document.getElementById('contact');
+    if (el) {
+      const offset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   }
 
   // ── cursor glow ──────────────────────────────────────────────────────────

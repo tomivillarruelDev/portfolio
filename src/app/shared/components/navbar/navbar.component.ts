@@ -50,9 +50,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.enableBodyScroll();
   }
 
-  scrollTo(id: string): void {
+  scrollTo(event: Event, id: string): void {
+    event.preventDefault();
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      const offset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   }
 
   toggleMenu(): void {

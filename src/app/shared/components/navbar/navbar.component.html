@@ -1,16 +1,16 @@
 <nav id="nav">
-  <a href="#hero" class="nav-logo" style="text-decoration:none;" (click)="scrollTo('hero')">TV.</a>
+  <a href="#hero" class="nav-logo" style="text-decoration:none;" (click)="scrollTo($event, 'hero')">TV.</a>
 
   <div class="navbar-overlay" [class.active]="menuActive()" (click)="closeMenu()"></div>
 
   <ul class="nav-links" [class.active]="menuActive()">
-    <li><a (click)="scrollTo('about'); closeMenu()">Sobre mí</a></li>
-    <li><a (click)="scrollTo('experience'); closeMenu()">Experiencia</a></li>
-    <li><a (click)="scrollTo('projects'); closeMenu()">Proyectos</a></li>
-    <li><a (click)="scrollTo('contact'); closeMenu()">Contacto</a></li>
+    <li><a href="#about" (click)="scrollTo($event, 'about'); closeMenu()">Sobre mí</a></li>
+    <li><a href="#experience" (click)="scrollTo($event, 'experience'); closeMenu()">Experiencia</a></li>
+    <li><a href="#projects" (click)="scrollTo($event, 'projects'); closeMenu()">Proyectos</a></li>
+    <li><a href="#contact" (click)="scrollTo($event, 'contact'); closeMenu()">Contacto</a></li>
   </ul>
 
-  <a href="#contact" class="nav-cta" (click)="scrollTo('contact'); closeMenu()">Trabajemos juntos →</a>
+  <a href="#contact" class="nav-cta" (click)="scrollTo($event, 'contact'); closeMenu()">Trabajemos juntos →</a>
 
   <button type="button" class="menu-toggle" aria-label="Toggle menu" (click)="toggleMenu()">
     <div class="menu-icon" [class.active]="menuActive()">

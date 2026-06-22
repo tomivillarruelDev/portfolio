@@ -16,11 +16,11 @@
         </p>
         <p class="hero-differentiator">No solo escribo código — resuelvo problemas de negocio.</p>
         <div class="hero-actions">
-          <a href="#projects" class="btn-primary" (click)="scrollToProjects()">
+          <a href="#projects" class="btn-primary" (click)="scrollToProjects($event)">
             Ver mi trabajo
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a href="#contact" class="btn-outline">
+          <a href="#contact" class="btn-outline" (click)="scrollToContact($event)">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 5.5l6 4 6-4" stroke="currentColor" stroke-width="1.5"/></svg>
             Hablemos
           </a>
