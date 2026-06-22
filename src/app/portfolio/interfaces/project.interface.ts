@@ -15,5 +15,6 @@ export interface Project {
   github: string;
   page?: string;
   photoURL?: string;
+  photoURLs?: string[];
   order?: number;
 }

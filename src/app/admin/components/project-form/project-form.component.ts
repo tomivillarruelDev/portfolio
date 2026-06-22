@@ -28,6 +28,11 @@ export class ProjectFormComponent implements OnInit {
   selectedTechnologies: string[] = [];
   projectTypes = ProjectType;
 
+  // Propiedades para el carrusel de imágenes
+  existingSecondaryUrls: string[] = [];
+  secondaryPreviews: (string | ArrayBuffer)[] = [];
+  selectedSecondaryFiles: File[] = [];
+
   get loading(): boolean { return this.isLoading; }
   get error(): string | null { return this.errorMessage; }
 
@@ -124,6 +129,11 @@ export class ProjectFormComponent implements OnInit {
       if (project.photoURL && this.projectType === ProjectType.IMAGE) {
         this.previewUrl = project.photoURL;
       }
+      if (Array.isArray(project.photoURLs)) {
+        this.existingSecondaryUrls = [...project.photoURLs];
+      } else {
+        this.existingSecondaryUrls = [];
+      }
     } catch {
       this.errorMessage = 'Error al cargar los datos del proyecto.';
     }
@@ -136,6 +146,32 @@ export class ProjectFormComponent implements OnInit {
       reader.readAsDataURL(this.selectedFile!);
       reader.onload = () => { this.previewUrl = reader.result; };
     }
+  }
+
+  onSecondaryFilesSelected(event: any): void {
+    if (event.target.files.length > 0) {
+      const files: FileList = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        this.selectedSecondaryFiles.push(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          if (reader.result) {
+            this.secondaryPreviews.push(reader.result);
+          }
+        };
+      }
+    }
+  }
+
+  removeExistingSecondary(index: number): void {
+    this.existingSecondaryUrls.splice(index, 1);
+  }
+
+  removeNewSecondary(index: number): void {
+    this.selectedSecondaryFiles.splice(index, 1);
+    this.secondaryPreviews.splice(index, 1);
   }
 
   isTechSelected(tech: Technology): boolean {
@@ -183,6 +219,7 @@ export class ProjectFormComponent implements OnInit {
         github: f.github,
         page:   f.page || null,
         photoURL: null,
+        photoURLs: null,
       };
 
       if (this.projectType === ProjectType.IMAGE) {
@@ -191,6 +228,15 @@ export class ProjectFormComponent implements OnInit {
         } else if (this.previewUrl && typeof this.previewUrl === 'string') {
           projectData.photoURL = this.previewUrl;
         }
+
+        const newSecondaryUrls: string[] = [];
+        if (this.selectedSecondaryFiles.length > 0) {
+          for (const file of this.selectedSecondaryFiles) {
+            const url = await this.projectService.uploadImage(file, projectData.name);
+            newSecondaryUrls.push(url);
+          }
+        }
+        projectData.photoURLs = [...this.existingSecondaryUrls, ...newSecondaryUrls];
       }
 
       if (this.isEditMode && this.projectId) {

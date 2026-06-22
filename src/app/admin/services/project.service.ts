@@ -21,6 +21,7 @@ export interface Project {
   github: string;
   page?: string | null;
   photoURL?: string | null;
+  photoURLs?: string[] | null;
   order?: number;
 }
 
@@ -71,6 +72,7 @@ export class ProjectService {
       let data = { ...projectData };
       if (data.page      === undefined) data.page      = null;
       if (data.photoURL  === undefined) data.photoURL  = null;
+      if (data.photoURLs === undefined) data.photoURLs = null;
       if (data.nameHtml  === undefined) data.nameHtml  = null;
       if (data.tagline   === undefined) data.tagline   = null;
       if (data.metrics   === undefined) data.metrics   = null;
@@ -105,10 +107,21 @@ export class ProjectService {
     try {
       if (projectType === ProjectType.IMAGE) {
         const project = await this.getProjectById(id, projectType);
-        if (project?.photoURL) {
-          this.deleteImage(project.photoURL).catch(err =>
-            console.warn(`Failed to delete image for project ${id}:`, err)
-          );
+        if (project) {
+          if (project.photoURL) {
+            this.deleteImage(project.photoURL).catch(err =>
+              console.warn(`Failed to delete main image for project ${id}:`, err)
+            );
+          }
+          if (Array.isArray(project.photoURLs)) {
+            project.photoURLs.forEach(url => {
+              if (url) {
+                this.deleteImage(url).catch(err =>
+                  console.warn(`Failed to delete secondary image for project ${id}:`, err)
+                );
+              }
+            });
+          }
         }
       }
       await this.db.database.ref(`${projectType}/${id}`).remove();

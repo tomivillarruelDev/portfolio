@@ -16,6 +16,8 @@ export interface Project {
   page?: string;
   /** URL de la imagen del proyecto (opcional) */
   photoURL?: string;
+  /** Array de URLs de imágenes del proyecto para el carrusel (opcional) */
+  photoURLs?: string[];
   /** Número de orden para controlar la posición del proyecto en la lista (opcional) */
   order?: number;
 }

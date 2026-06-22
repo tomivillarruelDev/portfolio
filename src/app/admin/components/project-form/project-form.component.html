@@ -95,7 +95,7 @@
 
     <!-- SECCION: Imagen -->
     <div class="form-section" *ngIf="projectType === projectTypes.IMAGE">
-      <h3 class="form-section-title">Imagen del proyecto {{ isEditMode ? '' : '*' }}</h3>
+      <h3 class="form-section-title">Imagen principal del proyecto {{ isEditMode ? '' : '*' }}</h3>
       <div class="image-upload">
         <div *ngIf="previewUrl" class="image-preview">
           <img [src]="previewUrl" alt="Vista previa" />
@@ -105,6 +105,34 @@
           <label for="file" class="file-label">{{ selectedFile ? selectedFile.name : "Seleccionar imagen" }}</label>
         </div>
         <small *ngIf="isEditMode && !selectedFile" class="image-hint">Dejá vacío para conservar la imagen actual</small>
+      </div>
+    </div>
+
+    <!-- SECCION: Imágenes secundarias para el carrusel -->
+    <div class="form-section" *ngIf="projectType === projectTypes.IMAGE">
+      <h3 class="form-section-title">Imágenes secundarias para el carrusel <span class="label-hint">(opcional)</span></h3>
+      
+      <div class="carousel-images-list" *ngIf="existingSecondaryUrls.length > 0 || secondaryPreviews.length > 0">
+        <!-- Existentes -->
+        <div class="carousel-image-item" *ngFor="let url of existingSecondaryUrls; let i = index">
+          <img [src]="url" alt="Imagen existente" />
+          <button type="button" class="btn-remove-image" (click)="removeExistingSecondary(i)" title="Eliminar foto">&times;</button>
+          <span class="image-badge-label">Existente</span>
+        </div>
+        <!-- Nuevas previews -->
+        <div class="carousel-image-item new-preview" *ngFor="let preview of secondaryPreviews; let i = index">
+          <img [src]="preview" alt="Nueva vista previa" />
+          <button type="button" class="btn-remove-image" (click)="removeNewSecondary(i)" title="Eliminar foto">&times;</button>
+          <span class="image-badge-label new">Nueva</span>
+        </div>
+      </div>
+
+      <div class="image-upload secondary-upload">
+        <div class="file-input-container">
+          <input type="file" (change)="onSecondaryFilesSelected($event)" accept="image/*" id="secondaryFiles" multiple />
+          <label for="secondaryFiles" class="file-label">Seleccionar fotos secundarias</label>
+        </div>
+        <small class="image-hint">Podés seleccionar múltiples archivos a la vez.</small>
       </div>
     </div>
 

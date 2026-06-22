@@ -53,25 +53,79 @@
               </div>
             </div>
 
-            @if (project.photoURL) {
-              <div class="browser-screen" style="padding:0;overflow:hidden;position:relative;width:100%;height:100%;">
-                @if (!imagesLoaded()[project.id || '']) {
-                  <ngx-skeleton-loader
-                    [theme]="{
-                      height: '100%',
-                      width: '100%',
-                      'border-radius': '0',
-                      'background-color': 'rgba(255, 255, 255, 0.08)',
-                      margin: '0',
-                      display: 'block'
-                    }"
-                    animation="pulse"
-                  ></ngx-skeleton-loader>
+            @if (getProjectImages(project).length > 0) {
+              <div class="browser-screen" 
+                   (mouseenter)="stopAutoplay(project)"
+                   (mouseleave)="startAutoplay(project)"
+                   style="padding:0;overflow:hidden;position:relative;width:100%;height:100%;">
+                @let images = getProjectImages(project);
+                
+                @if (images.length === 1) {
+                  @if (!imagesLoaded()[project.id + '_0']) {
+                    <ngx-skeleton-loader
+                      [theme]="{
+                        height: '100%',
+                        width: '100%',
+                        'border-radius': '0',
+                        'background-color': 'rgba(255, 255, 255, 0.08)',
+                        margin: '0',
+                        display: 'block'
+                      }"
+                      animation="pulse"
+                    ></ngx-skeleton-loader>
+                  }
+                  <img [src]="images[0]" [alt]="project.name"
+                       (load)="onImageLoad(project.id + '_0')"
+                       [style.opacity]="imagesLoaded()[project.id + '_0'] ? 1 : 0"
+                       style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;" loading="lazy"/>
+                } @else {
+                  <div class="carousel-container" style="width:100%;height:100%;position:relative;">
+                    
+                    <div class="carousel-slides" [style.transform]="'translateX(-' + (currentImageIndex[project.id] || 0) * 100 + '%)'" style="display:flex;width:100%;height:100%;transition:transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);">
+                      @for (img of images; track img; let imgIdx = $index) {
+                        <div class="carousel-slide" style="min-width:100%;width:100%;height:100%;position:relative;">
+                          @if (!imagesLoaded()[project.id + '_' + imgIdx]) {
+                            <ngx-skeleton-loader
+                              [theme]="{
+                                height: '100%',
+                                width: '100%',
+                                'border-radius': '0',
+                                'background-color': 'rgba(255, 255, 255, 0.08)',
+                                margin: '0',
+                                display: 'block'
+                              }"
+                              animation="pulse"
+                            ></ngx-skeleton-loader>
+                          }
+                          <img [src]="img" [alt]="project.name + ' - Foto ' + (imgIdx + 1)"
+                               (load)="onImageLoad(project.id + '_' + imgIdx)"
+                               [style.opacity]="imagesLoaded()[project.id + '_' + imgIdx] ? 1 : 0"
+                               style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;" loading="lazy"/>
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Controles del Carrusel (Flechas) -->
+                    <button class="carousel-control prev" (click)="prevImage(project, $event)" aria-label="Imagen anterior">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="carousel-control next" (click)="nextImage(project, $event)" aria-label="Imagen siguiente">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <!-- Indicadores (Puntos) -->
+                    <div class="carousel-indicators">
+                      @for (img of images; track img; let imgIdx = $index) {
+                        <button class="indicator-dot" 
+                                [class.active]="(currentImageIndex[project.id] || 0) === imgIdx"
+                                (click)="goToImage(project, imgIdx, $event)"
+                                [attr.aria-label]="'Ir a imagen ' + (imgIdx + 1)">
+                        </button>
+                      }
+                    </div>
+
+                  </div>
                 }
-                <img [src]="project.photoURL" [alt]="project.name"
-                     (load)="onImageLoad(project.id || '')"
-                     [style.opacity]="imagesLoaded()[project.id || ''] ? 1 : 0"
-                     style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;" loading="lazy"/>
               </div>
             } @else if (i === 0) {
               <div class="browser-screen" style="background:#060d1a;padding:0;overflow:hidden;">

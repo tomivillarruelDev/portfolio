@@ -55,3 +55,13 @@
   .form-row-2, .metric-row { grid-template-columns: 1fr; }
   .chips-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── CAROUSEL IMAGES ── */
+.carousel-images-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+.carousel-image-item { position: relative; width: 100px; height: 75px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.carousel-image-item img { width: 100%; height: 100%; object-fit: cover; }
+.btn-remove-image { position: absolute; top: 2px; right: 2px; background: rgba(220, 38, 38, 0.85); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; cursor: pointer; transition: background 0.15s; z-index: 10; }
+.btn-remove-image:hover { background: rgba(220, 38, 38, 1); }
+.image-badge-label { position: absolute; bottom: 2px; left: 2px; font-size: 8px; font-weight: bold; background: rgba(107, 114, 128, 0.85); color: white; padding: 1px 4px; border-radius: 3px; text-transform: uppercase; }
+.image-badge-label.new { background: rgba(16, 185, 129, 0.85); }
+.secondary-upload { margin-top: 0.5rem; }

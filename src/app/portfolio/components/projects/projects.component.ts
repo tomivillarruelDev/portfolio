@@ -1,4 +1,4 @@
-import { Component, signal, inject, effect, NgZone } from '@angular/core';
+import { Component, signal, inject, effect, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
@@ -64,9 +64,11 @@ const STATIC_FALLBACK: {
   standalone: true,
   imports: [CommonModule, ProjectCardComponent, NgxSkeletonLoaderModule],
 })
-export class ProjectsComponent {
+export class ProjectsComponent implements OnDestroy {
   readonly featuredProjects = signal<Project[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
+  currentImageIndex: Record<string, number> = {};
+  private autoplayIntervals: Record<string, any> = {};
   private gsapInited = false;
 
   private readonly firebaseService = inject(FirebaseService);
@@ -87,9 +89,18 @@ export class ProjectsComponent {
     this.loadProjects();
   }
 
+  ngOnDestroy(): void {
+    Object.keys(this.autoplayIntervals).forEach(key => {
+      clearInterval(this.autoplayIntervals[key]);
+    });
+    this.autoplayIntervals = {};
+  }
+
   private async loadProjects() {
     const all = await this.firebaseService.getProjects('projects-image');
-    this.featuredProjects.set(all.slice(0, 2));
+    const featured = all.slice(0, 2);
+    this.featuredProjects.set(featured);
+    featured.forEach(p => this.startAutoplay(p));
   }
 
   scrollToContact(event: Event): void {
@@ -108,6 +119,73 @@ export class ProjectsComponent {
 
   onImageLoad(projectId: string): void {
     this.imagesLoaded.update(state => ({ ...state, [projectId]: true }));
+  }
+
+  getProjectImages(project: Project): string[] {
+    const images: string[] = [];
+    if (project.photoURL) images.push(project.photoURL);
+    if (Array.isArray(project.photoURLs)) {
+      project.photoURLs.forEach(url => {
+        if (url && !images.includes(url)) {
+          images.push(url);
+        }
+      });
+    }
+    return images;
+  }
+
+  startAutoplay(project: Project): void {
+    const images = this.getProjectImages(project);
+    if (images.length <= 1) return;
+    this.stopAutoplay(project);
+    this.autoplayIntervals[project.id] = setInterval(() => {
+      this.nextImage(project);
+    }, 2000); // Cambio de imagen cada 2 segundos
+  }
+
+  stopAutoplay(project: Project): void {
+    if (this.autoplayIntervals[project.id]) {
+      clearInterval(this.autoplayIntervals[project.id]);
+      delete this.autoplayIntervals[project.id];
+    }
+  }
+
+  resetAutoplay(project: Project): void {
+    this.stopAutoplay(project);
+    this.startAutoplay(project);
+  }
+
+  prevImage(project: Project, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.resetAutoplay(project);
+    }
+    const images = this.getProjectImages(project);
+    if (images.length <= 1) return;
+    const current = this.currentImageIndex[project.id] || 0;
+    this.currentImageIndex[project.id] = current === 0 ? images.length - 1 : current - 1;
+  }
+
+  nextImage(project: Project, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.resetAutoplay(project);
+    }
+    const images = this.getProjectImages(project);
+    if (images.length <= 1) return;
+    const current = this.currentImageIndex[project.id] || 0;
+    this.currentImageIndex[project.id] = current === images.length - 1 ? 0 : current + 1;
+  }
+
+  goToImage(project: Project, index: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.resetAutoplay(project);
+    }
+    this.currentImageIndex[project.id] = index;
   }
 
   getTechIcon(techName: string): string | null {
