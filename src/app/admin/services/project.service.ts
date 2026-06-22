@@ -48,8 +48,8 @@ export class ProjectService {
       })) as Project[];
       return arr.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
     } catch (error) {
-      console.error(`Error fetching projects (${projectType}):`, error);
-      throw new Error(`Could not fetch projects (${projectType})`);
+      console.error(`Error al obtener proyectos (${projectType}):`, error);
+      throw new Error(`No se pudieron obtener los proyectos (${projectType})`);
     }
   }
 
@@ -59,8 +59,8 @@ export class ProjectService {
       const project = snapshot.val();
       return project ? { ...project, id } : null;
     } catch (error) {
-      console.error(`Error fetching project by ID (${id}, ${projectType}):`, error);
-      throw new Error(`Could not fetch project (${id}, ${projectType})`);
+      console.error(`Error al obtener proyecto por ID (${id}, ${projectType}):`, error);
+      throw new Error(`No se pudo obtener el proyecto (${id}, ${projectType})`);
     }
   }
 
@@ -84,20 +84,20 @@ export class ProjectService {
       await newRef.set(data);
       return { ...data, id: key };
     } catch (error) {
-      console.error(`Error creating project (${projectType}):`, error);
-      throw new Error(`Could not create project (${projectType})`);
+      console.error(`Error al crear proyecto (${projectType}):`, error);
+      throw new Error(`No se pudo crear el proyecto (${projectType})`);
     }
   }
 
   async updateProject(project: Project, projectType: ProjectType = ProjectType.IMAGE): Promise<Project> {
-    if (!project.id) throw new Error('Project ID is required for update');
+    if (!project.id) throw new Error('El ID del proyecto es requerido para actualizar');
     try {
       const { id, ...projectData } = project;
       await this.db.database.ref(`${projectType}/${id}`).update(projectData);
       return project;
     } catch (error) {
-      console.error(`Error updating project (${project.id}, ${projectType}):`, error);
-      throw new Error(`Could not update project (${project.id}, ${projectType})`);
+      console.error(`Error al actualizar proyecto (${project.id}, ${projectType}):`, error);
+      throw new Error(`No se pudo actualizar el proyecto (${project.id}, ${projectType})`);
     }
   }
 
@@ -113,8 +113,8 @@ export class ProjectService {
       }
       await this.db.database.ref(`${projectType}/${id}`).remove();
     } catch (error) {
-      console.error(`Error deleting project (${id}, ${projectType}):`, error);
-      throw new Error(`Could not delete project (${id}, ${projectType})`);
+      console.error(`Error al eliminar proyecto (${id}, ${projectType}):`, error);
+      throw new Error(`No se pudo eliminar el proyecto (${id}, ${projectType})`);
     }
   }
 
@@ -122,8 +122,8 @@ export class ProjectService {
     try {
       await this.db.database.ref(`${projectType}/${projectId}`).update({ order: newOrder });
     } catch (error) {
-      console.error(`Error updating project order (${projectId}, ${projectType}):`, error);
-      throw new Error(`Could not update project order (${projectId}, ${projectType})`);
+      console.error(`Error al actualizar el orden del proyecto (${projectId}, ${projectType}):`, error);
+      throw new Error(`No se pudo actualizar el orden del proyecto (${projectId}, ${projectType})`);
     }
   }
 
@@ -134,8 +134,8 @@ export class ProjectService {
       projectIds.forEach((id, index) => { batchUpdate[`/${projectType}/${id}/order`] = index; });
       await this.db.database.ref().update(batchUpdate);
     } catch (error) {
-      console.error(`Error reordering projects (${projectType}):`, error);
-      throw new Error(`Could not reorder projects (${projectType})`);
+      console.error(`Error al reordenar proyectos (${projectType}):`, error);
+      throw new Error(`No se pudo reordenar los proyectos (${projectType})`);
     }
   }
 
@@ -156,7 +156,7 @@ export class ProjectService {
         await fileRef.delete().toPromise();
       } catch (error: any) {
         if (error.code !== 'storage/object-not-found') {
-          console.error('Error deleting image from storage:', error);
+          console.error('Error al eliminar la imagen del storage:', error);
         }
       }
     }

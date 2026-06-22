@@ -6,13 +6,13 @@ import { firstValueFrom, Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class CloudinaryService {
-  private cloudName = 'dagxp85fl';
-  private uploadPreset = 'ml_default';
+  private cloudName = 'dcfcee5za';
+  private uploadPreset = 'preset_portfolio';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Sube una imagen directamente a Cloudinary y retorna su URL.
+   * Sube un archivo a Cloudinary y retorna su URL segura.
    */
   async uploadImage(file: File): Promise<string> {
     const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
@@ -31,13 +31,13 @@ export class CloudinaryService {
       }
       throw new Error('Respuesta inválida de Cloudinary');
     } catch (error) {
-      console.error('Error al subir imagen a Cloudinary:', error);
-      throw new Error('No se pudo subir la imagen a Cloudinary');
+      console.error('Error al subir a Cloudinary:', error);
+      throw new Error('No se pudo subir el archivo a Cloudinary');
     }
   }
 
   /**
-   * Sube una imagen a Cloudinary reportando el progreso de la carga.
+   * Sube un archivo a Cloudinary reportando el progreso de la carga.
    */
   uploadImageWithProgress(file: File): Observable<number | string> {
     const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
@@ -77,3 +77,4 @@ export class CloudinaryService {
     return progressSubject.asObservable();
   }
 }
+

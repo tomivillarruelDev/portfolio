@@ -92,14 +92,14 @@ export class ProfileImageService {
               progressSubject.complete();
             },
             error: (err) => {
-              console.error('Error saving profile image URL to database:', err);
+              console.error('Error al guardar la URL de la imagen de perfil en la base de datos:', err);
               progressSubject.error('Error al guardar la URL en la base de datos');
             }
           });
         }
       },
       error: (error) => {
-        console.error('Error uploading profile image to Cloudinary:', error);
+        console.error('Error al subir la imagen de perfil a Cloudinary:', error);
         progressSubject.error(error);
       }
     });
