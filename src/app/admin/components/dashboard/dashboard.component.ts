@@ -26,6 +26,7 @@ export class DashboardComponent {
     { label: 'Métricas',        route: '/admin/stats' },
     { label: 'Curriculum Vitae', route: '/admin/upload-cv' },
     { label: 'Imagen de Perfil', route: '/admin/upload-profile-image' },
+    { label: 'WhatsApp',         route: '/admin/whatsapp' },
   ]);
 
   readonly dashboardCards = signal<DashboardCard[]>([
@@ -36,6 +37,7 @@ export class DashboardComponent {
     { title: 'Métricas',        description: 'Editá y mostrá u ocultá las métricas del portfolio', route: '/admin/stats',                buttonText: 'Gestionar Métricas' },
     { title: 'Curriculum Vitae', description: 'Sube o actualiza tu CV',                           route: '/admin/upload-cv',            buttonText: 'Gestionar CV' },
     { title: 'Imagen de Perfil', description: 'Actualiza tu foto de perfil',                      route: '/admin/upload-profile-image', buttonText: 'Gestionar Imagen' },
+    { title: 'WhatsApp',         description: 'Configurá el botón flotante de WhatsApp',           route: '/admin/whatsapp',             buttonText: 'Configurar WhatsApp' },
   ]);
 
   async logout(): Promise<void> {

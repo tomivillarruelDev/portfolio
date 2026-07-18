@@ -1,0 +1,126 @@
+.wa-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+  opacity: 0;
+  transform: translateY(20px) scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.25s ease;
+  will-change: transform, opacity;
+}
+
+.wa-btn--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.wa-btn:hover {
+  background: #1ebe5d;
+  box-shadow: 0 6px 28px rgba(37, 211, 102, 0.6);
+  transform: translateY(-3px) scale(1.06);
+}
+
+.wa-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Pulse ring */
+.wa-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.4);
+  animation: wa-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes wa-pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(1.7); opacity: 0;   }
+  100% { transform: scale(1.7); opacity: 0;   }
+}
+
+/* Tooltip — portfolio glassmorphism style */
+.wa-tooltip {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  white-space: nowrap;
+  background: rgba(15, 10, 30, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.wa-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-left-color: rgba(168, 85, 247, 0.4);
+}
+
+/* Show on hover */
+.wa-btn:hover .wa-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Show on nudge (auto) */
+.wa-tooltip--nudge {
+  opacity: 1 !important;
+  transform: translateY(-50%) translateX(0) !important;
+  animation: wa-nudge 2.5s ease forwards;
+}
+
+@keyframes wa-nudge {
+  0%   { opacity: 0; transform: translateY(-50%) translateX(6px); }
+  15%  { opacity: 1; transform: translateY(-50%) translateX(0);   }
+  75%  { opacity: 1; transform: translateY(-50%) translateX(0);   }
+  100% { opacity: 0; transform: translateY(-50%) translateX(6px); }
+}
+
+@media (max-width: 640px) {
+  .wa-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .wa-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .wa-tooltip {
+    display: none;
+  }
+}

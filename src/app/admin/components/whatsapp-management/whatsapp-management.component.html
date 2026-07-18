@@ -1,0 +1,71 @@
+<div class="wm-wrap">
+  <div class="wm-header">
+    <h2 class="wm-title">WhatsApp</h2>
+    <p class="wm-sub">Configurá el botón flotante de WhatsApp que aparece en el portfolio.</p>
+  </div>
+
+  @if (loading) {
+    <div class="wm-loading">Cargando configuración…</div>
+  }
+
+  @if (!loading) {
+    <div class="wm-card">
+
+      <div class="wm-toggle-row">
+        <label class="wm-toggle-label">
+          <input type="checkbox" [(ngModel)]="config.enabled" />
+          <span class="wm-toggle-text">{{ config.enabled ? 'Botón activo' : 'Botón oculto' }}</span>
+        </label>
+        <span class="wm-status" [class.wm-status--on]="config.enabled">
+          {{ config.enabled ? 'Visible en el portfolio' : 'No visible' }}
+        </span>
+      </div>
+
+      <div class="wm-fields">
+        <div class="wm-field">
+          <label>Número de WhatsApp <span class="wm-hint">sin + ni espacios, incluir código de país</span></label>
+          <input
+            type="text"
+            [(ngModel)]="config.phone"
+            placeholder="ej: 543512524229"
+          />
+        </div>
+
+        <div class="wm-field">
+          <label>Mensaje pre-cargado</label>
+          <textarea
+            [(ngModel)]="config.message"
+            rows="3"
+            placeholder="ej: Hola Tomas, vi tu portfolio y me interesa hablar sobre un proyecto."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="wm-preview">
+        <span class="wm-preview-label">Vista previa del link</span>
+        <a [href]="previewUrl" target="_blank" rel="noopener noreferrer" class="wm-preview-link">
+          {{ previewUrl }}
+        </a>
+      </div>
+
+    </div>
+
+    <div class="wm-actions">
+      <button class="wm-save-btn" (click)="save()" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar cambios' }}
+      </button>
+    </div>
+
+    @if (saved) {
+      <div class="wm-success">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 6px; color: #10b981;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Configuración guardada correctamente.
+      </div>
+    }
+    @if (error) {
+      <div class="wm-error">{{ error }}</div>
+    }
+  }
+</div>

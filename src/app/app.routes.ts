@@ -11,6 +11,7 @@ import { ProfileImageUploadComponent } from './admin/components/profile-image-up
 import { ExperienceManagementComponent } from './admin/components/experience-management/experience-management.component';
 import { EducationManagementComponent } from './admin/components/education-management/education-management.component';
 import { StatsManagementComponent } from './admin/components/stats-management/stats-management.component';
+import { WhatsappManagementComponent } from './admin/components/whatsapp-management/whatsapp-management.component';
 import { AuthGuard } from './admin/services/auth.guard';
 
 export const routes: Routes = [
@@ -34,6 +35,7 @@ export const routes: Routes = [
           { path: 'experience',           component: ExperienceManagementComponent },
           { path: 'education',            component: EducationManagementComponent },
           { path: 'stats',                component: StatsManagementComponent },
+          { path: 'whatsapp',             component: WhatsappManagementComponent },
           { path: '',                     redirectTo: 'dashboard', pathMatch: 'full' },
         ],
       },
