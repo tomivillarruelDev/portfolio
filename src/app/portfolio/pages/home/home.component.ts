@@ -8,6 +8,7 @@ import { ProjectsComponent } from '../../components/projects/projects.component'
 import { SkillsComponent } from '../../components/skills/skills.component';
 import { ExperienceComponent } from '../../components/experience/experience.component';
 import { EducationComponent } from '../../components/education/education.component';
+import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
 import { ContactComponent } from '../../components/contact/contact.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { WhatsappButtonComponent } from '../../components/whatsapp-button/whatsapp-button.component';
@@ -29,6 +30,7 @@ gsap.registerPlugin(ScrollTrigger);
     SkillsComponent,
     ExperienceComponent,
     EducationComponent,
+    TestimonialsComponent,
     ContactComponent,
     FooterComponent,
     WhatsappButtonComponent,
@@ -36,6 +38,20 @@ gsap.registerPlugin(ScrollTrigger);
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   showCtaBanner = false;
+
+  scrollToContact(event: Event): void {
+    event.preventDefault();
+    const el = document.getElementById('contact');
+    if (el) {
+      const offset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
 
   constructor(private ngZone: NgZone, private seo: SeoService) {}
 
@@ -76,6 +92,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initAboutValues();
     this.initSmallCards();
     this.initEduCards();
+    this.initTestimonials();
     this.initOrbParallax();
     this.initContactCard();
   }
@@ -309,6 +326,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, { threshold: 0.01 });
 
     sections.forEach(s => io.observe(s));
+  }
+
+  private initTestimonials(): void {
+    document.querySelectorAll<HTMLElement>('.testi-card').forEach(el => {
+      gsap.fromTo(el,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1,
+          scrollTrigger: { trigger: el, scrub: 0.6, start: 'top 88%', end: 'top 45%' } }
+      );
+    });
   }
 
   private initContactCard(): void {

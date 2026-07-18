@@ -1,0 +1,29 @@
+<section id="testimonials">
+  <div class="orb testi-orb"></div>
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Referencias</p>
+      <h2 class="section-title">Lo que dicen<br>quienes trabajaron conmigo</h2>
+    </div>
+    <div class="testi-grid stagger">
+      @for (item of testimonials; track item.name) {
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p class="testi-text" [innerHTML]="item.text"></p>
+          <div class="testi-author">
+            <div class="testi-avatar">{{ item.avatar }}</div>
+            <div>
+              <div class="testi-name">{{ item.name }}</div>
+              <div class="testi-role">{{ item.role }}</div>
+              <div class="testi-stars">
+                @for (star of getStarsArray(item.stars); track $index) {
+                  ★
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

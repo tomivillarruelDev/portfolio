@@ -10,6 +10,7 @@ import { CvUploadComponent } from './admin/components/cv-upload/cv-upload.compon
 import { ProfileImageUploadComponent } from './admin/components/profile-image-upload/profile-image-upload.component';
 import { ExperienceManagementComponent } from './admin/components/experience-management/experience-management.component';
 import { EducationManagementComponent } from './admin/components/education-management/education-management.component';
+import { ReferencesManagementComponent } from './admin/components/references-management/references-management.component';
 import { StatsManagementComponent } from './admin/components/stats-management/stats-management.component';
 import { WhatsappManagementComponent } from './admin/components/whatsapp-management/whatsapp-management.component';
 import { CaptchaManagementComponent } from './admin/components/captcha-management/captcha-management.component';
@@ -35,6 +36,7 @@ export const routes: Routes = [
           { path: 'upload-profile-image', component: ProfileImageUploadComponent },
           { path: 'experience',           component: ExperienceManagementComponent },
           { path: 'education',            component: EducationManagementComponent },
+          { path: 'references',           component: ReferencesManagementComponent },
           { path: 'stats',                component: StatsManagementComponent },
           { path: 'whatsapp',             component: WhatsappManagementComponent },
           { path: 'captcha',              component: CaptchaManagementComponent },
