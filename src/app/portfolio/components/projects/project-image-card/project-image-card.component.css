@@ -16,7 +16,7 @@
   min-height: 150%;
   object-fit: contain;
   border-radius: 0.8rem;
-  transition: all 0.4s ease-in-out;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
 
 }
 
@@ -32,8 +32,7 @@ article:hover .slide-image {
   color: #fff;
   border: 0.1rem solid var(--red);
   border-radius: 0.8rem;
-  transition: all 0.3s;
-
+  transition: padding 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 
   &:hover {
     padding-right: 2.4rem;
@@ -41,6 +40,9 @@ article:hover .slide-image {
     color: var(--red);
   }
 
+  &:active {
+    transform: scale(0.97);
+  }
 }
 
 .button-links:last-child {
@@ -49,7 +51,7 @@ article:hover .slide-image {
 
 
   .link svg {
-    transition: all 0.3s ease-in-out;
+    transition: margin-left 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), fill 0.2s ease;
     margin-left: 0.2rem;
     fill: #fff;
   }

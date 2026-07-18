@@ -8,22 +8,24 @@
   padding: 26px 24px; border-radius: 16px;
   border: 1px solid var(--border); background: var(--glass);
   backdrop-filter: blur(10px);
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative; overflow: hidden;
 }
 .small-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0;
   height: 2px; background: linear-gradient(90deg, var(--purple-1), var(--purple-2), var(--pink));
-  opacity: 0; transition: opacity 0.3s;
+  opacity: 0; transition: opacity 0.2s ease;
 }
 .small-card:hover { transform: translateY(-4px); border-color: rgba(168,85,247,0.38); box-shadow: 0 12px 40px rgba(124,58,237,0.14); }
 .small-card:hover::before { opacity: 1; }
+.small-card:active { transform: translateY(-2px); }
 
 .small-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .small-card-icon { color: var(--purple-3); display: flex; }
 .small-card-links { display: flex; gap: 12px; }
-.small-card-links a { color: var(--muted); transition: color 0.2s; text-decoration: none; display: flex; align-items: center; }
-.small-card-links a:hover { color: var(--purple-3); }
+.small-card-links a { color: var(--muted); transition: color 0.15s ease, transform 0.15s ease; text-decoration: none; display: flex; align-items: center; }
+.small-card-links a:hover { color: var(--purple-3); transform: scale(1.08); }
+.small-card-links a:active { transform: scale(0.95); }
 
 .small-card-name { font-size: 15px; font-weight: 700; margin-bottom: 7px; }
 .small-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
@@ -39,6 +41,7 @@
   padding: 11px 32px; border-radius: 50px;
   border: 1px solid var(--border); background: transparent;
   color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 .show-more-btn:hover { border-color: var(--purple-2); background: var(--glass); }
+.show-more-btn:active { transform: scale(0.97); }

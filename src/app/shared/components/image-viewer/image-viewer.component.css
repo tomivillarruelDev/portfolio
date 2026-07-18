@@ -1,0 +1,147 @@
+/* ── OVERLAY ── */
+.iv-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(20px) brightness(0.75) saturate(0.85);
+  -webkit-backdrop-filter: blur(20px) brightness(0.75) saturate(0.85);
+  /* opacity managed by GSAP */
+}
+
+/* ── STAGE (image container) ── */
+.iv-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── IMAGES ── */
+.iv-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 72vw;
+  max-height: 80vh;
+  object-fit: contain;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  /* GSAP owns transform via xPercent/yPercent; no CSS transform here */
+  cursor: default;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0; /* GSAP controls opacity — prevents flash on render */
+}
+
+@media (max-width: 768px) {
+  .iv-img {
+    max-width: 94vw;
+    max-height: 86vh;
+  }
+}
+
+/* ── COUNTER ── */
+.iv-counter {
+  position: fixed;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9992;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 5px;
+  color: rgba(255, 255, 255, 0.72);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0; /* GSAP controls opacity */
+}
+
+.iv-counter-text {
+  display: block;
+}
+
+/* ── CLOSE BUTTON ── */
+.iv-close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  opacity: 0; /* GSAP controls opacity */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9992;
+  transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+  padding: 0;
+}
+
+.iv-close:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: scale(1.1);
+}
+
+/* ── NAV BUTTONS ── */
+.iv-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0; /* GSAP controls opacity */
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9992;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  padding: 0;
+}
+
+.iv-prev { left: 24px; }
+.iv-next { right: 24px; }
+
+.iv-nav:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.26);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .iv-nav {
+    width: 42px;
+    height: 42px;
+  }
+  .iv-prev { left: 10px; }
+  .iv-next { right: 10px; }
+  .iv-close {
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+  }
+  .iv-counter {
+    top: 20px;
+    font-size: 10px;
+    letter-spacing: 4px;
+  }
+}

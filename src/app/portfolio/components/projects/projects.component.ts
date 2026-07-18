@@ -4,6 +4,7 @@ import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { ImageViewerService } from 'src/app/shared/services/image-viewer.service';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -74,6 +75,7 @@ export class ProjectsComponent implements OnDestroy {
 
   private readonly firebaseService = inject(FirebaseService);
   private readonly ngZone = inject(NgZone);
+  private readonly imageViewerService = inject(ImageViewerService);
 
   constructor() {
     effect(() => {
@@ -157,7 +159,7 @@ export class ProjectsComponent implements OnDestroy {
     this.stopAutoplay(project);
     this.autoplayIntervals[project.id] = setInterval(() => {
       this.nextImage(project);
-    }, 2000); // Cambio de imagen cada 2 segundos
+    }, 5000); // Cambio de imagen cada 5 segundos
   }
 
   stopAutoplay(project: Project): void {
@@ -208,6 +210,14 @@ export class ProjectsComponent implements OnDestroy {
   getTechIcon(techName: string): string | null {
     if (!techName) return null;
     return this.firebaseService.techIconCache[techName.trim().toLowerCase()] || null;
+  }
+
+  openViewer(event: MouseEvent, project: Project, imgIndex: number): void {
+    event.stopPropagation();
+    const img = event.currentTarget as HTMLImageElement;
+    const rect = img.getBoundingClientRect();
+    const images = this.getProjectImages(project);
+    this.imageViewerService.open(images, imgIndex, rect);
   }
 
   getTechClass(tech: string): string { return TECH_MAP[tech]?.[0] ?? 'ic-ng'; }

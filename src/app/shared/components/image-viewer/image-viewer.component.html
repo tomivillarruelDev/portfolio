@@ -1,0 +1,36 @@
+@if (isVisible()) {
+  <div class="iv-overlay" #overlay (click)="onOverlayClick($event)">
+
+    <div class="iv-counter" #counter>
+      <span #counterText class="iv-counter-text">
+        {{ pad(currentIndex() + 1) }}&nbsp;/&nbsp;{{ pad(totalImages()) }}
+      </span>
+    </div>
+
+    <button class="iv-close" #closeBtn (click)="close()" aria-label="Cerrar visor de imágenes">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="iv-stage" #stage>
+      <img #imgA class="iv-img" [src]="imgASrc()" alt="Imagen del proyecto" draggable="false" />
+      <img #imgB class="iv-img" [src]="imgBSrc()" alt="Imagen del proyecto" draggable="false" />
+    </div>
+
+    @if (totalImages() > 1) {
+      <button class="iv-nav iv-prev" #prevBtn (click)="prev()" aria-label="Imagen anterior">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <button class="iv-nav iv-next" #nextBtn (click)="next()" aria-label="Imagen siguiente">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    }
+
+  </div>
+}
