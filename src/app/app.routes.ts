@@ -17,7 +17,7 @@ import { CaptchaManagementComponent } from './admin/components/captcha-managemen
 import { AuthGuard } from './admin/services/auth.guard';
 
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   {
     path: 'admin',
     children: [
@@ -45,7 +45,6 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

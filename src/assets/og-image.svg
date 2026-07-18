@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06060f"/>
+      <stop offset="100%" style="stop-color:#0d0d1a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#ffffff06" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Accent orb top-right -->
+  <circle cx="1050" cy="120" r="200" fill="#6366f1" opacity="0.08"/>
+  <!-- Accent orb bottom-left -->
+  <circle cx="150" cy="520" r="150" fill="#8b5cf6" opacity="0.06"/>
+
+  <!-- Left accent bar -->
+  <rect x="80" y="180" width="4" height="270" rx="2" fill="url(#accent)"/>
+
+  <!-- Main content -->
+  <!-- Name -->
+  <text x="116" y="260" font-family="Inter, system-ui, sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="-1">Tomás Villarruel</text>
+
+  <!-- Job title -->
+  <text x="118" y="318" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="400" fill="#a5b4fc">Desarrollador Full Stack</text>
+
+  <!-- Divider -->
+  <rect x="118" y="348" width="480" height="2" rx="1" fill="#ffffff12"/>
+
+  <!-- Tech stack -->
+  <text x="118" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="500" fill="#6366f1">Angular</text>
+  <text x="234" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="300" fill="#ffffff30">·</text>
+  <text x="252" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="500" fill="#6366f1">TypeScript</text>
+  <text x="392" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="300" fill="#ffffff30">·</text>
+  <text x="410" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="500" fill="#6366f1">Firebase</text>
+  <text x="518" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="300" fill="#ffffff30">·</text>
+  <text x="536" y="390" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="500" fill="#6366f1">Node.js</text>
+
+  <!-- Description -->
+  <text x="118" y="440" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="300" fill="#94a3b8">Desarrollo web moderno, aplicaciones escalables</text>
+  <text x="118" y="468" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="300" fill="#94a3b8">y arquitectura limpia.</text>
+
+  <!-- URL badge -->
+  <rect x="118" y="516" width="380" height="40" rx="20" fill="#ffffff0a" stroke="#ffffff15" stroke-width="1"/>
+  <text x="308" y="541" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="middle">tomas-villarruel-portfolio.web.app</text>
+
+  <!-- Right side decoration — code brackets -->
+  <text x="820" y="380" font-family="monospace" font-size="180" font-weight="700" fill="#6366f1" opacity="0.06">{}</text>
+
+  <!-- Small logo/initials badge -->
+  <circle cx="1080" cy="540" r="45" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1"/>
+  <text x="1080" y="553" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="800" fill="#a5b4fc" text-anchor="middle">TV</text>
+</svg>

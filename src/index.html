@@ -43,16 +43,36 @@
 
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/icons/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/icons/logo.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icons/logo.png">
+  <link rel="manifest" href="manifest.webmanifest">
 
-  <!-- Preconnect -->
+  <!-- Preconnect & DNS prefetch -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap" rel="stylesheet">
 
-  <!-- JSON-LD Structured Data -->
+  <!-- JSON-LD Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tomás Villarruel Portfolio",
+    "url": "https://tomas-villarruel-portfolio.web.app/",
+    "description": "Portfolio de Tomás Villarruel, Desarrollador Full Stack especializado en Angular, TypeScript y Firebase.",
+    "author": {
+      "@type": "Person",
+      "name": "Tomás Villarruel"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD Structured Data: Person -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
