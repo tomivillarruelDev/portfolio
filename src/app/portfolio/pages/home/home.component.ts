@@ -295,7 +295,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   private initCtaBanner(): void {
-    const ids = ['about', 'experience'];
+    const ids = ['experience', 'skills', 'projects'];
     const sections = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!sections.length) return;
 
