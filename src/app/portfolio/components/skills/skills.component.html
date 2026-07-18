@@ -1,4 +1,4 @@
-<section id="skills">
+﻿<section id="skills">
   <div class="container">
     <div class="skills-inner">
 
@@ -37,74 +37,40 @@
       </div>
 
       <div class="skills-orb-wrap reveal-right">
-        <div class="orbit orbit-2">
-          @for (tech of orbitOuter(); track tech.id; let i = $index) {
-            <div class="orbit-dot" [ngClass]="'o2-d' + (i + 1)">
-              @if (tech.icon) {
-                @if (!imagesLoaded()[tech.id || '']) {
-                  <ngx-skeleton-loader
-                    [theme]="{
-                      height: '22px',
-                      width: '22px',
-                      'border-radius': '4px',
-                      'background-color': 'rgba(255, 255, 255, 0.12)',
-                      margin: '0',
-                      display: 'block'
-                    }"
-                    animation="pulse"
-                  ></ngx-skeleton-loader>
-                }
-                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
-                     [attr.data-img-key]="tech.id || ''"
-                     (load)="onImageLoad(tech.id || '')"
-                     (error)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
-              } @else {
-                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
-              }
-            </div>
-          }
-        </div>
-        <div class="orbit orbit-1">
-          @for (tech of orbitInner(); track tech.id; let i = $index) {
-            <div class="orbit-dot" [ngClass]="'o1-d' + (i + 1)">
-              @if (tech.icon) {
-                @if (!imagesLoaded()[tech.id || '']) {
-                  <ngx-skeleton-loader
-                    [theme]="{
-                      height: '22px',
-                      width: '22px',
-                      'border-radius': '4px',
-                      'background-color': 'rgba(255, 255, 255, 0.12)',
-                      margin: '0',
-                      display: 'block'
-                    }"
-                    animation="pulse"
-                  ></ngx-skeleton-loader>
-                }
-                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
-                     [attr.data-img-key]="tech.id || ''"
-                     (load)="onImageLoad(tech.id || '')"
-                     (error)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
-              } @else {
-                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
-              }
-            </div>
-          }
-        </div>
-        <div class="skills-central-orb">
-          <svg class="brain-icon" width="82" height="82" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="3" width="20" height="14" rx="2"/>
-            <polyline points="8 21 12 17 16 21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
-            <path d="M7 8l3 3-3 3"/>
-            <line x1="13" y1="14" x2="17" y2="14"/>
-          </svg>
+        <div class="skills-terminal">
+          <div class="term-chrome">
+            <span class="term-dot td-red"></span>
+            <span class="term-dot td-yellow"></span>
+            <span class="term-dot td-green"></span>
+            <span class="term-name">~/projects/tomas</span>
+          </div>
+          <div class="term-body">
+            <p class="term-line">
+              <span class="term-prompt">$</span>
+              <span class="term-cmd">ng g service auth/jwt --flat</span>
+            </p>
+            <p class="term-out">CREATE src/app/auth/jwt.service.ts</p>
+            <p class="term-line">
+              <span class="term-prompt">$</span>
+              <span class="term-cmd">firebase deploy --only hosting,functions</span>
+            </p>
+            <p class="term-out">&#10004;&nbsp; Deploy complete in 14s</p>
+            <p class="term-line">
+              <span class="term-prompt">$</span>
+              <span class="term-cmd">git push origin main</span>
+            </p>
+            <p class="term-out">[main a3f8c12] feat: módulo de pagos</p>
+            <p class="term-divider"></p>
+            <p class="term-line">
+              <span class="term-prompt">$</span>
+              <span class="term-cursor" aria-hidden="true">&#x258C;</span>
+            </p>
+          </div>
         </div>
       </div>
 
     </div>
+
 
     <!-- ── ACORDEÓN CERTIFICACIONES ── -->
     <div class="certs-accordion">

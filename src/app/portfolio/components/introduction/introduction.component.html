@@ -14,7 +14,7 @@
         <p class="hero-tagline">
           Soy Tomás Villarruel, desarrollador Full Stack de Córdoba. Construyo productos digitales que combinan ingeniería sólida con experiencias que la gente quiere usar.
         </p>
-        <p class="hero-differentiator">Si no entiendo el por qué del feature, pregunto antes de codear.</p>
+        <p class="hero-differentiator">Construyo lo que acordamos. Y aviso si hay una forma mejor.</p>
         <div class="hero-actions">
           <a href="#projects" class="btn-primary" (click)="scrollToProjects($event)">
             Ver mi trabajo
@@ -33,9 +33,7 @@
 
       <div class="hero-avatar-wrap">
         <div class="hero-avatar-glow"></div>
-        <div class="hero-avatar-ring">
-          <div class="hero-avatar-ring-inner"></div>
-        </div>
+        <div class="hero-avatar-ring"></div>
         <div class="hero-avatar">
           @if (isLoading()) {
             <ngx-skeleton-loader

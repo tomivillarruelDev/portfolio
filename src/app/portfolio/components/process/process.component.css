@@ -1,7 +1,6 @@
-#process {
+﻿#process {
   padding: 100px 0;
   position: relative;
-  overflow: hidden;
 }
 
 .process-orb-1 {
@@ -32,6 +31,10 @@
   z-index: 2;
 }
 
+.process-inner .section-title {
+  font-size: clamp(38px, 5.5vw, 62px);
+}
+
 .process-inner .section-label {
   justify-content: center;
 }
@@ -44,7 +47,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 28px;
-  margin-top: 56px;
+  margin-top: 48px;
   position: relative;
   max-width: 780px;
   margin-left: auto;
@@ -270,3 +273,5 @@
     }
   }
 }
+
+

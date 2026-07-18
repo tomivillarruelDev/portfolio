@@ -1,4 +1,4 @@
-/* ── TIPPY ── */
+﻿/* ── TIPPY ── */
 @import "tippy.js/dist/tippy.css";
 @import "tippy.js/animations/shift-away-extreme.css";
 @import "tippy.js/themes/light-border.css";
@@ -779,8 +779,7 @@ section[id] { scroll-margin-top: 80px; }
 @media(max-width:768px) { .skills-inner { flex-direction: column; gap: 48px; } .skills-orb-wrap { width: 100%; } }
 
 /* ── ABOUT ── */
-#about { padding: 120px 0; }
-.about-orb { width: 500px; height: 500px; background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, transparent 70%); top: 50%; right: -200px; transform: translateY(-50%); }
+#about { padding: 120px 0; background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 18%, var(--bg2) 82%, var(--bg) 100%); }
 .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 .about-image-wrap { position: relative; }
 .about-image {
@@ -827,8 +826,7 @@ section[id] { scroll-margin-top: 80px; }
 @media(max-width:768px) { .about-inner { grid-template-columns: 1fr; } .tag-top-right, .tag-top-left { display: none; } }
 
 /* ── EXPERIENCE ── */
-#experience { padding: 120px 0; background: linear-gradient(180deg, transparent, rgba(124,58,237,0.03), transparent); }
-.exp-orb { width: 500px; height: 500px; background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+#experience { padding: 120px 0; }
 .exp-entry { padding: 64px 0; border-top: 1px solid rgba(255,255,255,0.065); position: relative; }
 .exp-entry:last-child { border-bottom: 1px solid rgba(255,255,255,0.065); }
 .exp-index { font-size: 10.5px; letter-spacing: 0.22em; font-weight: 700; color: rgba(168,85,247,0.4); margin-bottom: 18px; }
@@ -873,8 +871,7 @@ section[id] { scroll-margin-top: 80px; }
 @media(max-width:900px) { .edu-layout { grid-template-columns: 1fr; } .edu-sticky { position: static; } }
 
 /* ── CONTACT ── */
-#contact { padding: 120px 0 100px; }
-.contact-orb { width: 700px; height: 450px; background: radial-gradient(ellipse, rgba(124,58,237,0.22) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+#contact { padding: 120px 0 100px; background: rgba(124,58,237,0.018); }
 .contact-inner { text-align: center; position: relative; z-index: 1; }
 .contact-inner .section-label { justify-content: center; }
 .contact-inner .section-label::before { display: none; }
@@ -952,7 +949,7 @@ footer span { color: var(--purple-3); }
 
 /* ── GRADIENT TEXT (hero cycling word) ── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--purple-2) 0%, var(--pink) 50%, var(--purple-3) 100%);
+  background: linear-gradient(160deg, #ede9fe 0%, var(--purple-3) 55%, var(--purple-2) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1264,4 +1261,6 @@ footer span { color: var(--purple-3); }
   align-items: center;
   gap: 4px;
 }
+
+
 

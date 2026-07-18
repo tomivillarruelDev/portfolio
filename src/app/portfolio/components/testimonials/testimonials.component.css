@@ -1,8 +1,6 @@
 #testimonials {
   padding: 120px 0;
-  background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.04), transparent);
   position: relative;
-  overflow: hidden;
 }
 
 .testi-orb {
@@ -17,11 +15,19 @@
   z-index: 1;
 }
 
+#testimonials .reveal {
+  text-align: left;
+}
+
+#testimonials .reveal .section-title {
+  font-size: clamp(34px, 4.5vw, 52px);
+}
+
 .testi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 18px;
-  margin-top: 56px;
+  margin-top: 48px;
   position: relative;
   z-index: 2;
 }
