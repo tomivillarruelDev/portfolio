@@ -50,20 +50,356 @@ body {
   overflow-x: hidden; line-height: 1.6;
 }
 
-/* ── ADMIN LIGHT OVERRIDE ── */
+/* ── ADMIN DARK THEME OVERRIDE ── */
 body.admin-mode {
-  background: #f4f5f7;
-  color: #111827;
-  color-scheme: light;
+  background: var(--bg);
+  color: var(--text);
+  color-scheme: dark;
 }
-body.admin-mode::before { display: none; }
+body.admin-mode::before {
+  display: block;
+  opacity: 0.35;
+}
 body.admin-mode *,
 body.admin-mode input,
 body.admin-mode select,
 body.admin-mode textarea,
 body.admin-mode button {
-  color-scheme: light;
+  color-scheme: dark;
 }
+
+/* Estilos de unificación de Admin */
+body.admin-mode .admin-shell {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+body.admin-mode .admin-sidebar {
+  background: #06060f !important;
+  border-right: 1px solid rgba(124, 58, 237, 0.15) !important;
+}
+
+body.admin-mode .admin-main {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+/* Tarjetas y componentes estilo Glassmorphism del Home */
+body.admin-mode .dash-card,
+body.admin-mode .admin-form-card,
+body.admin-mode .entry-card,
+body.admin-mode .upload-card,
+body.admin-mode .sm-card,
+body.admin-mode .tech-form-section,
+body.admin-mode .tech-list-section,
+body.admin-mode .project-form-container,
+body.admin-mode .tabs-container {
+  background: rgba(124, 58, 237, 0.04) !important;
+  border: 1px solid rgba(124, 58, 237, 0.15) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 16px !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+}
+
+body.admin-mode .dash-card:hover,
+body.admin-mode .entry-card:hover,
+body.admin-mode .upload-card:hover,
+body.admin-mode .sm-card:hover {
+  border-color: var(--purple-2) !important;
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.18) !important;
+}
+
+/* Títulos y Subtítulos */
+body.admin-mode .page-title,
+body.admin-mode h1,
+body.admin-mode h2,
+body.admin-mode h3,
+body.admin-mode .sm-title,
+body.admin-mode .admin-section-header h2,
+body.admin-mode .tech-header h2,
+body.admin-mode .project-list-header h2,
+body.admin-mode .project-form-header h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px !important;
+}
+
+body.admin-mode .page-sub,
+body.admin-mode .subtitle,
+body.admin-mode .sm-sub,
+body.admin-mode .helper-text,
+body.admin-mode .field-hint,
+body.admin-mode .image-hint,
+body.admin-mode .label-hint {
+  color: var(--muted) !important;
+}
+
+/* Campos de entrada */
+body.admin-mode input[type="text"],
+body.admin-mode input[type="email"],
+body.admin-mode input[type="password"],
+body.admin-mode input[type="number"],
+body.admin-mode input[type="url"],
+body.admin-mode select,
+body.admin-mode textarea {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(124, 58, 237, 0.22) !important;
+  color: var(--text) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  outline: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+body.admin-mode input:focus,
+body.admin-mode select:focus,
+body.admin-mode textarea:focus {
+  border-color: var(--purple-2) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.admin-mode label,
+body.admin-mode .form-group label {
+  color: var(--text) !important;
+  opacity: 0.9 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+}
+
+/* Botones principales y secundarios en Admin */
+body.admin-mode .btn-primary,
+body.admin-mode .btn-save,
+body.admin-mode button[type="submit"],
+body.admin-mode .sm-save-btn {
+  background: linear-gradient(135deg, var(--purple-1), var(--purple-2)) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  padding: 11px 24px !important;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3) !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+body.admin-mode .btn-primary:hover:not(:disabled),
+body.admin-mode .btn-save:hover:not(:disabled),
+body.admin-mode button[type="submit"]:hover:not(:disabled),
+body.admin-mode .sm-save-btn:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+}
+
+body.admin-mode .btn-secondary,
+body.admin-mode .btn-ghost,
+body.admin-mode .btn-cancel,
+body.admin-mode button[type="button"].btn-ghost,
+body.admin-mode .btn-cancel {
+  background: rgba(124, 58, 237, 0.07) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(124, 58, 237, 0.22) !important;
+  border-radius: 50px !important;
+  padding: 10px 24px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s, border-color 0.2s !important;
+}
+
+body.admin-mode .btn-secondary:hover,
+body.admin-mode .btn-ghost:hover,
+body.admin-mode .btn-cancel:hover {
+  background: rgba(124, 58, 237, 0.15) !important;
+  border-color: var(--purple-2) !important;
+}
+
+/* Modificamos los tokens locales para project-list y project-form */
+body.admin-mode app-project-list,
+body.admin-mode app-project-form,
+body.admin-mode app-dashboard,
+body.admin-mode app-technology-management,
+body.admin-mode app-experience-management,
+body.admin-mode app-education-management,
+body.admin-mode app-stats-management,
+body.admin-mode app-cv-upload,
+body.admin-mode app-profile-image-upload {
+  --border: rgba(124, 58, 237, 0.22) !important;
+  --bg: #06060f !important;
+  --white: rgba(124, 58, 237, 0.04) !important;
+  --text: #f1f0ff !important;
+  --muted: #8b8aad !important;
+  --danger-bg: rgba(239, 68, 68, 0.1) !important;
+  --danger: #f87171 !important;
+}
+
+/* Listado de elementos (experiencias, educación, etc.) */
+body.admin-mode .entry-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+body.admin-mode .entry-subtitle {
+  color: var(--purple-3) !important;
+}
+body.admin-mode .entry-desc,
+body.admin-mode .entry-tasks,
+body.admin-mode .entry-address {
+  color: var(--muted) !important;
+}
+
+body.admin-mode .entry-card {
+  align-items: center !important;
+}
+
+/* Tablas */
+body.admin-mode .project-table {
+  background: rgba(124, 58, 237, 0.02) !important;
+  border: 1px solid rgba(124, 58, 237, 0.15) !important;
+}
+body.admin-mode table th {
+  background: rgba(124, 58, 237, 0.08) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
+}
+body.admin-mode table td {
+  border-bottom: 1px solid rgba(124, 58, 237, 0.1) !important;
+  color: var(--text) !important;
+}
+body.admin-mode .project-row:hover td {
+  background: rgba(124, 58, 237, 0.04) !important;
+}
+
+/* Alertas de error y éxito */
+body.admin-mode .alert-success,
+body.admin-mode .msg-success,
+body.admin-mode .sm-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+body.admin-mode .alert-error,
+body.admin-mode .msg-error,
+body.admin-mode .error-alert,
+body.admin-mode .sm-error {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+/* Botones circulares o de orden */
+body.admin-mode .btn-icon,
+body.admin-mode .order-btn {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border: 1px solid rgba(124, 58, 237, 0.22) !important;
+  color: var(--text) !important;
+  border-radius: 6px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+body.admin-mode .btn-icon:hover:not(:disabled),
+body.admin-mode .order-btn:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.2) !important;
+  border-color: var(--purple-2) !important;
+}
+
+body.admin-mode .btn-icon-danger {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  color: #f87171 !important;
+  border-radius: 6px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+body.admin-mode .btn-icon-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2) !important;
+}
+
+body.admin-mode .reorder-instructions {
+  background: rgba(124, 58, 237, 0.05) !important;
+  border: 1px solid rgba(124, 58, 237, 0.2) !important;
+  color: var(--purple-3) !important;
+  border-radius: 8px !important;
+}
+
+body.admin-mode .active-tab,
+body.admin-mode .tab-button.active {
+  color: var(--purple-3) !important;
+  border-bottom-color: var(--purple-2) !important;
+}
+
+body.admin-mode .tab-button:hover:not(.active) {
+  color: #ffffff !important;
+}
+
+body.admin-mode .technology-tag {
+  background: rgba(124, 58, 237, 0.15) !important;
+  color: var(--purple-3) !important;
+  border: 1px solid rgba(124, 58, 237, 0.25) !important;
+}
+
+body.admin-mode .tech-item {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(124, 58, 237, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.admin-mode .btn-edit {
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: var(--purple-3) !important;
+  border: 1px solid rgba(124, 58, 237, 0.2) !important;
+}
+body.admin-mode .btn-edit:hover {
+  background: rgba(124, 58, 237, 0.2) !important;
+  border-color: var(--purple-2) !important;
+}
+
+body.admin-mode .btn-delete {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+body.admin-mode .btn-delete:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: #ef4444 !important;
+}
+
+/* Estilo para el drag & drop zona de archivos */
+body.admin-mode .file-trigger,
+body.admin-mode .file-label {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border: 1px dashed rgba(124, 58, 237, 0.3) !important;
+  color: var(--purple-3) !important;
+  border-radius: 10px !important;
+  padding: 14px 20px !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  transition: all 0.2s !important;
+}
+body.admin-mode .file-trigger:hover,
+body.admin-mode .file-label:hover {
+  background: rgba(124, 58, 237, 0.15) !important;
+  border-color: var(--purple-2) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   html { scroll-behavior: auto; }
@@ -216,10 +552,47 @@ section[id] { scroll-margin-top: 80px; }
 }
 @keyframes proj-spin { to { transform: rotate(360deg); } }
 .proj-frame {
-  position: relative; z-index: 2; border-radius: 14px; width: 100%; max-width: 520px;
+  position: relative; z-index: 2; border-radius: 14px; width: 100%; max-width: 600px;
   box-shadow: 0 48px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(124,58,237,0.18), 0 0 60px rgba(124,58,237,0.07);
   transform-style: preserve-3d;
 }
+
+/* ── PHONE MOCKUP ── */
+.phone-frame {
+  position: relative; z-index: 2; transform-style: preserve-3d;
+  width: 165px;
+  background: rgba(9,6,25,0.96);
+  border-radius: 30px;
+  border: 1.5px solid rgba(124,58,237,0.35);
+  box-shadow: 0 48px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(124,58,237,0.18), 0 0 60px rgba(124,58,237,0.07);
+  padding: 12px 7px 8px;
+}
+.phone-notch {
+  width: 58px; height: 16px;
+  background: rgba(5,3,15,0.98); border-radius: 0 0 11px 11px;
+  margin: 0 auto 7px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.phone-notch::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(124,58,237,0.45);
+  box-shadow: 0 0 5px 2px rgba(124,58,237,0.3);
+}
+.phone-notch::after {
+  content: ''; width: 24px; height: 3px; border-radius: 3px;
+  background: rgba(255,255,255,0.07);
+}
+.phone-screen {
+  border-radius: 20px; overflow: hidden;
+  position: relative; height: 310px;
+  background: #060d1a;
+}
+.phone-home-bar {
+  width: 56px; height: 3px; border-radius: 3px;
+  background: rgba(255,255,255,0.18);
+  margin: 8px auto 0;
+}
+
 .proj-badge {
   position: absolute; z-index: 4;
   padding: 7px 14px 7px 10px; border-radius: 50px;
@@ -277,7 +650,7 @@ section[id] { scroll-margin-top: 80px; }
 .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
 .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
 .browser-bar { flex: 1; height: 24px; background: rgba(255,255,255,0.04); border-radius: 5px; display: flex; align-items: center; padding: 0 10px; font-size: 10.5px; color: var(--muted); }
-.browser-screen { height: 290px; border-radius: 0 0 14px 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.browser-screen { height: 350px; border-radius: 0 0 14px 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .proj-glow { position: absolute; width: 180px; height: 180px; border-radius: 50%; filter: blur(55px); opacity: 0.7; }
 .proj-pin-stage {
   position: relative;
@@ -584,7 +957,7 @@ footer span { color: var(--purple-3); }
   .pc-1, .pc-2 { display: none; }
 
   .proj-frame { max-width: 100%; }
-  .browser-screen { height: 260px; }
+  .browser-screen { height: 310px; }
   .proj-scene::before { font-size: min(50vw, 240px); }
   .proj-name { font-size: clamp(32px, 9vw, 52px); letter-spacing: -2px; }
   .small-projects { margin-top: 48px; }
@@ -618,7 +991,7 @@ footer span { color: var(--purple-3); }
   .mid-cta-text { font-size: 19px; }
 
   /* Browser screen */
-  .browser-screen { height: 240px; }
+  .browser-screen { height: 285px; }
 }
 
 /* ── SMALL MOBILE (≤ 600px) ── */
@@ -639,7 +1012,7 @@ footer span { color: var(--purple-3); }
 
   /* Projects */
   .proj-scene { padding: 44px 16px 28px; gap: 20px; }
-  .browser-screen { height: 210px; }
+  .browser-screen { height: 250px; }
   .proj-body { font-size: 13.5px; margin-bottom: 24px; }
   .proj-stack-row { margin-bottom: 24px; }
   .proj-links { flex-wrap: wrap; gap: 10px; }
@@ -675,7 +1048,7 @@ footer span { color: var(--purple-3); }
   .container { padding: 0 16px; }
   nav { padding: 12px 16px; }
   .hero-avatar-wrap { width: 170px; height: 170px; }
-  .browser-screen { height: 185px; }
+  .browser-screen { height: 220px; }
   .proj-metrics { grid-template-columns: 1fr; }
   .proj-metric:last-child { grid-column: auto; }
   .contact-box { padding: 18px 14px; }

@@ -77,8 +77,16 @@
       @for (entry of entries; track entry.id; let i = $index) {
         <div class="entry-card">
           <div class="entry-order-btns">
-            <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0">▲</button>
-            <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === entries.length - 1">▼</button>
+            <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0" title="Subir">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </button>
+            <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === entries.length - 1" title="Bajar">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
           </div>
           <div class="entry-info">
             <div class="entry-year">{{ entry.year }}</div>

@@ -65,6 +65,7 @@ export class ProjectFormComponent implements OnInit {
       page:   [''],
       photoURL: [''],
       logoIsWordmark: [false],
+      isMobileView: [false],
     });
   }
 
@@ -126,6 +127,7 @@ export class ProjectFormComponent implements OnInit {
         page:    project.page || '',
         photoURL: project.photoURL || '',
         logoIsWordmark: project.logoIsWordmark || false,
+        isMobileView: project.isMobileView || false,
       });
       if (project.logoURL) {
         this.logoPreviewUrl = project.logoURL;
@@ -267,6 +269,7 @@ export class ProjectFormComponent implements OnInit {
         logoURL: null,
         logoIsWordmark: f.logoIsWordmark || false,
         iconURL: null,
+        isMobileView: f.isMobileView || false,
       };
 
       if (this.selectedLogoFile) {
