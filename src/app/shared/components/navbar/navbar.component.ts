@@ -33,10 +33,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       if (!nav) return;
       if (window.scrollY > 60) {
         nav.style.padding = '12px 60px';
-        nav.style.borderBottomColor = 'rgba(124,58,237,0.18)';
       } else {
         nav.style.padding = '18px 60px';
-        nav.style.borderBottomColor = 'rgba(124,58,237,0.08)';
       }
     };
     window.addEventListener('scroll', this.scrollListener, { passive: true });
