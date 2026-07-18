@@ -84,6 +84,22 @@
           </button>
         </div>
 
+        <div class="form-group">
+          <label>Stack tecnológico</label>
+          <input formControlName="stack" placeholder="Ej: Angular · TypeScript · Firebase · GSAP" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Métrica destacada</label>
+            <input formControlName="metric" placeholder="Ej: −60%" />
+          </div>
+          <div class="form-group">
+            <label>Etiqueta de métrica</label>
+            <input formControlName="metricLabel" placeholder="Ej: tamaño del bundle" />
+          </div>
+        </div>
+
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="saving">
             {{ saving ? 'Guardando...' : (editingId ? 'Actualizar' : 'Crear') }}

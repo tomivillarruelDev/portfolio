@@ -5,7 +5,7 @@ import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 
 const FALLBACK: ExperienceInterface[] = [
   {
-    name: 'Desarrollador Frontend',
+    name: 'Frontend Developer',
     company: 'Grupo EON',
     date: 'Feb 2024 — Actualidad',
     address: 'Córdoba, Argentina (Remoto)',
@@ -17,18 +17,24 @@ const FALLBACK: ExperienceInterface[] = [
       'Desarrollé un sistema de reportes con exportación a PDF y Excel consumiendo datos en tiempo real.',
       'Establecí una guía de estilos y convenciones de código que redujo el tiempo de onboarding de nuevos developers.',
     ],
+    stack: 'Angular · TypeScript · RxJS · Firebase · GSAP',
+    metric: '−60%',
+    metricLabel: 'tamaño del bundle',
   },
   {
-    name: 'Desarrollador Web Freelance',
-    company: 'Clientes independientes',
+    name: 'Full Stack Developer',
+    company: 'Freelance / Clientes',
     date: '2022 — 2024',
     address: 'Córdoba, Argentina',
-    description: 'Diseñé y desarrollé sitios web y aplicaciones a medida para clientes locales, desde landing pages hasta e-commerce completos con panel de administración.',
+    description: 'Construí e-commerces y dashboards para clientes de distintas industrias. Stack completo de punta a punta: base de datos, backend, frontend y despliegue. Doce proyectos entregados, cero excusas.',
     tasks: [
       'Desarrollé Óptica San Nicolás: e-commerce completo con Angular, Node.js y MongoDB.',
       'Construí SpotiApp, plataforma de música que consume la API de Spotify con búsqueda en tiempo real.',
       'Entregué proyectos de principio a fin, incluyendo diseño UI, desarrollo y deployment.',
     ],
+    stack: 'Node.js · MongoDB · Angular · Firebase · PostgreSQL',
+    metric: '12+',
+    metricLabel: 'proyectos entregados',
   },
 ];
 
@@ -49,6 +55,9 @@ export class ExperienceComponent implements OnInit {
     if (remote.length > 0) {
       this.experiences = remote;
     }
-    // else: keeps FALLBACK
+  }
+
+  padIndex(i: number): string {
+    return String(i + 1).padStart(2, '0');
   }
 }

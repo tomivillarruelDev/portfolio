@@ -52,6 +52,9 @@ export class ExperienceManagementComponent implements OnInit {
       tasks:       this.fb.array(
         (entry?.tasks ?? ['']).map(t => this.fb.control(t, Validators.required))
       ),
+      stack:       [entry?.stack       ?? ''],
+      metric:      [entry?.metric      ?? ''],
+      metricLabel: [entry?.metricLabel ?? ''],
     });
   }
 

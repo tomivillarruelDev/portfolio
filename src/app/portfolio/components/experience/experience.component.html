@@ -8,43 +8,39 @@
     </div>
     <div class="exp-timeline">
 
-      <div class="exp-entry">
-        <div class="exp-index">01</div>
-        <div class="exp-headline">Frontend<br>Developer</div>
-        <div class="exp-byline">
-          <span class="exp-company-name">Grupo EON</span>
-          <span class="exp-period-label">Feb 2024 — Actualidad</span>
-        </div>
-        <div class="exp-content">
-          <div>
-            <p class="exp-body">Lideré la migración de Angular 12 a Angular 19, reduciendo el bundle un 60% e implementando lazy loading en toda la plataforma. Rediseñé el dashboard principal con GSAP y mejores prácticas de UX, y construí un sistema de componentes reutilizables adoptado por todo el equipo.</p>
-            <div class="exp-stack">Angular · TypeScript · RxJS · Firebase · GSAP</div>
+      @for (exp of experiences; track exp.company; let i = $index) {
+        <div class="exp-entry">
+          <div class="exp-index">{{ padIndex(i) }}</div>
+          <div class="exp-headline">{{ exp.name }}</div>
+          <div class="exp-byline">
+            <span class="exp-company-name">{{ exp.company }}</span>
+            <span class="exp-period-label">{{ exp.date }}</span>
           </div>
-          <div class="exp-pullquote">
-            <div class="exp-pq-num">−60%</div>
-            <div class="exp-pq-label">tamaño<br>del bundle</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="exp-entry">
-        <div class="exp-index">02</div>
-        <div class="exp-headline">Full Stack<br>Developer</div>
-        <div class="exp-byline">
-          <span class="exp-company-name">Freelance / Clientes</span>
-          <span class="exp-period-label">2022 — 2024</span>
-        </div>
-        <div class="exp-content">
-          <div>
-            <p class="exp-body">Construí e-commerces y dashboards para clientes de distintas industrias. Stack completo de punta a punta: base de datos, backend, frontend y despliegue. Doce proyectos entregados, cero excusas.</p>
-            <div class="exp-stack">Node.js · MongoDB · Angular · Firebase · PostgreSQL</div>
-          </div>
-          <div class="exp-pullquote">
-            <div class="exp-pq-num">12+</div>
-            <div class="exp-pq-label">proyectos<br>entregados</div>
+          <div class="exp-content">
+            <div>
+              @if (exp.description) {
+                <p class="exp-body">{{ exp.description }}</p>
+              }
+              @if (exp.tasks?.length) {
+                <ul class="exp-tasks">
+                  @for (task of exp.tasks!; track $index) {
+                    <li>{{ task }}</li>
+                  }
+                </ul>
+              }
+              @if (exp.stack) {
+                <div class="exp-stack">{{ exp.stack }}</div>
+              }
+            </div>
+            @if (exp.metric) {
+              <div class="exp-pullquote">
+                <div class="exp-pq-num">{{ exp.metric }}</div>
+                <div class="exp-pq-label">{{ exp.metricLabel }}</div>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
 
     </div>
   </div>

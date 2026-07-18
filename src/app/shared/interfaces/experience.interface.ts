@@ -5,4 +5,7 @@ export interface ExperienceInterface {
   address: string;
   description?: string;
   tasks?: string[];
+  stack?: string;
+  metric?: string;
+  metricLabel?: string;
 }
