@@ -38,22 +38,46 @@
       </div>
 
       @if (!sent) {
-        <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm" novalidate>
+          
+          <!-- Honeypot invisible para bots -->
+          <div style="display: none;" aria-hidden="true">
+            <input type="text" name="website" [(ngModel)]="honeypot" tabindex="-1" autocomplete="off">
+          </div>
+
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="cf-name">Nombre</label>
               <input class="form-input" id="cf-name" name="nombre" type="text"
-                     placeholder="Tu nombre" required [(ngModel)]="form.nombre" autocomplete="name">
+                     placeholder="Tu nombre" required minlength="3" [(ngModel)]="form.nombre" autocomplete="name"
+                     #nombreModel="ngModel"
+                     [class.is-invalid]="nombreModel.invalid && (nombreModel.touched || nombreModel.dirty || contactForm.submitted)">
+              @if (nombreModel.invalid && (nombreModel.touched || nombreModel.dirty || contactForm.submitted)) {
+                <div class="input-error">
+                  @if (nombreModel.errors?.['required']) { El nombre es obligatorio. }
+                  @if (nombreModel.errors?.['minlength']) { Mínimo 3 caracteres. }
+                </div>
+              }
             </div>
             <div class="form-group">
               <label class="form-label" for="cf-email">Email</label>
               <input class="form-input" id="cf-email" name="email" type="email"
-                     placeholder="tu@email.com" required [(ngModel)]="form.email" autocomplete="email">
+                     placeholder="tu@email.com" required email [(ngModel)]="form.email" autocomplete="email"
+                     #emailModel="ngModel"
+                     [class.is-invalid]="emailModel.invalid && (emailModel.touched || emailModel.dirty || contactForm.submitted)">
+              @if (emailModel.invalid && (emailModel.touched || emailModel.dirty || contactForm.submitted)) {
+                <div class="input-error">
+                  @if (emailModel.errors?.['required']) { El email es obligatorio. }
+                  @if (emailModel.errors?.['email']) { Formato de email inválido. }
+                </div>
+              }
             </div>
           </div>
           <div class="form-group">
             <label class="form-label" for="cf-type">¿Qué tipo de proyecto tenés?</label>
-            <select class="form-select" id="cf-type" name="tipo" required [(ngModel)]="form.tipo">
+            <select class="form-select" id="cf-type" name="tipo" required [(ngModel)]="form.tipo"
+                    #tipoModel="ngModel"
+                    [class.is-invalid]="tipoModel.invalid && (tipoModel.touched || tipoModel.dirty || contactForm.submitted)">
               <option value="" disabled>Elegí una opción</option>
               <option>E-commerce / Tienda online</option>
               <option>Dashboard / SaaS / Panel interno</option>
@@ -61,18 +85,37 @@
               <option>API / Backend / Integración</option>
               <option>Otro — te cuento</option>
             </select>
+            @if (tipoModel.invalid && (tipoModel.touched || tipoModel.dirty || contactForm.submitted)) {
+              <div class="input-error">
+                Por favor, seleccioná una opción.
+              </div>
+            }
           </div>
           <div class="form-group">
             <label class="form-label" for="cf-msg">Contame más</label>
             <textarea class="form-textarea" id="cf-msg" name="mensaje"
               placeholder="¿Cuál es el problema que querés resolver? ¿Tenés un plazo en mente? Cuanto más detalle, mejor puedo ayudarte."
-              required [(ngModel)]="form.mensaje"></textarea>
+              required minlength="10" [(ngModel)]="form.mensaje"
+              #mensajeModel="ngModel"
+              [class.is-invalid]="mensajeModel.invalid && (mensajeModel.touched || mensajeModel.dirty || contactForm.submitted)"></textarea>
+            @if (mensajeModel.invalid && (mensajeModel.touched || mensajeModel.dirty || contactForm.submitted)) {
+              <div class="input-error">
+                @if (mensajeModel.errors?.['required']) { El mensaje es obligatorio. }
+                @if (mensajeModel.errors?.['minlength']) { Detallá un poco más (mínimo 10 caracteres). }
+              </div>
+            }
           </div>
-          <button type="submit" class="form-submit" [disabled]="sending">
+
+          <!-- Contenedor invisible para Google reCAPTCHA -->
+          @if (captchaConfig.enabled) {
+            <div id="recaptcha-container"></div>
+          }
+
+          <button type="submit" class="form-submit" [disabled]="sending" style="margin-top: 20px;">
             @if (sending) { Enviando… } @else { Enviar mensaje → }
           </button>
           @if (error) {
-            <div class="form-error">{{ error }}</div>
+            <div class="form-error" style="margin-top: 14px;">{{ error }}</div>
           }
           <div class="form-reassurance">Sin compromiso &nbsp;·&nbsp; Respuesta en &lt; 24h</div>
         </form>

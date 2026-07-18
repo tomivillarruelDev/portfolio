@@ -12,6 +12,7 @@ import { ExperienceManagementComponent } from './admin/components/experience-man
 import { EducationManagementComponent } from './admin/components/education-management/education-management.component';
 import { StatsManagementComponent } from './admin/components/stats-management/stats-management.component';
 import { WhatsappManagementComponent } from './admin/components/whatsapp-management/whatsapp-management.component';
+import { CaptchaManagementComponent } from './admin/components/captcha-management/captcha-management.component';
 import { AuthGuard } from './admin/services/auth.guard';
 
 export const routes: Routes = [
@@ -36,6 +37,7 @@ export const routes: Routes = [
           { path: 'education',            component: EducationManagementComponent },
           { path: 'stats',                component: StatsManagementComponent },
           { path: 'whatsapp',             component: WhatsappManagementComponent },
+          { path: 'captcha',              component: CaptchaManagementComponent },
           { path: '',                     redirectTo: 'dashboard', pathMatch: 'full' },
         ],
       },
@@ -44,3 +46,4 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
+

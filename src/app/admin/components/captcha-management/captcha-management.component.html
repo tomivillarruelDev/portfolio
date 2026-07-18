@@ -1,0 +1,82 @@
+<div class="wm-wrap">
+  <div class="wm-header">
+    <h2 class="wm-title">Google reCAPTCHA v2 (Invisible)</h2>
+    <p class="wm-sub">Configurá las claves pública y privada oficiales de Google reCAPTCHA v2 Invisible para proteger el formulario de contacto sin alterar el diseño visual de la web.</p>
+  </div>
+
+  @if (loading) {
+    <div class="wm-loading">Cargando configuración…</div>
+  }
+
+  @if (!loading) {
+    <div class="wm-card">
+
+      <div class="wm-toggle-row">
+        <label class="wm-toggle-label">
+          <input type="checkbox" [(ngModel)]="config.enabled" />
+          <span class="wm-toggle-text">{{ config.enabled ? 'reCAPTCHA activado' : 'reCAPTCHA desactivado' }}</span>
+        </label>
+        <span class="wm-status" [class.wm-status--on]="config.enabled">
+          {{ config.enabled ? 'Activo en el formulario' : 'Inactivo' }}
+        </span>
+      </div>
+
+      <div class="wm-fields">
+        <div class="wm-field">
+          <label>Clave del Sitio (Public Key / Site Key) <span class="wm-hint">Clave pública para el frontend</span></label>
+          <input
+            type="text"
+            [(ngModel)]="config.siteKey"
+            [disabled]="!config.enabled"
+            placeholder="ej: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          />
+        </div>
+
+        <div class="wm-field" style="margin-top: 8px;">
+          <label>Clave Secreta (Private Key / Secret Key) <span class="wm-hint">Clave privada para la validación en el servidor</span></label>
+          <input
+            type="text"
+            [(ngModel)]="config.secretKey"
+            [disabled]="!config.enabled"
+            placeholder="ej: 6LeIxAcTAAAAAOP9mvZ7H1L_Yh4... (mantenela segura)"
+          />
+        </div>
+      </div>
+
+      <div class="captcha-info">
+        <span class="captcha-info-label">Instrucciones de configuración:</span>
+        <p class="captcha-info-text" style="margin-bottom: 8px;">
+          1. Ingresá a la consola de <a href="https://www.google.com/recaptcha/admin" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline;">Google reCAPTCHA</a> y creá un sitio de tipo <strong>reCAPTCHA v2 (Insignia de reCAPTCHA invisible)</strong>.
+        </p>
+        <p class="captcha-info-text" style="margin-bottom: 8px;">
+          2. Agregá tu dominio local (<code>localhost</code>) y el dominio de producción del portfolio en la consola de Google.
+        </p>
+        <p class="captcha-info-text" style="margin-bottom: 8px;">
+          3. Copiá la <strong>Clave del Sitio (Public Key)</strong> y la <strong>Clave Secreta (Private Key)</strong> y pegalas en los campos de arriba.
+        </p>
+        <p class="captcha-info-text">
+          4. <strong>Importante:</strong> Debes ingresar a tu panel de <a href="https://dashboard.emailjs.com/" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline;">EmailJS</a>, ir a la plantilla de correo de contacto, activar la verificación de reCAPTCHA y guardar allí la <strong>Clave Secreta (Secret Key)</strong> provista por Google para que la API de EmailJS pueda validar las respuestas en sus servidores.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="wm-actions">
+      <button class="wm-save-btn" (click)="save()" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar cambios' }}
+      </button>
+    </div>
+
+    @if (saved) {
+      <div class="wm-success">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 6px; color: #10b981;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Configuración de Google reCAPTCHA guardada correctamente.
+      </div>
+    }
+    @if (error) {
+      <div class="wm-error">{{ error }}</div>
+    }
+  }
+</div>

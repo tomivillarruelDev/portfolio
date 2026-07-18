@@ -1,0 +1,229 @@
+:host {
+  --p: #7c3aed;
+  --p2: #a855f7;
+  --shield: #3b82f6;
+}
+
+.wm-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+.wm-header {
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.wm-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.wm-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.wm-loading {
+  color: var(--muted);
+  padding: 40px 0;
+  text-align: center;
+}
+
+.wm-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Toggle row */
+.wm-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wm-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.wm-toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--p);
+  cursor: pointer;
+}
+
+.wm-toggle-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.wm-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 50px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  transition: all 0.2s;
+}
+
+.wm-status--on {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.3);
+  color: #c084fc;
+}
+
+/* Fields */
+.wm-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.wm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wm-field label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.wm-hint {
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--p2);
+  letter-spacing: 0;
+}
+
+.wm-field input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s, box-shadow 0.15s, opacity 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.wm-field input:focus:not(:disabled) {
+  border-color: var(--p2);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.wm-field input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Captcha info box */
+.captcha-info {
+  padding: 12px 14px;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.captcha-info-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #60a5fa;
+}
+
+.captcha-info-text {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Actions */
+.wm-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.wm-save-btn {
+  background: linear-gradient(135deg, var(--p), var(--p2));
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wm-save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+}
+
+.wm-save-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.wm-success {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(34, 197, 94, .1);
+  border: 1px solid rgba(34, 197, 94, .25);
+  border-radius: 8px;
+  color: #34d399;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.wm-error {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(239, 68, 68, .1);
+  border: 1px solid rgba(239, 68, 68, .25);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 13px;
+}
