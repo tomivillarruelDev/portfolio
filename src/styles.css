@@ -232,6 +232,7 @@ section[id] { scroll-margin-top: 80px; }
 .pb-2 { bottom: 18%; right: 4%; animation: pb-float 3.6s ease-in-out infinite 0.7s; }
 .pb-3 { top: 60%; left: 2%; animation: pb-float 4.8s ease-in-out infinite 1.3s; }
 .pb-4 { top: 26%; left: 3%; animation: pb-float 5.2s ease-in-out infinite 2.1s; }
+.pb-icon { top: 8%; left: -1%; padding: 8px; animation: pb-float 4.5s ease-in-out infinite 0.9s; }
 @keyframes pb-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
 .proj-chip {
   position: absolute; z-index: 4; padding: 12px 18px; border-radius: 16px;

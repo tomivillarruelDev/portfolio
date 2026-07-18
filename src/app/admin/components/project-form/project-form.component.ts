@@ -28,6 +28,14 @@ export class ProjectFormComponent implements OnInit {
   selectedTechnologies: string[] = [];
   projectTypes = ProjectType;
 
+  // Propiedades para el logo/ícono del proyecto
+  logoPreviewUrl: string | null = null;
+  selectedLogoFile: File | null = null;
+
+  // Propiedades para el símbolo/marca del proyecto (badge flotante)
+  iconPreviewUrl: string | null = null;
+  selectedIconFile: File | null = null;
+
   // Propiedades para el carrusel de imágenes
   existingSecondaryUrls: string[] = [];
   secondaryPreviews: (string | ArrayBuffer)[] = [];
@@ -56,6 +64,7 @@ export class ProjectFormComponent implements OnInit {
       github: ['', Validators.required],
       page:   [''],
       photoURL: [''],
+      logoIsWordmark: [false],
     });
   }
 
@@ -116,7 +125,14 @@ export class ProjectFormComponent implements OnInit {
         github:  project.github,
         page:    project.page || '',
         photoURL: project.photoURL || '',
+        logoIsWordmark: project.logoIsWordmark || false,
       });
+      if (project.logoURL) {
+        this.logoPreviewUrl = project.logoURL;
+      }
+      if (project.iconURL) {
+        this.iconPreviewUrl = project.iconURL;
+      }
       // Resolver IDs o nombres a nombres canonicos
       this.selectedTechnologies = (project.technologies || []).map(entry => {
         const byId   = this.allTechnologies.find((t: Technology) => t.id === entry);
@@ -137,6 +153,34 @@ export class ProjectFormComponent implements OnInit {
     } catch {
       this.errorMessage = 'Error al cargar los datos del proyecto.';
     }
+  }
+
+  onLogoFileSelected(event: any): void {
+    if (event.target.files.length > 0) {
+      this.selectedLogoFile = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(this.selectedLogoFile!);
+      reader.onload = () => { this.logoPreviewUrl = reader.result as string; };
+    }
+  }
+
+  removeLogo(): void {
+    this.selectedLogoFile = null;
+    this.logoPreviewUrl = null;
+  }
+
+  onIconFileSelected(event: any): void {
+    if (event.target.files.length > 0) {
+      this.selectedIconFile = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(this.selectedIconFile!);
+      reader.onload = () => { this.iconPreviewUrl = reader.result as string; };
+    }
+  }
+
+  removeIcon(): void {
+    this.selectedIconFile = null;
+    this.iconPreviewUrl = null;
   }
 
   onFileSelected(event: any): void {
@@ -220,7 +264,22 @@ export class ProjectFormComponent implements OnInit {
         page:   f.page || null,
         photoURL: null,
         photoURLs: null,
+        logoURL: null,
+        logoIsWordmark: f.logoIsWordmark || false,
+        iconURL: null,
       };
+
+      if (this.selectedLogoFile) {
+        projectData.logoURL = await this.projectService.uploadImage(this.selectedLogoFile, projectData.name + '-logo');
+      } else if (this.logoPreviewUrl) {
+        projectData.logoURL = this.logoPreviewUrl;
+      }
+
+      if (this.selectedIconFile) {
+        projectData.iconURL = await this.projectService.uploadImage(this.selectedIconFile, projectData.name + '-icon');
+      } else if (this.iconPreviewUrl) {
+        projectData.iconURL = this.iconPreviewUrl;
+      }
 
       if (this.projectType === ProjectType.IMAGE) {
         if (this.selectedFile) {

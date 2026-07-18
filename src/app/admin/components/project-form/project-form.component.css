@@ -65,3 +65,11 @@
 .image-badge-label { position: absolute; bottom: 2px; left: 2px; font-size: 8px; font-weight: bold; background: rgba(107, 114, 128, 0.85); color: white; padding: 1px 4px; border-radius: 3px; text-transform: uppercase; }
 .image-badge-label.new { background: rgba(16, 185, 129, 0.85); }
 .secondary-upload { margin-top: 0.5rem; }
+
+/* ── LOGO PREVIEW ── */
+.logo-preview-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; }
+.logo-preview-img { height: 40px; width: auto; max-width: 200px; object-fit: contain; }
+.btn-remove-logo { padding: 0.35rem 0.8rem; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.btn-remove-logo:hover { background: #fca5a5; }
+.logo-wordmark-toggle { margin-top: 1rem; margin-bottom: 0; }
+.icon-preview-img { height: 32px; width: 32px; object-fit: contain; border-radius: 8px; }

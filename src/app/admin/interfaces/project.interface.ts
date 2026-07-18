@@ -18,6 +18,12 @@ export interface Project {
   photoURL?: string;
   /** Array de URLs de imágenes del proyecto para el carrusel (opcional) */
   photoURLs?: string[];
+  /** URL del logo/ícono del proyecto (opcional — reemplaza el eyebrow en la vista destacada) */
+  logoURL?: string;
+  /** Si true, el logo ya incluye el nombre (wordmark) y se oculta el título de texto */
+  logoIsWordmark?: boolean;
+  /** URL del símbolo/marca del proyecto (opcional — aparece como badge flotante alrededor del browser) */
+  iconURL?: string;
   /** Número de orden para controlar la posición del proyecto en la lista (opcional) */
   order?: number;
 }

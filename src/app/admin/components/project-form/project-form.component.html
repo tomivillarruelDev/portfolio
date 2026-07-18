@@ -93,6 +93,47 @@
       </div>
     </div>
 
+    <!-- SECCION: Logo del proyecto -->
+    <div class="form-section">
+      <h3 class="form-section-title">Logo / Ícono <span class="label-hint">(opcional — reemplaza el "Proyecto 01" en la vista destacada)</span></h3>
+
+      <div class="image-upload">
+        <div *ngIf="logoPreviewUrl" class="logo-preview-wrap">
+          <img [src]="logoPreviewUrl" alt="Vista previa del logo" class="logo-preview-img" />
+          <button type="button" class="btn-remove-logo" (click)="removeLogo()">✕ Eliminar logo</button>
+        </div>
+        <div class="file-input-container">
+          <input type="file" (change)="onLogoFileSelected($event)" accept="image/png,image/jpeg,image/svg+xml,image/webp" id="logoFile" />
+          <label for="logoFile" class="file-label">{{ selectedLogoFile ? selectedLogoFile.name : "Seleccionar logo (PNG, JPG, SVG, WebP)" }}</label>
+        </div>
+        <small *ngIf="isEditMode && !selectedLogoFile && logoPreviewUrl" class="image-hint">Dejá vacío para conservar el logo actual</small>
+      </div>
+
+      <div class="form-group logo-wordmark-toggle">
+        <label class="tech-checkbox-label">
+          <input type="checkbox" formControlName="logoIsWordmark" />
+          <span>El logo ya incluye el nombre (wordmark) — oculta el título de texto</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- SECCION: Símbolo/marca (badge flotante) -->
+    <div class="form-section">
+      <h3 class="form-section-title">Símbolo / Marca <span class="label-hint">(opcional — aparece como badge flotante alrededor del browser, solo el ícono sin texto)</span></h3>
+
+      <div class="image-upload">
+        <div *ngIf="iconPreviewUrl" class="logo-preview-wrap">
+          <img [src]="iconPreviewUrl" alt="Vista previa del símbolo" class="icon-preview-img" />
+          <button type="button" class="btn-remove-logo" (click)="removeIcon()">✕ Eliminar símbolo</button>
+        </div>
+        <div class="file-input-container">
+          <input type="file" (change)="onIconFileSelected($event)" accept="image/png,image/jpeg,image/svg+xml,image/webp" id="iconFile" />
+          <label for="iconFile" class="file-label">{{ selectedIconFile ? selectedIconFile.name : "Seleccionar símbolo (PNG, JPG, SVG, WebP)" }}</label>
+        </div>
+        <small *ngIf="isEditMode && !selectedIconFile && iconPreviewUrl" class="image-hint">Dejá vacío para conservar el símbolo actual</small>
+      </div>
+    </div>
+
     <!-- SECCION: Imagen -->
     <div class="form-section" *ngIf="projectType === projectTypes.IMAGE">
       <h3 class="form-section-title">Imagen principal del proyecto {{ isEditMode ? '' : '*' }}</h3>

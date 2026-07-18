@@ -22,6 +22,9 @@ export interface Project {
   page?: string | null;
   photoURL?: string | null;
   photoURLs?: string[] | null;
+  logoURL?: string | null;
+  logoIsWordmark?: boolean | null;
+  iconURL?: string | null;
   order?: number;
 }
 
@@ -70,13 +73,16 @@ export class ProjectService {
       const newRef = this.db.database.ref(projectType).push();
       const key = newRef.key!;
       let data = { ...projectData };
-      if (data.page      === undefined) data.page      = null;
-      if (data.photoURL  === undefined) data.photoURL  = null;
-      if (data.photoURLs === undefined) data.photoURLs = null;
-      if (data.nameHtml  === undefined) data.nameHtml  = null;
-      if (data.tagline   === undefined) data.tagline   = null;
-      if (data.metrics   === undefined) data.metrics   = null;
-      if (data.chipVals  === undefined) data.chipVals  = null;
+      if (data.page           === undefined) data.page           = null;
+      if (data.photoURL       === undefined) data.photoURL       = null;
+      if (data.photoURLs      === undefined) data.photoURLs      = null;
+      if (data.nameHtml       === undefined) data.nameHtml       = null;
+      if (data.tagline        === undefined) data.tagline        = null;
+      if (data.metrics        === undefined) data.metrics        = null;
+      if (data.chipVals       === undefined) data.chipVals       = null;
+      if (data.logoURL        === undefined) data.logoURL        = null;
+      if (data.logoIsWordmark === undefined) data.logoIsWordmark = null;
+      if (data.iconURL        === undefined) data.iconURL        = null;
       if (data.order === undefined) {
         const projects = await this.getProjects(projectType);
         const maxOrder = projects.reduce((max, p) => (p.order !== undefined && p.order > max ? p.order : max), -1);

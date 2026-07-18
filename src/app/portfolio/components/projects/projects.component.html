@@ -16,6 +16,31 @@
           <div class="proj-orbit"></div>
           <div class="proj-orbit-2"></div>
 
+          @if (project.iconURL) {
+            <div class="proj-badge pb-icon">
+              <div style="position:relative;width:32px;height:32px;flex-shrink:0;">
+                @if (!imagesLoaded()[project.id + '_icon']) {
+                  <ngx-skeleton-loader
+                    [theme]="{
+                      height: '32px',
+                      width: '32px',
+                      'border-radius': '8px',
+                      'background-color': 'rgba(255, 255, 255, 0.08)',
+                      margin: '0',
+                      display: 'block'
+                    }"
+                    animation="pulse"
+                  ></ngx-skeleton-loader>
+                }
+                <img [src]="project.iconURL" [alt]="project.name"
+                     (load)="onImageLoad(project.id + '_icon')"
+                     [style.opacity]="imagesLoaded()[project.id + '_icon'] ? 1 : 0"
+                     style="position:absolute;top:0;left:0;width:32px;height:32px;object-fit:contain;border-radius:8px;display:block;transition:opacity 0.4s ease;"
+                     loading="lazy" />
+              </div>
+            </div>
+          }
+
           @for (tech of project.technologies.slice(0,4); track tech; let bi = $index) {
             <div class="proj-badge" [ngClass]="'pb-' + (bi+1)">
               @if (getTechIcon(tech)) {
@@ -28,10 +53,12 @@
           }
 
           @if (project.chipVals?.length) {
-            <div class="proj-chip pc-1">
-              <div class="proj-chip-val">{{ project.chipVals![0] }}</div>
-              <div class="proj-chip-lab">{{ project.chipVals![1] }}</div>
-            </div>
+            @if (!project.iconURL) {
+              <div class="proj-chip pc-1">
+                <div class="proj-chip-val">{{ project.chipVals![0] }}</div>
+                <div class="proj-chip-lab">{{ project.chipVals![1] }}</div>
+              </div>
+            }
             <div class="proj-chip pc-2">
               <div class="proj-chip-val">{{ project.chipVals![2] }}</div>
               <div class="proj-chip-lab">{{ project.chipVals![3] }}</div>
@@ -148,8 +175,63 @@
         </div>
 
         <div class="proj-narrative">
-          <p class="proj-eyebrow">Proyecto 0{{ i + 1 }}</p>
-          <h3 class="proj-name" [innerHTML]="getNameHtml(i, project)"></h3>
+          @if (project.logoURL) {
+            @if (project.logoIsWordmark) {
+              <!-- Modo A: wordmark — el logo ya trae el texto -->
+              <div class="proj-logo">
+                <div class="proj-logo-img-wrap proj-logo-img-wrap--wordmark">
+                  @if (!imagesLoaded()[project.id + '_logo']) {
+                    <ngx-skeleton-loader
+                      [theme]="{
+                        height: '56px',
+                        width: '220px',
+                        'border-radius': '6px',
+                        'background-color': 'rgba(255, 255, 255, 0.08)',
+                        margin: '0',
+                        display: 'block'
+                      }"
+                      animation="pulse"
+                    ></ngx-skeleton-loader>
+                  }
+                  <img [src]="project.logoURL" [alt]="project.name"
+                       (load)="onImageLoad(project.id + '_logo')"
+                       [style.opacity]="imagesLoaded()[project.id + '_logo'] ? 1 : 0"
+                       style="position:absolute;top:0;left:0;height:56px;width:auto;max-width:260px;object-fit:contain;display:block;transition:opacity 0.4s ease;"
+                       loading="lazy" />
+                </div>
+              </div>
+              <h3 class="sr-only">{{ project.name }}</h3>
+            } @else {
+              <!-- Modo B: ícono + nombre -->
+              <div class="proj-logo proj-logo--with-name">
+                <div class="proj-logo-img-wrap proj-logo-img-wrap--icon">
+                  @if (!imagesLoaded()[project.id + '_logo']) {
+                    <ngx-skeleton-loader
+                      [theme]="{
+                        height: '36px',
+                        width: '36px',
+                        'border-radius': '8px',
+                        'background-color': 'rgba(255, 255, 255, 0.08)',
+                        margin: '0',
+                        display: 'block'
+                      }"
+                      animation="pulse"
+                    ></ngx-skeleton-loader>
+                  }
+                  <img [src]="project.logoURL" [alt]="project.name + ' logo'"
+                       (load)="onImageLoad(project.id + '_logo')"
+                       [style.opacity]="imagesLoaded()[project.id + '_logo'] ? 1 : 0"
+                       style="position:absolute;top:0;left:0;width:36px;height:36px;object-fit:contain;border-radius:8px;display:block;transition:opacity 0.4s ease;"
+                       loading="lazy" />
+                </div>
+                <h3 class="proj-name" [innerHTML]="getNameHtml(i, project)"></h3>
+              </div>
+            }
+          } @else {
+            <!-- Modo C: sin logo — comportamiento original -->
+            <p class="proj-eyebrow">Proyecto 0{{ i + 1 }}</p>
+            <h3 class="proj-name" [innerHTML]="getNameHtml(i, project)"></h3>
+          }
           <p class="proj-tagline" [innerHTML]="getTagline(i, project)"></p>
           <p class="proj-body">{{ project.description }}</p>
 
