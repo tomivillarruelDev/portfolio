@@ -25,7 +25,8 @@
                 }
                 <img [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
                      (load)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'" />
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'"
+                     loading="lazy" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }
@@ -55,7 +56,8 @@
                 }
                 <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
                      (load)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'"
+                     loading="lazy" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }
@@ -81,7 +83,8 @@
                 }
                 <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
                      (load)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'" />
+                     [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'"
+                     loading="lazy" />
               } @else {
                 <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
               }

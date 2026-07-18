@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, NgZone } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
+import { SeoService } from '../../../shared/services/seo.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { IntroductionComponent } from '../../components/introduction/introduction.component';
 import { StatsComponent } from '../../components/stats/stats.component';
@@ -9,6 +10,7 @@ import { ExperienceComponent } from '../../components/experience/experience.comp
 import { EducationComponent } from '../../components/education/education.component';
 import { ContactComponent } from '../../components/contact/contact.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
+import { WhatsappButtonComponent } from '../../components/whatsapp-button/whatsapp-button.component';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -29,12 +31,17 @@ gsap.registerPlugin(ScrollTrigger);
     EducationComponent,
     ContactComponent,
     FooterComponent,
+    WhatsappButtonComponent,
   ],
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   showCtaBanner = false;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone, private seo: SeoService) {}
+
+  ngOnInit(): void {
+    this.seo.setHomePage();
+  }
 
   ngAfterViewInit(): void {
     requestAnimationFrame(() => {
