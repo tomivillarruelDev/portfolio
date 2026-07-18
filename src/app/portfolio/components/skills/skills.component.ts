@@ -46,7 +46,7 @@ export class SkillsComponent implements OnInit {
     effect(() => {
       const techs = this.technologies();
       if (techs.length > 0) {
-        setTimeout(() => this.checkCompletedImages(), 100);
+        setTimeout(() => this.checkCompletedImages(), 300);
       }
     });
   }
