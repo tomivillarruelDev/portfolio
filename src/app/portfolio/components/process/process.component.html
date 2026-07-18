@@ -1,60 +1,149 @@
-﻿<section id="process">
+<section id="process">
   <div class="container">
     <div class="process-inner reveal">
-      <p class="section-label">C&#243;mo trabajo</p>
+      <p class="section-label">Cómo trabajo</p>
       <h2 class="section-title">Sin burocracia.<br>Sin sorpresas.</h2>
       <p class="section-desc" style="margin: 0 auto; max-width: 560px;">
-        Cuatro pasos para llevar tu idea de concepto a producci&#243;n.
+        Cuatro pasos para llevar tu idea de concepto a producción.
       </p>
 
-      <div class="process-steps stagger">
+      <div class="process-timeline" #timelineContainer>
+        <svg class="timeline-svg" #timelineSvg xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="processLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#f472b6"/>
+            </linearGradient>
+            <filter id="lineGlow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path class="path-trail" #pathTrail/>
+          <path class="path-line" #pathLine/>
+        </svg>
 
-        <div class="process-step">
-          <div class="step-badge-wrap">
-            <span class="step-number">01</span>
-            <span class="step-badge-text">PASO</span>
+        <div class="steps-grid">
+
+          <!-- Step 1 — TOP -->
+          <div class="step-node top">
+            <div class="step-circle" #stepCircle>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span class="step-num">1</span>
+            <h3 class="step-title">Primer contacto</h3>
+            <p class="step-desc">Reunión breve para entender el proyecto, el stack deseado y los objetivos concretos. Sin burocracia.</p>
           </div>
-          <h3 class="step-title">Primer contacto</h3>
-          <p class="step-desc">
-            Reunión breve para entender el proyecto, el stack deseado y los objetivos concretos. Sin burocracia, sin formularios interminables.
-          </p>
-        </div>
 
-        <div class="process-step">
-          <div class="step-badge-wrap">
-            <span class="step-number">02</span>
-            <span class="step-badge-text">PASO</span>
+          <!-- Step 2 — BOTTOM -->
+          <div class="step-node bottom">
+            <div class="step-circle" #stepCircle>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <span class="step-num">2</span>
+            <h3 class="step-title">Propuesta técnica</h3>
+            <p class="step-desc">Defino arquitectura, tecnologías, plazos y entregables. Todo por escrito antes de escribir código.</p>
           </div>
-          <h3 class="step-title">Propuesta técnica</h3>
-          <p class="step-desc">
-            Defino arquitectura, tecnologías, plazos y entregables. Todo por escrito y acordado antes de escribir una sola línea de código.
-          </p>
-        </div>
 
-        <div class="process-step">
-          <div class="step-badge-wrap">
-            <span class="step-number">03</span>
-            <span class="step-badge-text">PASO</span>
+          <!-- Step 3 — TOP -->
+          <div class="step-node top">
+            <div class="step-circle" #stepCircle>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <span class="step-num">3</span>
+            <h3 class="step-title">Desarrollo iterativo</h3>
+            <p class="step-desc">Sprints cortos, avances reales. Acceso permanente al repositorio y staging para revisión continua.</p>
           </div>
-          <h3 class="step-title">Desarrollo iterativo</h3>
-          <p class="step-desc">
-            Sprints cortos, avances reales. Acceso permanente al repositorio y builds en staging para que puedas revisar en cualquier momento.
-          </p>
-        </div>
 
-        <div class="process-step">
-          <div class="step-badge-wrap">
-            <span class="step-number">04</span>
-            <span class="step-badge-text">PASO</span>
+          <!-- Step 4 — BOTTOM -->
+          <div class="step-node bottom">
+            <div class="step-circle" #stepCircle>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <span class="step-num">4</span>
+            <h3 class="step-title">Entrega y soporte</h3>
+            <p class="step-desc">Deploy en producción, código limpio y seguimiento real los primeros días en prod.</p>
           </div>
-          <h3 class="step-title">Entrega y soporte</h3>
-          <p class="step-desc">
-            Deploy en producción, código que el próximo dev va a entender, y seguimiento real los primeros días en prod.
-          </p>
-        </div>
 
+        </div>
       </div>
+
+      <!-- Mobile fallback: simple vertical list -->
+      <div class="process-mobile">
+        <div class="mobile-step">
+          <div class="mobile-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="mobile-content">
+            <span class="mobile-num">01</span>
+            <h3 class="step-title">Primer contacto</h3>
+            <p class="step-desc">Reunión breve para entender el proyecto, el stack deseado y los objetivos concretos. Sin burocracia.</p>
+          </div>
+        </div>
+        <div class="mobile-connector"></div>
+        <div class="mobile-step">
+          <div class="mobile-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div class="mobile-content">
+            <span class="mobile-num">02</span>
+            <h3 class="step-title">Propuesta técnica</h3>
+            <p class="step-desc">Defino arquitectura, tecnologías, plazos y entregables. Todo por escrito antes de escribir código.</p>
+          </div>
+        </div>
+        <div class="mobile-connector"></div>
+        <div class="mobile-step">
+          <div class="mobile-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div class="mobile-content">
+            <span class="mobile-num">03</span>
+            <h3 class="step-title">Desarrollo iterativo</h3>
+            <p class="step-desc">Sprints cortos, avances reales. Acceso permanente al repositorio y staging para revisión continua.</p>
+          </div>
+        </div>
+        <div class="mobile-connector"></div>
+        <div class="mobile-step">
+          <div class="mobile-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div class="mobile-content">
+            <span class="mobile-num">04</span>
+            <h3 class="step-title">Entrega y soporte</h3>
+            <p class="step-desc">Deploy en producción, código limpio y seguimiento real los primeros días en prod.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
-
