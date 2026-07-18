@@ -153,6 +153,25 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
+  async toggleVisibility(project: Project, type: ProjectType): Promise<void> {
+    const originalValue = project.isVisible;
+    const newValue = project.isVisible === false ? true : false;
+    
+    // Update local state first (Optimistic UI)
+    project.isVisible = newValue;
+
+    try {
+      await this.projectService.updateProject({
+        ...project,
+        isVisible: newValue
+      }, type);
+    } catch (error) {
+      console.error('Error al actualizar visibilidad del proyecto:', error);
+      project.isVisible = originalValue; // Rollback if error
+      alert('Error al cambiar la visibilidad del proyecto. Intente nuevamente.');
+    }
+  }
+
   private async reorderProjects(projects: Project[], type: ProjectType): Promise<void> {
     try {
       const projectIds = projects.map((p) => p.id!);

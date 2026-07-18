@@ -206,20 +206,21 @@
 .project-card-order-badge {
   position: absolute;
   top: 12px;
-  right: 12px;
-  background: rgba(6, 6, 15, 0.75);
+  left: 12px;
+  background: rgba(6, 6, 15, 0.65);
   border: 1px solid var(--border);
   color: var(--p2);
   padding: 3px 8px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Cabecera para proyectos sin imagen (Tarjetas) */
 .bg-gradient-card {
-  background: linear-gradient(135deg, #0f0c24 0%, #1c0e35 100%) !important;
+  background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), rgba(124, 58, 237, 0.03) 70%), #0d0d1f !important;
 }
 
 .project-card-gradient-overlay {
@@ -230,6 +231,17 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+}
+
+.project-card-gradient-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
 }
 
 .project-card-type-label {
@@ -266,6 +278,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 4.8em;
 }
 
 .project-card-links {
@@ -312,66 +325,71 @@
   font-weight: 600;
 }
 
-/* Pie de tarjeta (Acciones y orden) */
+/* Pie de tarjeta (Acciones) */
 .project-card-footer {
-  padding: 1rem 1.25rem;
+  padding: 0.85rem 1rem;
   border-top: 1px solid var(--border);
-  background: rgba(6, 6, 15, 0.3);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  background: rgba(6, 6, 15, 0.4);
 }
 
-/* Ordenación horizontal inline */
-.order-controls-horizontal {
+.project-card-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+/* Controles de orden flotantes */
+.order-controls-floating {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   display: flex;
   gap: 6px;
+  z-index: 10;
 }
 
-.order-btn-inline {
-  background: rgba(124, 58, 237, 0.08);
+.order-btn-floating {
+  background: rgba(6, 6, 15, 0.7);
   border: 1px solid var(--border);
-  color: var(--text);
+  color: var(--muted);
   border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  backdrop-filter: blur(8px);
   transition: all 0.2s;
+  padding: 0;
 }
 
-.order-btn-inline:hover:not(:disabled) {
-  background: rgba(124, 58, 237, 0.2);
+.order-btn-floating:hover:not(:disabled) {
+  background: var(--p);
   border-color: var(--p2);
   color: #fff;
+  transform: translateY(-1px);
 }
 
-.order-btn-inline:disabled {
+.order-btn-floating:disabled {
   opacity: 0.25;
   cursor: not-allowed;
 }
 
-/* Acciones */
-.project-card-actions {
-  display: flex;
-  gap: 6px;
-}
-
 .btn {
-  padding: 0.55rem 1rem;
+  padding: 0.55rem 0.5rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .btn-primary {
@@ -386,14 +404,15 @@
 }
 
 .btn-edit {
-  background: rgba(124, 58, 237, 0.1);
+  background: rgba(124, 58, 237, 0.08);
   color: var(--p2);
   border: 1px solid var(--border);
 }
 
 .btn-edit:hover {
-  background: rgba(124, 58, 237, 0.18);
+  background: rgba(124, 58, 237, 0.16);
   border-color: var(--p2);
+  color: #fff;
 }
 
 .btn-delete {
@@ -406,3 +425,40 @@
   background: rgba(239, 68, 68, 0.2);
   border-color: var(--danger);
 }
+
+/* Visibilidad de proyectos */
+.project-admin-card.is-hidden {
+  opacity: 0.55;
+  border-style: dashed;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.project-admin-card.is-hidden:hover {
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 12px 35px rgba(245, 158, 11, 0.08);
+}
+
+.btn-visibility-visible {
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.btn-visibility-visible:hover {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: #34d399;
+  color: #fff;
+}
+
+.btn-visibility-hidden {
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.btn-visibility-hidden:hover {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: #fbbf24;
+  color: #fff;
+}
+

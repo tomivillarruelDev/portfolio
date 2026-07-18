@@ -28,4 +28,7 @@ export interface Project {
   iconURL?: string;
   /** Número de orden para controlar la posición del proyecto en la lista (opcional) */
   order?: number;
+  /** Si false, el proyecto no se muestra en el portfolio público */
+  isVisible?: boolean;
 }
+

@@ -71,6 +71,6 @@ export class FirebaseService {
         : [],
     }));
 
-    return this.projects;
+    return this.projects.filter(p => p.isVisible !== false);
   }
 }

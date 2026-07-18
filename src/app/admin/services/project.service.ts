@@ -27,6 +27,7 @@ export interface Project {
   iconURL?: string | null;
   isMobileView?: boolean | null;
   order?: number;
+  isVisible?: boolean | null;
 }
 
 export enum ProjectType {
@@ -85,6 +86,7 @@ export class ProjectService {
       if (data.logoIsWordmark === undefined) data.logoIsWordmark = null;
       if (data.iconURL        === undefined) data.iconURL        = null;
       if (data.isMobileView   === undefined) data.isMobileView   = null;
+      if (data.isVisible      === undefined) data.isVisible      = true;
       if (data.order === undefined) {
         const projects = await this.getProjects(projectType);
         const maxOrder = projects.reduce((max, p) => (p.order !== undefined && p.order > max ? p.order : max), -1);

@@ -21,4 +21,6 @@ export interface Project {
   iconURL?: string;
   isMobileView?: boolean;
   order?: number;
+  isVisible?: boolean;
 }
+

@@ -74,8 +74,9 @@
       <div
         *ngFor="let project of imageProjects; let i = index"
         class="project-admin-card"
+        [class.is-hidden]="project.isVisible === false"
       >
-        <!-- Previsualización de Imagen -->
+        <!-- Cabecera / Imagen con controles flotantes -->
         <div class="project-card-image-wrap">
           <img
             *ngIf="project.photoURL"
@@ -86,7 +87,33 @@
           <div *ngIf="!project.photoURL" class="project-card-no-image">
             <span>Sin imagen principal</span>
           </div>
+          
+          <!-- Badge de orden flotante izquierdo -->
           <span class="project-card-order-badge">#{{ i + 1 }}</span>
+          
+          <!-- Controles de ordenación flotantes derechos -->
+          <div class="order-controls-floating">
+            <button
+              class="order-btn-floating"
+              [disabled]="i === 0"
+              (click)="moveProjectUp(i, projectTypes.IMAGE); $event.stopPropagation()"
+              title="Mover hacia arriba"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </button>
+            <button
+              class="order-btn-floating"
+              [disabled]="i === imageProjects.length - 1"
+              (click)="moveProjectDown(i, projectTypes.IMAGE); $event.stopPropagation()"
+              title="Mover hacia abajo"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Detalles del proyecto -->
@@ -105,51 +132,47 @@
           </div>
         </div>
 
-        <!-- Pie de tarjeta con acciones y ordenación -->
+        <!-- Pie de tarjeta con acciones -->
         <div class="project-card-footer">
-          <div class="order-controls-horizontal">
+          <div class="project-card-actions-grid">
             <button
-              class="order-btn-inline"
-              [disabled]="i === 0"
-              (click)="moveProjectUp(i, projectTypes.IMAGE)"
-              title="Mover hacia arriba"
+              [class]="'btn btn-sm ' + (project.isVisible !== false ? 'btn-visibility-visible' : 'btn-visibility-hidden')"
+              (click)="toggleVisibility(project, projectTypes.IMAGE)"
+              [title]="project.isVisible !== false ? 'Ocultar en portfolio' : 'Mostrar en portfolio'"
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
+              <!-- Ojo abierto -->
+              <svg *ngIf="project.isVisible !== false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
               </svg>
-            </button>
-            <button
-              class="order-btn-inline"
-              [disabled]="i === imageProjects.length - 1"
-              (click)="moveProjectDown(i, projectTypes.IMAGE)"
-              title="Mover hacia abajo"
-            >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+              <!-- Ojo tachado -->
+              <svg *ngIf="project.isVisible === false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
               </svg>
+              <span>{{ project.isVisible !== false ? 'Visible' : 'Oculto' }}</span>
             </button>
-          </div>
-
-          <div class="project-card-actions">
             <button
               class="btn btn-edit btn-sm"
               (click)="editProject(project.id!, projectTypes.IMAGE)"
+              title="Editar proyecto"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
-              Editar
+              <span>Editar</span>
             </button>
             <button
               class="btn btn-delete btn-sm"
               (click)="deleteProject(project.id!, projectTypes.IMAGE)"
+              title="Eliminar proyecto"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
-              Eliminar
+              <span>Eliminar</span>
             </button>
           </div>
         </div>
@@ -195,18 +218,45 @@
       <div
         *ngFor="let project of cardProjects; let i = index"
         class="project-admin-card"
+        [class.is-hidden]="project.isVisible === false"
       >
-        <!-- Cabecera de tipo tarjeta -->
+        <!-- Cabecera de tipo tarjeta con controles flotantes -->
         <div class="project-card-image-wrap bg-gradient-card">
           <div class="project-card-gradient-overlay">
-            <svg class="project-card-icon-placeholder" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--purple-3);">
+            <svg class="project-card-icon-placeholder" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--p2);">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
               <line x1="8" y1="21" x2="16" y2="21"></line>
               <line x1="12" y1="17" x2="12" y2="21"></line>
             </svg>
             <span class="project-card-type-label">Tarjeta</span>
           </div>
+          
+          <!-- Badge de orden flotante izquierdo -->
           <span class="project-card-order-badge">#{{ i + 1 }}</span>
+          
+          <!-- Controles de ordenación flotantes derechos -->
+          <div class="order-controls-floating">
+            <button
+              class="order-btn-floating"
+              [disabled]="i === 0"
+              (click)="moveProjectUp(i, projectTypes.CARD); $event.stopPropagation()"
+              title="Mover hacia arriba"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </button>
+            <button
+              class="order-btn-floating"
+              [disabled]="i === cardProjects.length - 1"
+              (click)="moveProjectDown(i, projectTypes.CARD); $event.stopPropagation()"
+              title="Mover hacia abajo"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Detalles del proyecto -->
@@ -217,7 +267,7 @@
           <!-- GitHub link -->
           <div class="project-card-links" *ngIf="project.github">
             <a [href]="project.github" target="_blank" class="github-link-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
               </svg>
               <span>Ver repositorio</span>
@@ -235,51 +285,47 @@
           </div>
         </div>
 
-        <!-- Pie de tarjeta con acciones y ordenación -->
+        <!-- Pie de tarjeta con acciones -->
         <div class="project-card-footer">
-          <div class="order-controls-horizontal">
+          <div class="project-card-actions-grid">
             <button
-              class="order-btn-inline"
-              [disabled]="i === 0"
-              (click)="moveProjectUp(i, projectTypes.CARD)"
-              title="Mover hacia arriba"
+              [class]="'btn btn-sm ' + (project.isVisible !== false ? 'btn-visibility-visible' : 'btn-visibility-hidden')"
+              (click)="toggleVisibility(project, projectTypes.CARD)"
+              [title]="project.isVisible !== false ? 'Ocultar en portfolio' : 'Mostrar en portfolio'"
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
+              <!-- Ojo abierto -->
+              <svg *ngIf="project.isVisible !== false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
               </svg>
-            </button>
-            <button
-              class="order-btn-inline"
-              [disabled]="i === cardProjects.length - 1"
-              (click)="moveProjectDown(i, projectTypes.CARD)"
-              title="Mover hacia abajo"
-            >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+              <!-- Ojo tachado -->
+              <svg *ngIf="project.isVisible === false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
               </svg>
+              <span>{{ project.isVisible !== false ? 'Visible' : 'Oculto' }}</span>
             </button>
-          </div>
-
-          <div class="project-card-actions">
             <button
               class="btn btn-edit btn-sm"
               (click)="editProject(project.id!, projectTypes.CARD)"
+              title="Editar proyecto"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
-              Editar
+              <span>Editar</span>
             </button>
             <button
               class="btn btn-delete btn-sm"
               (click)="deleteProject(project.id!, projectTypes.CARD)"
+              title="Eliminar proyecto"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
-              Eliminar
+              <span>Eliminar</span>
             </button>
           </div>
         </div>
