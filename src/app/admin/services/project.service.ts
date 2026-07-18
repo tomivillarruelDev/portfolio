@@ -141,6 +141,40 @@ export class ProjectService {
     }
   }
 
+  async migrateProject(project: Project, sourceRef: ProjectType, targetRef: ProjectType): Promise<Project> {
+    if (!project.id) throw new Error('El ID del proyecto es requerido para migrar');
+    try {
+      const { id, ...projectData } = project;
+
+      // Limpiar imágenes si migramos a CARD
+      if (targetRef === ProjectType.CARD) {
+        projectData.photoURL = null;
+        projectData.photoURLs = null;
+        projectData.isMobileView = null;
+      } else {
+        if (projectData.photoURL === undefined) projectData.photoURL = null;
+        if (projectData.photoURLs === undefined) projectData.photoURLs = null;
+        if (projectData.isMobileView === undefined) projectData.isMobileView = false;
+      }
+
+      // Asignar order al final de la colección destino
+      const targetProjects = await this.getProjects(targetRef);
+      const maxOrder = targetProjects.reduce((max, p) => (p.order !== undefined && p.order > max ? p.order : max), -1);
+      projectData.order = maxOrder + 1;
+
+      // Guardar en el destino conservando el mismo ID
+      await this.db.database.ref(`${targetRef}/${id}`).set(projectData);
+
+      // Remover de la colección de origen
+      await this.db.database.ref(`${sourceRef}/${id}`).remove();
+
+      return { ...projectData, id };
+    } catch (error) {
+      console.error(`Error al migrar proyecto (${project.id}):`, error);
+      throw new Error(`No se pudo migrar el proyecto de ${sourceRef} a ${targetRef}`);
+    }
+  }
+
   async updateProjectOrder(projectId: string, newOrder: number, projectType: ProjectType = ProjectType.IMAGE): Promise<void> {
     try {
       await this.db.database.ref(`${projectType}/${projectId}`).update({ order: newOrder });

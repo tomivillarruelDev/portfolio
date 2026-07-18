@@ -55,6 +55,43 @@
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
+.type-radio-group {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.type-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text);
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.type-radio-label:has(input:checked) {
+  border-color: var(--p);
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--p2);
+}
+
+.type-radio-label input[type="radio"] {
+  accent-color: var(--p);
+  width: 16px;
+  height: 16px;
+}
+
+.migration-hint {
+  display: block;
+  margin-top: 0.75rem;
+  color: #f59e0b;
+}
+
 .loading {
   padding: 3rem;
   text-align: center;

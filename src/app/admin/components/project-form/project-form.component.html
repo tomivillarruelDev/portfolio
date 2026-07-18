@@ -11,6 +11,24 @@
 
   <form *ngIf="!loading" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 
+    <!-- SECCION: Tipo de proyecto -->
+    <div class="form-section">
+      <h3 class="form-section-title">Tipo de proyecto</h3>
+      <div class="type-radio-group">
+        <label class="type-radio-label">
+          <input type="radio" formControlName="type" [value]="projectTypes.IMAGE" />
+          <span>Con imagen</span>
+        </label>
+        <label class="type-radio-label">
+          <input type="radio" formControlName="type" [value]="projectTypes.CARD" />
+          <span>Tipo tarjeta</span>
+        </label>
+      </div>
+      <small *ngIf="isEditMode && projectType !== originalProjectType" class="image-hint migration-hint">
+        Cambiar el tipo migrará el proyecto a otra colección.
+      </small>
+    </div>
+
     <!-- SECCION: Identidad -->
     <div class="form-section">
       <h3 class="form-section-title">Identidad</h3>

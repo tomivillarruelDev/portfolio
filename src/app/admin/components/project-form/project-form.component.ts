@@ -19,6 +19,7 @@ export class ProjectFormComponent implements OnInit {
   isEditMode = false;
   projectId: string | null = null;
   projectType: ProjectType = ProjectType.IMAGE;
+  originalProjectType: ProjectType = ProjectType.IMAGE;
   allTechnologies: Technology[] = [];
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
@@ -67,6 +68,7 @@ export class ProjectFormComponent implements OnInit {
       logoIsWordmark: [false],
       isMobileView: [false],
       isVisible: [true],
+      type: [ProjectType.IMAGE, Validators.required],
     });
   }
 
@@ -76,7 +78,11 @@ export class ProjectFormComponent implements OnInit {
       await this.loadTechnologies();
       this.projectId = this.route.snapshot.paramMap.get('id');
       this.route.queryParams.subscribe(params => {
-        if (params['type']) this.projectType = params['type'] as ProjectType;
+        if (params['type']) {
+          this.projectType = params['type'] as ProjectType;
+          this.originalProjectType = this.projectType;
+          this.projectForm.get('type')?.setValue(this.projectType, { emitEvent: false });
+        }
       });
       this.isEditMode = !!this.projectId;
       if (this.isEditMode && this.projectId) {
@@ -85,6 +91,22 @@ export class ProjectFormComponent implements OnInit {
         this.selectedTechnologies = [];
         this.projectForm.get('technologies')?.setValue([]);
       }
+
+      // Escuchar cambios de tipo
+      this.projectForm.get('type')?.valueChanges.subscribe((value: ProjectType) => {
+        this.projectType = value;
+        if (value === ProjectType.CARD) {
+          this.projectForm.get('photoURL')?.disable();
+          this.selectedFile = null;
+          this.previewUrl = null;
+          this.existingSecondaryUrls = [];
+          this.secondaryPreviews = [];
+          this.selectedSecondaryFiles = [];
+        } else {
+          this.projectForm.get('photoURL')?.enable();
+        }
+      });
+
       if (this.projectType === ProjectType.CARD) {
         this.projectForm.get('photoURL')?.disable();
       }
@@ -130,6 +152,7 @@ export class ProjectFormComponent implements OnInit {
         logoIsWordmark: project.logoIsWordmark || false,
         isMobileView: project.isMobileView || false,
         isVisible: project.isVisible !== false,
+        type: this.projectType,
       });
       if (project.logoURL) {
         this.logoPreviewUrl = project.logoURL;
@@ -305,7 +328,27 @@ export class ProjectFormComponent implements OnInit {
       }
 
       if (this.isEditMode && this.projectId) {
-        await this.projectService.updateProject({ ...projectData, id: this.projectId }, this.projectType);
+        const targetType = this.projectForm.get('type')?.value as ProjectType;
+        if (targetType !== this.originalProjectType) {
+          if (targetType === ProjectType.CARD) {
+            const confirmed = window.confirm(
+              '¿Estás seguro de que querés convertir este proyecto a Tipo Tarjeta? Las imágenes asociadas serán desvinculadas.'
+            );
+            if (!confirmed) { this.saving = false; return; }
+          }
+          if (targetType === ProjectType.IMAGE && !this.selectedFile) {
+            this.errorMessage = 'Debés subir una imagen para convertir el proyecto a tipo Con Imagen.';
+            this.saving = false;
+            return;
+          }
+          await this.projectService.migrateProject(
+            { ...projectData, id: this.projectId },
+            this.originalProjectType,
+            targetType
+          );
+        } else {
+          await this.projectService.updateProject({ ...projectData, id: this.projectId }, this.projectType);
+        }
       } else {
         await this.projectService.createProject(projectData, this.projectType);
       }
