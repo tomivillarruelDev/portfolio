@@ -1,5 +1,176 @@
 /* All layout styles in global styles.css */
 
+/* ── PROJECTS HERO HEADER ── */
+.proj-hero {
+  padding: 80px 0 8px;
+  position: relative;
+}
+
+.ph-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease 0.05s, transform 0.5s ease 0.05s;
+}
+.proj-hero.visible .ph-eyebrow { opacity: 1; transform: translateY(0); }
+
+.ph-chip {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--purple-3);
+  border: 1px solid rgba(192,132,252,0.28);
+  border-radius: 100px;
+  padding: 5px 14px;
+  background: rgba(124,58,237,0.07);
+}
+
+.ph-sep {
+  width: 22px;
+  height: 1px;
+  background: rgba(168,85,247,0.3);
+}
+
+.ph-cnt {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* Title block */
+.ph-title-block { margin-bottom: 44px; }
+
+.ph-clip-row {
+  clip-path: inset(0 -80px 0 -48px);
+  line-height: 0.87;
+  padding-bottom: 0.22em;
+}
+
+.ph-word-fill {
+  display: block;
+  font-size: clamp(72px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.87;
+  margin: 0;
+  background: linear-gradient(115deg, #f1f0ff 0%, var(--purple-3) 40%, var(--pink) 80%, #f1f0ff 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateY(108%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  animation: ph-shimmer 7s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.proj-hero.visible .ph-word-fill {
+  transform: translateY(0);
+  animation-play-state: running;
+}
+
+.ph-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 36px;
+  margin-top: 6px;
+}
+
+.ph-word-stroke {
+  display: block;
+  font-size: clamp(72px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.87;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(168,85,247,0.35);
+  transform: translateY(108%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.28s,
+              -webkit-text-stroke-color 0.3s ease;
+}
+.proj-hero.visible .ph-word-stroke { transform: translateY(0); }
+.ph-word-stroke:hover { -webkit-text-stroke-color: var(--purple-3); }
+
+/* Tech tags */
+.ph-tags {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 12px;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(18px);
+  transition: opacity 0.55s ease 0.6s, transform 0.55s ease 0.6s;
+}
+.proj-hero.visible .ph-tags { opacity: 1; transform: translateX(0); }
+
+.ph-tags li {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 11px;
+  border-radius: 4px;
+  border: 1px solid rgba(124,58,237,0.12);
+  background: rgba(124,58,237,0.04);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: default;
+}
+.ph-tags li:hover {
+  color: var(--purple-3);
+  border-color: rgba(192,132,252,0.3);
+}
+
+/* Footer row */
+.ph-footer-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.65s, transform 0.5s ease 0.65s;
+}
+.proj-hero.visible .ph-footer-row { opacity: 1; transform: translateY(0); }
+
+.ph-rule {
+  height: 1px;
+  width: 0;
+  background: linear-gradient(90deg, var(--purple-2), var(--pink), transparent);
+  box-shadow: 0 0 8px rgba(168,85,247,0.4);
+  flex-shrink: 0;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s;
+}
+.proj-hero.visible .ph-rule { width: 72px; }
+
+.ph-sub {
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@keyframes ph-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (max-width: 640px) {
+  .ph-bottom-row { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .ph-tags {
+    flex-direction: row;
+    flex-wrap: wrap;
+    transform: translateY(14px);
+    transition: opacity 0.55s ease 0.6s, transform 0.55s ease 0.6s;
+  }
+  .proj-hero.visible .ph-tags { transform: translateY(0); }
+}
+
 /* ── ZOOM HINT (appears on hover over project images) ── */
 .iv-zoom-hint {
   position: absolute;
