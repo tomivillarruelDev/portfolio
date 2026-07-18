@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Project } from '../interfaces/project.interface';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class FirebaseService {
   private url = 'https://tomas-villarruel-portfolio-default-rtdb.firebaseio.com';
   public projects: Project[] = [];
-  public techIconCache: Record<string, string> = {};
+  public readonly techIconCache = signal<Record<string, string>>({});
   private techCache: Record<string, string> | null = null;
 
   constructor(private http: HttpClient) {}
@@ -21,17 +21,18 @@ export class FirebaseService {
         this.http.get<Record<string, { name: string; icon?: string }>>(`${this.url}/technologies.json`)
       );
       this.techCache = {};
-      this.techIconCache = {};
+      const newCache: Record<string, string> = {};
       if (raw) {
         Object.entries(raw).forEach(([id, val]) => {
           if (val?.name) {
             this.techCache![id] = val.name;
             if (val.icon) {
-              this.techIconCache[val.name.trim().toLowerCase()] = val.icon;
+              newCache[val.name.trim().toLowerCase()] = val.icon;
             }
           }
         });
       }
+      this.techIconCache.set(newCache);
     } catch {
       this.techCache = {};
     }

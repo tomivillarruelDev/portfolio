@@ -1,4 +1,4 @@
-import { Component, signal, inject, effect, NgZone, OnDestroy } from '@angular/core';
+import { Component, signal, inject, effect, NgZone, OnDestroy, untracked, ElementRef, viewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
@@ -29,7 +29,6 @@ const TECH_MAP: Record<string, [string, string]> = {
   'Django':     ['ic-ng',  'Dj'], 'django':     ['ic-ng',  'Dj'],
 };
 
-// Fallback data for projects without extended fields in Firebase
 const STATIC_FALLBACK: {
   nameHtml: string;
   tagline:  string;
@@ -73,6 +72,8 @@ export class ProjectsComponent implements OnDestroy {
   private autoplayIntervals: Record<string, any> = {};
   private gsapInited = false;
 
+  readonly projectImages = viewChildren<ElementRef<HTMLImageElement>>('projImg');
+
   private readonly firebaseService = inject(FirebaseService);
   private readonly ngZone = inject(NgZone);
   private readonly imageViewerService = inject(ImageViewerService);
@@ -89,7 +90,51 @@ export class ProjectsComponent implements OnDestroy {
         });
       }
     });
+
+    // Una vez que los proyectos se cargan asíncronamente en featuredProjects,
+    // Angular los renderiza e inserta las imágenes en el DOM. En ese momento
+    // disparamos asíncronamente el escaneo de imágenes en caché.
+    effect(() => {
+      const projects = this.featuredProjects();
+      if (projects.length > 0) {
+        setTimeout(() => {
+          this.checkCompletedImages();
+        }, 100);
+      }
+    });
+
+    effect(() => {
+      const isOpen = this.imageViewerService.state().isOpen;
+      untracked(() => {
+        if (isOpen) {
+          Object.keys(this.autoplayIntervals).forEach(key => {
+            clearInterval(this.autoplayIntervals[key]);
+          });
+          this.autoplayIntervals = {};
+        } else {
+          const projects = this.featuredProjects();
+          projects.forEach(p => this.startAutoplay(p));
+        }
+      });
+    });
+
     this.loadProjects();
+  }
+
+  private checkCompletedImages(): void {
+    this.projectImages().forEach(ref => {
+      const img = ref.nativeElement;
+      if (img.complete) {
+        const key = img.getAttribute('data-img-key');
+        if (key) {
+          this.imagesLoaded.update(state => ({ ...state, [key]: true }));
+          if (img.naturalWidth > 0) {
+            const ratio = img.naturalHeight / img.naturalWidth;
+            this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
+          }
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -157,9 +202,13 @@ export class ProjectsComponent implements OnDestroy {
     const images = this.getProjectImages(project);
     if (images.length <= 1) return;
     this.stopAutoplay(project);
-    this.autoplayIntervals[project.id] = setInterval(() => {
-      this.nextImage(project);
-    }, 5000); // Cambio de imagen cada 5 segundos
+    this.ngZone.runOutsideAngular(() => {
+      this.autoplayIntervals[project.id] = setInterval(() => {
+        this.ngZone.run(() => {
+          this.nextImage(project);
+        });
+      }, 5000);
+    });
   }
 
   stopAutoplay(project: Project): void {
@@ -209,7 +258,7 @@ export class ProjectsComponent implements OnDestroy {
 
   getTechIcon(techName: string): string | null {
     if (!techName) return null;
-    return this.firebaseService.techIconCache[techName.trim().toLowerCase()] || null;
+    return this.firebaseService.techIconCache()[techName.trim().toLowerCase()] || null;
   }
 
   openViewer(event: MouseEvent, project: Project, imgIndex: number): void {
@@ -237,7 +286,6 @@ export class ProjectsComponent implements OnDestroy {
   }
 
   private initGsap(): void {
-    // Skip pin animation on mobile/tablet — GSAP sets inline styles that fight CSS
     if (window.innerWidth < 900) return;
 
     const section = document.querySelector<HTMLElement>('#projects');

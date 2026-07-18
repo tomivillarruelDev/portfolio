@@ -23,7 +23,8 @@
                     animation="pulse"
                   ></ngx-skeleton-loader>
                 }
-                <img [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
+                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
+                     [attr.data-img-key]="tech.id || ''"
                      (load)="onImageLoad(tech.id || '')"
                      [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'"
                      loading="lazy" />
@@ -54,7 +55,8 @@
                     animation="pulse"
                   ></ngx-skeleton-loader>
                 }
-                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                     [attr.data-img-key]="tech.id || ''"
                      (load)="onImageLoad(tech.id || '')"
                      [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'"
                      loading="lazy" />
@@ -81,7 +83,8 @@
                     animation="pulse"
                   ></ngx-skeleton-loader>
                 }
-                <img [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="orbit-icon"
+                     [attr.data-img-key]="tech.id || ''"
                      (load)="onImageLoad(tech.id || '')"
                      [style.display]="imagesLoaded()[tech.id || ''] ? 'block' : 'none'"
                      loading="lazy" />

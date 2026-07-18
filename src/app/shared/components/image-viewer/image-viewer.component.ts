@@ -1,6 +1,7 @@
 import {
-  Component, signal, effect, inject, ElementRef, ViewChild,
-  OnDestroy, NgZone, ChangeDetectorRef, computed, untracked,
+  Component, signal, effect, inject, ElementRef,
+  OnDestroy, NgZone, ChangeDetectorRef, untracked,
+  viewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageViewerService } from '../../services/image-viewer.service';
@@ -14,15 +15,15 @@ import gsap from 'gsap';
   imports: [CommonModule],
 })
 export class ImageViewerComponent implements OnDestroy {
-  @ViewChild('overlay')     overlayRef!:     ElementRef<HTMLDivElement>;
-  @ViewChild('stage')       stageRef!:       ElementRef<HTMLDivElement>;
-  @ViewChild('imgA')        imgARef!:        ElementRef<HTMLImageElement>;
-  @ViewChild('imgB')        imgBRef!:        ElementRef<HTMLImageElement>;
-  @ViewChild('counter')     counterRef?:     ElementRef<HTMLDivElement>;
-  @ViewChild('counterText') counterTextRef?: ElementRef<HTMLSpanElement>;
-  @ViewChild('closeBtn')    closeBtnRef?:    ElementRef<HTMLButtonElement>;
-  @ViewChild('prevBtn')     prevBtnRef?:     ElementRef<HTMLButtonElement>;
-  @ViewChild('nextBtn')     nextBtnRef?:     ElementRef<HTMLButtonElement>;
+  readonly overlayRef     = viewChild<ElementRef<HTMLDivElement>>('overlay');
+  readonly stageRef       = viewChild<ElementRef<HTMLDivElement>>('stage');
+  readonly imgARef        = viewChild<ElementRef<HTMLImageElement>>('imgA');
+  readonly imgBRef        = viewChild<ElementRef<HTMLImageElement>>('imgB');
+  readonly counterRef     = viewChild<ElementRef<HTMLDivElement>>('counter');
+  readonly counterTextRef = viewChild<ElementRef<HTMLSpanElement>>('counterText');
+  readonly closeBtnRef    = viewChild<ElementRef<HTMLButtonElement>>('closeBtn');
+  readonly prevBtnRef     = viewChild<ElementRef<HTMLButtonElement>>('prevBtn');
+  readonly nextBtnRef     = viewChild<ElementRef<HTMLButtonElement>>('nextBtn');
 
   private readonly svc  = inject(ImageViewerService);
   private readonly zone = inject(NgZone);
@@ -39,7 +40,7 @@ export class ImageViewerComponent implements OnDestroy {
   private openingIndex = 0;
   private originRect: DOMRect | null = null;
   private prevIsOpen = false;
-  private flipDone = false;
+  private readonly flipDone = signal(false);
 
   private keyHandler?:        (e: KeyboardEvent) => void;
   private mmHandler?:         (e: MouseEvent) => void;
@@ -56,22 +57,46 @@ export class ImageViewerComponent implements OnDestroy {
   private controlsShown = true;
 
   constructor() {
-    // Derived signal: only re-run effect when isOpen toggles
-    const isOpenSig = computed(() => this.svc.state().isOpen);
-
+    // 1. Sincronizar el estado de visibilidad y fuentes con el servicio
     effect(() => {
-      const isOpen = isOpenSig();
+      const state = this.svc.state();
+      const isOpen = state.isOpen;
+
       untracked(() => {
         if (isOpen && !this.prevIsOpen) {
           this.prevIsOpen = true;
-          const s = this.svc.state();
-          this.prepareOpen(s.images, s.currentIndex, s.originRect);
+          this.openingIndex = state.currentIndex;
+          this.originRect = state.originRect;
+          this.activeSlot = 'a';
+          this.flipDone.set(false);
+          this.isSliding = false;
+          this.controlsShown = true;
+
+          this.currentIndex.set(state.currentIndex);
+          this.totalImages.set(state.images.length);
+          this.imgASrc.set(state.images[state.currentIndex]);
+          this.imgBSrc.set(state.images.length > 1 ? state.images[(state.currentIndex + 1) % state.images.length] : '');
+          this.isVisible.set(true);
         } else if (!isOpen && this.prevIsOpen) {
           this.prevIsOpen = false;
           this.runCloseAnimation();
         }
       });
-    }, { allowSignalWrites: true });
+    });
+
+    // 2. Ejecutar la animación de apertura cuando el DOM esté listo
+    effect(() => {
+      const isOpen = this.svc.state().isOpen;
+      const overlay = this.overlayRef();
+      const imgA = this.imgARef();
+      const done = this.flipDone();
+
+      if (isOpen && overlay && imgA && !done) {
+        this.zone.runOutsideAngular(() => {
+          this.runOpenAnimation(overlay.nativeElement, imgA.nativeElement);
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -87,7 +112,7 @@ export class ImageViewerComponent implements OnDestroy {
 
   onOverlayClick(event: MouseEvent): void {
     const t = event.target as HTMLElement;
-    if (t === this.overlayRef?.nativeElement || t === this.stageRef?.nativeElement) {
+    if (t === this.overlayRef()?.nativeElement || t === this.stageRef()?.nativeElement) {
       this.close();
     }
   }
@@ -108,30 +133,9 @@ export class ImageViewerComponent implements OnDestroy {
 
   // ── Open sequence ──────────────────────────────────────────────────────────
 
-  private prepareOpen(images: string[], index: number, originRect: DOMRect | null): void {
-    this.openingIndex  = index;
-    this.originRect    = originRect;
-    this.activeSlot    = 'a';
-    this.flipDone      = false;
-    this.isSliding     = false;
-    this.controlsShown = true;
-
-    this.currentIndex.set(index);
-    this.totalImages.set(images.length);
-    this.imgASrc.set(images[index]);
-    this.imgBSrc.set(images.length > 1 ? images[(index + 1) % images.length] : '');
-    this.isVisible.set(true);
-
-    this.zone.runOutsideAngular(() => {
-      requestAnimationFrame(() => requestAnimationFrame(() => this.runOpenAnimation()));
-    });
-  }
-
-  private runOpenAnimation(): void {
-    const overlay = this.overlayRef?.nativeElement;
-    const imgA    = this.imgARef?.nativeElement;
-    const imgB    = this.imgBRef?.nativeElement;
-    if (!overlay || !imgA) return;
+  private runOpenAnimation(overlay: HTMLDivElement, imgA: HTMLImageElement): void {
+    const imgB = this.imgBRef()?.nativeElement;
+    this.flipDone.set(true);
 
     document.body.style.overflow = 'hidden';
 
@@ -139,10 +143,10 @@ export class ImageViewerComponent implements OnDestroy {
     gsap.set(imgA, { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 1, opacity: 0, rotationX: 0, rotationY: 0 });
     if (imgB) gsap.set(imgB, { xPercent: -50, yPercent: -50, x: window.innerWidth, y: 0, scale: 1, opacity: 1, rotationX: 0, rotationY: 0 });
 
-    // Overlay: fade in (backdrop-filter is always applied; this fades it in visually)
+    // Overlay: fade in
     gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.42, ease: 'power2.out' });
 
-    // Controls entrance (staggered, after backdrop starts fading)
+    // Controls entrance
     this.animateControlsIn();
 
     // Image FLIP
@@ -156,9 +160,8 @@ export class ImageViewerComponent implements OnDestroy {
       imgA.addEventListener('load', onLoad);
       // Fallback if image takes too long
       setTimeout(() => {
-        if (this.flipDone || !this.isVisible()) return;
+        if (!this.isVisible()) return;
         imgA.removeEventListener('load', onLoad);
-        this.flipDone = true;
         gsap.to(imgA, { opacity: 1, scale: 1, duration: 0.42, ease: 'power3.out' });
       }, 900);
     }
@@ -168,9 +171,6 @@ export class ImageViewerComponent implements OnDestroy {
   }
 
   private runFlip(imgEl: HTMLImageElement): void {
-    if (this.flipDone) return;
-    this.flipDone = true;
-
     const finalRect = imgEl.getBoundingClientRect();
 
     if (!finalRect.width || !finalRect.height) {
@@ -220,7 +220,7 @@ export class ImageViewerComponent implements OnDestroy {
   // ── Close sequence ─────────────────────────────────────────────────────────
 
   private runCloseAnimation(): void {
-    const overlay   = this.overlayRef?.nativeElement;
+    const overlay   = this.overlayRef()?.nativeElement;
     const activeImg = this.getActiveImg();
 
     this.detachListeners();
@@ -236,7 +236,7 @@ export class ImageViewerComponent implements OnDestroy {
     if (!overlay) { finish(); return; }
 
     // Hide the inactive slot so no ghost image appears during close
-    const inactiveImg = this.activeSlot === 'a' ? this.imgBRef?.nativeElement : this.imgARef?.nativeElement;
+    const inactiveImg = this.activeSlot === 'a' ? this.imgBRef()?.nativeElement : this.imgARef()?.nativeElement;
     if (inactiveImg) gsap.set(inactiveImg, { opacity: 0 });
 
     // Fade out overlay
@@ -432,7 +432,7 @@ export class ImageViewerComponent implements OnDestroy {
   }
 
   private animateCounter(): void {
-    const el = this.counterTextRef?.nativeElement;
+    const el = this.counterTextRef()?.nativeElement;
     if (!el) return;
     gsap.fromTo(el, { y: -7, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: 'power2.out' });
   }
@@ -440,28 +440,30 @@ export class ImageViewerComponent implements OnDestroy {
   // ── Event listener management ──────────────────────────────────────────────
 
   private attachListeners(): void {
-    this.keyHandler = (e: KeyboardEvent) => {
-      this.resetIdleTimer();
-      switch (e.key) {
-        case 'Escape':     this.zone.run(() => this.close()); break;
-        case 'ArrowLeft':  this.zone.run(() => this.prev());  break;
-        case 'ArrowRight': this.zone.run(() => this.next());  break;
-      }
-    };
-    document.addEventListener('keydown', this.keyHandler);
+    this.zone.runOutsideAngular(() => {
+      this.keyHandler = (e: KeyboardEvent) => {
+        this.resetIdleTimer();
+        switch (e.key) {
+          case 'Escape':     this.zone.run(() => this.close()); break;
+          case 'ArrowLeft':  this.zone.run(() => this.prev());  break;
+          case 'ArrowRight': this.zone.run(() => this.next());  break;
+        }
+      };
+      document.addEventListener('keydown', this.keyHandler);
 
-    const ov = this.overlayRef?.nativeElement;
-    if (!ov) return;
+      const ov = this.overlayRef()?.nativeElement;
+      if (!ov) return;
 
-    this.mmHandler = (e: MouseEvent) => this.onMouseMove(e);
-    this.tsHandler = (e: TouchEvent) => this.onTouchStart(e);
-    this.tmHandler = (e: TouchEvent) => this.onTouchMove(e);
-    this.teHandler = (e: TouchEvent) => this.onTouchEnd(e);
+      this.mmHandler = (e: MouseEvent) => this.onMouseMove(e);
+      this.tsHandler = (e: TouchEvent) => this.onTouchStart(e);
+      this.tmHandler = (e: TouchEvent) => this.onTouchMove(e);
+      this.teHandler = (e: TouchEvent) => this.onTouchEnd(e);
 
-    ov.addEventListener('mousemove', this.mmHandler);
-    ov.addEventListener('touchstart', this.tsHandler, { passive: true });
-    ov.addEventListener('touchmove',  this.tmHandler, { passive: false });
-    ov.addEventListener('touchend',   this.teHandler, { passive: true });
+      ov.addEventListener('mousemove', this.mmHandler);
+      ov.addEventListener('touchstart', this.tsHandler, { passive: true });
+      ov.addEventListener('touchmove',  this.tmHandler, { passive: false });
+      ov.addEventListener('touchend',   this.teHandler, { passive: true });
+    });
   }
 
   private detachListeners(): void {
@@ -469,7 +471,7 @@ export class ImageViewerComponent implements OnDestroy {
       document.removeEventListener('keydown', this.keyHandler);
       this.keyHandler = undefined;
     }
-    const ov = this.overlayRef?.nativeElement;
+    const ov = this.overlayRef()?.nativeElement;
     if (ov) {
       if (this.mmHandler) ov.removeEventListener('mousemove', this.mmHandler);
       if (this.tsHandler) ov.removeEventListener('touchstart', this.tsHandler);
@@ -483,22 +485,22 @@ export class ImageViewerComponent implements OnDestroy {
 
   private getActiveImg(): HTMLImageElement | null {
     return this.activeSlot === 'a'
-      ? this.imgARef?.nativeElement ?? null
-      : this.imgBRef?.nativeElement ?? null;
+      ? this.imgARef()?.nativeElement ?? null
+      : this.imgBRef()?.nativeElement ?? null;
   }
 
   private getSlotImg(slot: 'a' | 'b'): HTMLImageElement | null {
     return slot === 'a'
-      ? this.imgARef?.nativeElement ?? null
-      : this.imgBRef?.nativeElement ?? null;
+      ? this.imgARef()?.nativeElement ?? null
+      : this.imgBRef()?.nativeElement ?? null;
   }
 
   private getControlEls(): HTMLElement[] {
     const els: (HTMLElement | undefined)[] = [
-      this.counterRef?.nativeElement,
-      this.closeBtnRef?.nativeElement,
-      this.prevBtnRef?.nativeElement,
-      this.nextBtnRef?.nativeElement,
+      this.counterRef()?.nativeElement,
+      this.closeBtnRef()?.nativeElement,
+      this.prevBtnRef()?.nativeElement,
+      this.nextBtnRef()?.nativeElement,
     ];
     return els.filter((el): el is HTMLElement => !!el);
   }
