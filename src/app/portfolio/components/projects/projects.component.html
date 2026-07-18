@@ -125,7 +125,7 @@
             </div>
           } @else {
             <!-- ── BROWSER MOCKUP ── -->
-            <div class="proj-frame">
+            <div class="proj-frame" [style.max-width.px]="getBrowserMaxWidth(project)" style="margin: 0 auto; width: 100%;">
               <div class="browser-chrome">
                 <div class="browser-dots">
                   <div class="browser-dot dot-r"></div>
@@ -133,9 +133,11 @@
                   <div class="browser-dot dot-g"></div>
                 </div>
                 <div class="browser-bar">
-                  <span style="display:inline-flex;align-items:center;gap:4px;color:#6b7280">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    {{ project.page || 'github.com/' + project.name.toLowerCase().replace(' ','-') }}
+                  <span style="display:inline-flex;align-items:center;gap:4px;color:#6b7280;width:100%;max-width:100%;overflow:hidden;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    <span style="display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;font-size:10px;vertical-align:middle;">
+                      {{ project.page || 'github.com/' + project.name.toLowerCase().replace(' ','-') }}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -144,8 +146,8 @@
                 <div class="browser-screen"
                      (mouseenter)="stopAutoplay(project)"
                      (mouseleave)="startAutoplay(project)"
-                     [style.height]="getBrowserScreenHeight(project)"
-                     style="padding:0;width:100%;">
+                     [style.aspect-ratio]="getBrowserAspectRatio(project)"
+                     style="padding:0;width:100%;height:auto;max-height:450px;">
                   @let images = getProjectImages(project);
                   @if (images.length === 1) {
                     @if (!imagesLoaded()[project.id + '_0']) {
@@ -156,7 +158,7 @@
                          (load)="onImageLoad(project.id + '_0', $event)"
                          (click)="openViewer($event, project, 0)"
                          [style.opacity]="imagesLoaded()[project.id + '_0'] ? 1 : 0"
-                         style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
+                         style="width:100%;height:100%;object-fit:contain;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
                     <div class="iv-zoom-hint" (click)="openViewer($event, project, 0)">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                     </div>
@@ -173,7 +175,7 @@
                                  (load)="onImageLoad(project.id + '_' + imgIdx, $event)"
                                  (click)="openViewer($event, project, imgIdx)"
                                  [style.opacity]="imagesLoaded()[project.id + '_' + imgIdx] ? 1 : 0"
-                                 style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
+                                 style="width:100%;height:100%;object-fit:contain;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
                             <div class="iv-zoom-hint" (click)="openViewer($event, project, imgIdx)">
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                             </div>

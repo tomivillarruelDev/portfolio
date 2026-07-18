@@ -91,9 +91,6 @@ export class ProjectsComponent implements OnDestroy {
       }
     });
 
-    // Una vez que los proyectos se cargan asíncronamente en featuredProjects,
-    // Angular los renderiza e inserta las imágenes en el DOM. En ese momento
-    // disparamos asíncronamente el escaneo de imágenes en caché.
     effect(() => {
       const projects = this.featuredProjects();
       if (projects.length > 0) {
@@ -128,8 +125,8 @@ export class ProjectsComponent implements OnDestroy {
         const key = img.getAttribute('data-img-key');
         if (key) {
           this.imagesLoaded.update(state => ({ ...state, [key]: true }));
-          if (img.naturalWidth > 0) {
-            const ratio = img.naturalHeight / img.naturalWidth;
+          if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+            const ratio = img.naturalWidth / img.naturalHeight;
             this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
           }
         }
@@ -169,20 +166,27 @@ export class ProjectsComponent implements OnDestroy {
     this.imagesLoaded.update(state => ({ ...state, [key]: true }));
     if (event) {
       const img = event.target as HTMLImageElement;
-      if (img.naturalWidth > 0) {
-        const ratio = img.naturalHeight / img.naturalWidth;
+      if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+        const ratio = img.naturalWidth / img.naturalHeight;
         this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
       }
     }
   }
 
-  getBrowserScreenHeight(project: Project): string {
+  getBrowserAspectRatio(project: Project): string {
     const idx = this.currentImageIndex[project.id] || 0;
     const key = project.id + '_' + idx;
     const ratio = this.imageAspectRatios()[key];
-    if (!ratio) return '';
-    const height = Math.min(600, Math.max(350, Math.round(600 * ratio)));
-    return height + 'px';
+    return ratio ? `${ratio}` : '1.6'; // Fallback 16/10
+  }
+
+  getBrowserMaxWidth(project: Project): number {
+    const idx = this.currentImageIndex[project.id] || 0;
+    const key = project.id + '_' + idx;
+    const ratio = this.imageAspectRatios()[key];
+    if (!ratio) return 600;
+    if (ratio >= 1.2) return 600;
+    return Math.max(220, Math.round(450 * ratio));
   }
 
   getProjectImages(project: Project): string[] {

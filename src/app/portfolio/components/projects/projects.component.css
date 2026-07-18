@@ -53,15 +53,30 @@
   background: rgba(0, 0, 0, 0.46);
 }
 
-/* Image zoom effect on hover */
-.phone-screen img,
-.browser-screen img {
+/* Image zoom effect on hover for phone mockups */
+.phone-screen img {
   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease !important;
 }
 
-.phone-screen:hover img,
-.browser-screen:hover img {
+.phone-screen:hover img {
   transform: scale(1.04);
+}
+
+/* Image container style for browser mockups */
+.browser-screen {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.browser-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.3s ease !important;
 }
 
 /* Show on parent hover — works for both phone-screen and browser-screen */
