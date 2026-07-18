@@ -31,6 +31,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const nav = document.getElementById('nav');
     this.scrollListener = () => {
       if (!nav) return;
+      if (window.innerWidth <= 768) {
+        nav.style.padding = '';
+        return;
+      }
       if (window.scrollY > 60) {
         nav.style.padding = '12px 60px';
       } else {

@@ -1,16 +1,14 @@
 <nav id="nav">
   <a href="#hero" class="nav-logo" style="text-decoration:none;" (click)="scrollTo($event, 'hero')"><img src="assets/img/icons/logo.png" alt="Tomás Villarruel"></a>
 
-  <div class="navbar-overlay" [class.active]="menuActive()" (click)="closeMenu()"></div>
-
-  <ul class="nav-links" [class.active]="menuActive()">
-    <li><a href="#about" (click)="scrollTo($event, 'about'); closeMenu()">Sobre mí</a></li>
-    <li><a href="#experience" (click)="scrollTo($event, 'experience'); closeMenu()">Experiencia</a></li>
-    <li><a href="#projects" (click)="scrollTo($event, 'projects'); closeMenu()">Proyectos</a></li>
-    <li><a href="#contact" (click)="scrollTo($event, 'contact'); closeMenu()">Contacto</a></li>
+  <ul class="nav-links-desktop">
+    <li><a href="#about" (click)="scrollTo($event, 'about')">Sobre mí</a></li>
+    <li><a href="#experience" (click)="scrollTo($event, 'experience')">Experiencia</a></li>
+    <li><a href="#projects" (click)="scrollTo($event, 'projects')">Proyectos</a></li>
+    <li><a href="#contact" (click)="scrollTo($event, 'contact')">Contacto</a></li>
   </ul>
 
-  <a href="#contact" class="nav-cta" (click)="scrollTo($event, 'contact'); closeMenu()">Trabajemos juntos →</a>
+  <a href="#contact" class="nav-cta" (click)="scrollTo($event, 'contact')">Trabajemos juntos →</a>
 
   <button type="button" class="menu-toggle" aria-label="Toggle menu" (click)="toggleMenu()">
     <div class="menu-icon" [class.active]="menuActive()">
@@ -18,3 +16,13 @@
     </div>
   </button>
 </nav>
+
+<div class="navbar-overlay" [class.active]="menuActive()" (click)="closeMenu()"></div>
+
+<ul class="nav-links-mobile" [class.active]="menuActive()">
+  <li><a href="#about" (click)="scrollTo($event, 'about'); closeMenu()">Sobre mí</a></li>
+  <li><a href="#experience" (click)="scrollTo($event, 'experience'); closeMenu()">Experiencia</a></li>
+  <li><a href="#projects" (click)="scrollTo($event, 'projects'); closeMenu()">Proyectos</a></li>
+  <li><a href="#contact" (click)="scrollTo($event, 'contact'); closeMenu()">Contacto</a></li>
+  <li class="nav-cta-item"><a href="#contact" (click)="scrollTo($event, 'contact'); closeMenu()">Trabajemos juntos →</a></li>
+</ul>
