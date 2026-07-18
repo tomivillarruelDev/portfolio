@@ -25,6 +25,7 @@ export interface Project {
   logoURL?: string | null;
   logoIsWordmark?: boolean | null;
   iconURL?: string | null;
+  isMobileView?: boolean | null;
   order?: number;
 }
 
@@ -83,6 +84,7 @@ export class ProjectService {
       if (data.logoURL        === undefined) data.logoURL        = null;
       if (data.logoIsWordmark === undefined) data.logoIsWordmark = null;
       if (data.iconURL        === undefined) data.iconURL        = null;
+      if (data.isMobileView   === undefined) data.isMobileView   = null;
       if (data.order === undefined) {
         const projects = await this.getProjects(projectType);
         const maxOrder = projects.reduce((max, p) => (p.order !== undefined && p.order > max ? p.order : max), -1);

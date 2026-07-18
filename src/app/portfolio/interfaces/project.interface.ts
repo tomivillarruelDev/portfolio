@@ -19,5 +19,6 @@ export interface Project {
   logoURL?: string;
   logoIsWordmark?: boolean;
   iconURL?: string;
+  isMobileView?: boolean;
   order?: number;
 }

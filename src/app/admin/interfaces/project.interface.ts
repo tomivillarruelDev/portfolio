@@ -22,6 +22,8 @@ export interface Project {
   logoURL?: string;
   /** Si true, el logo ya incluye el nombre (wordmark) y se oculta el título de texto */
   logoIsWordmark?: boolean;
+  /** Si true, muestra un phone mockup portrait en lugar del browser chrome */
+  isMobileView?: boolean;
   /** URL del símbolo/marca del proyecto (opcional — aparece como badge flotante alrededor del browser) */
   iconURL?: string;
   /** Número de orden para controlar la posición del proyecto en la lista (opcional) */

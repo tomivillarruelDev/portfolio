@@ -67,6 +67,7 @@ const STATIC_FALLBACK: {
 export class ProjectsComponent implements OnDestroy {
   readonly featuredProjects = signal<Project[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
+  readonly imageAspectRatios = signal<Record<string, number>>({});
   currentImageIndex: Record<string, number> = {};
   private autoplayIntervals: Record<string, any> = {};
   private gsapInited = false;
@@ -117,8 +118,24 @@ export class ProjectsComponent implements OnDestroy {
     }
   }
 
-  onImageLoad(projectId: string): void {
-    this.imagesLoaded.update(state => ({ ...state, [projectId]: true }));
+  onImageLoad(key: string, event?: Event): void {
+    this.imagesLoaded.update(state => ({ ...state, [key]: true }));
+    if (event) {
+      const img = event.target as HTMLImageElement;
+      if (img.naturalWidth > 0) {
+        const ratio = img.naturalHeight / img.naturalWidth;
+        this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
+      }
+    }
+  }
+
+  getBrowserScreenHeight(project: Project): string {
+    const idx = this.currentImageIndex[project.id] || 0;
+    const key = project.id + '_' + idx;
+    const ratio = this.imageAspectRatios()[key];
+    if (!ratio) return '';
+    const height = Math.min(600, Math.max(350, Math.round(600 * ratio)));
+    return height + 'px';
   }
 
   getProjectImages(project: Project): string[] {
