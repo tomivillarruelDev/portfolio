@@ -32,6 +32,8 @@ gsap.registerPlugin(ScrollTrigger);
   ],
 })
 export class HomeComponent implements AfterViewInit {
+  showCtaBanner = false;
+
   constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit(): void {
@@ -51,6 +53,7 @@ export class HomeComponent implements AfterViewInit {
     this.initRevealObserver();  // always: handles .reveal via IntersectionObserver
     this.initNavShrink();       // always
     this.initStatCounters();    // always: number counters work on all screens
+    this.initCtaBanner();       // always: fixed banner visible on about+experience
 
     // GSAP scrub animations set opacity:0 inline — skip on mobile where
     // scroll triggers don't complete reliably, leaving content invisible
@@ -282,6 +285,23 @@ export class HomeComponent implements AfterViewInit {
         },
       });
     });
+  }
+
+  private initCtaBanner(): void {
+    const ids = ['about', 'experience'];
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (!sections.length) return;
+
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      });
+      this.ngZone.run(() => { this.showCtaBanner = visible.size > 0; });
+    }, { threshold: 0.01 });
+
+    sections.forEach(s => io.observe(s));
   }
 
   private initContactCard(): void {
