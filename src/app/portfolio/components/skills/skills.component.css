@@ -1,4 +1,28 @@
-﻿/* ── TERMINAL ── */
+﻿/* ── GRID BACKGROUND ── */
+#skills {
+  position: relative;
+}
+
+#skills::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+  background-size: 6rem 4rem;
+  -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 30%, transparent 80%);
+}
+
+#skills .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TERMINAL ── */
 .skills-terminal {
   background: #070512;
   border: 1px solid rgba(124,58,237,0.22);
