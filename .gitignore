@@ -42,6 +42,8 @@ testem.log
 Thumbs.db
 
 /.firebase
-/.github
+/.github/*
+!/.github/workflows/
 
-
+.agents/
+.claude/

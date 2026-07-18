@@ -1,25 +1,52 @@
 @if (loaded && visibleStats.length > 0) {
-  <section id="stats">
-    <div class="stats-strip">
-      @for (stat of visibleStats; track stat.label) {
-        <div class="stat-col" [style.flex]="stat.flex">
-          <span class="stat-n" [class.is-hero]="stat.size === 'hero'" [class.is-major]="stat.size === 'major'">
-            <span class="count" [attr.data-target]="stat.number">{{ stat.number }}</span>
-            @if (stat.suffix) {
-              <span class="stat-sfx">{{ stat.suffix }}</span>
-            }
+<section id="stats" class="evidence-section">
+
+  <!-- ambient depth -->
+  <div class="ev-dots" aria-hidden="true"></div>
+  <div class="ev-glow" aria-hidden="true"></div>
+
+  <!-- centred label rule -->
+  <div class="ev-rule">
+    <span class="ev-rule-line"></span>
+    <span class="ev-rule-label">Track record</span>
+    <span class="ev-rule-line"></span>
+  </div>
+
+  <!-- featured: first 2 stats -->
+  <div class="ev-featured">
+    @for (stat of featuredStats; track stat.label) {
+      <div class="ev-feat stat-col" [class]="'ev-feat--' + stat.size">
+        <div class="ev-feat-num">
+          <span class="count" [attr.data-target]="stat.number">{{ stat.number }}</span>
+          @if (stat.suffix) { <span class="ev-feat-sfx">{{ stat.suffix }}</span> }
+        </div>
+        <p class="ev-feat-body">
+          <strong>{{ stat.label }}</strong>
+          @if (stat.labelAccent) { <span class="ev-feat-accent"> {{ stat.labelAccent }}</span> }
+          @if (stat.sublabel) { <span class="ev-feat-sub"><br>{{ stat.sublabel }}</span> }
+        </p>
+      </div>
+    }
+  </div>
+
+  <!-- secondary: remaining stats -->
+  @if (secondaryStats.length > 0) {
+    <div class="ev-secondary">
+      @for (stat of secondaryStats; track stat.label) {
+        <div class="ev-sec stat-col">
+          <span class="ev-sec-num">
+            <span class="count" [attr.data-target]="stat.number">{{ stat.number }}</span>{{ stat.suffix }}
           </span>
-          <div class="stat-desc">
-            {{ stat.label }}
-            @if (stat.labelAccent) {
-              &nbsp;<span class="stat-desc-accent">{{ stat.labelAccent }}</span>
-            }
-            @if (stat.sublabel) {
-              <br>{{ stat.sublabel }}
-            }
+          <div class="ev-sec-text">
+            <span class="ev-sec-label">{{ stat.label }}
+              @if (stat.labelAccent) { <span class="ev-sec-accent"> {{ stat.labelAccent }}</span> }
+            </span>
+            @if (stat.sublabel) { <span class="ev-sec-sub">{{ stat.sublabel }}</span> }
           </div>
         </div>
       }
     </div>
-  </section>
+  }
+
+</section>
 }

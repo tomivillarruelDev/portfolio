@@ -33,6 +33,9 @@ export class StatsComponent implements OnInit {
     setTimeout(() => this.ngZone.runOutsideAngular(() => this.initCounters()), 80);
   }
 
+  get featuredStats()   { return this.visibleStats.slice(0, 2); }
+  get secondaryStats()  { return this.visibleStats.slice(2); }
+
   private initCounters(): void {
     if (typeof gsap === 'undefined') return;
     document.querySelectorAll<HTMLElement>('.count').forEach(el => {
