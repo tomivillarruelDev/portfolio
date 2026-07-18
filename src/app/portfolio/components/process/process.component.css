@@ -42,11 +42,11 @@
 
 .process-steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 28px;
   margin-top: 56px;
   position: relative;
-  max-width: 960px;
+  max-width: 780px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -76,14 +76,12 @@
   pointer-events: none;
 }
 
-/* El último elemento de cada fila no tiene línea en desktop */
-@media (min-width: 993px) {
-  .process-step:nth-child(3n)::after {
-    display: none;
-  }
+/* El último elemento de cada fila (2 columnas) no tiene línea */
+.process-step:nth-child(2n)::after {
+  display: none;
 }
 
-/* 2. HAZ DE LUZ FLUYENTE (Se desliza sobre la línea estática - Desktop) */
+/* 2. HAZ DE LUZ FLUYENTE (Se desliza sobre la línea estática) */
 .process-step::before {
   content: '';
   position: absolute;
@@ -99,10 +97,8 @@
   animation: pulseLine 9s infinite linear;
 }
 
-@media (min-width: 993px) {
-  .process-step:nth-child(3n)::before {
-    display: none;
-  }
+.process-step:nth-child(2n)::before {
+  display: none;
 }
 
 .step-badge-wrap {
@@ -146,21 +142,15 @@
   line-height: 1.6;
 }
 
-/* ── RETARDOS DE ANIMACIÓN (1.5s por paso) ── */
+/* ── RETARDOS DE ANIMACIÓN (2.25s por paso, ciclo 9s) ── */
 .process-step:nth-child(1) { animation-delay: 0s; }
-.process-step:nth-child(2) { animation-delay: 1.5s; }
-.process-step:nth-child(3) { animation-delay: 3s; }
-.process-step:nth-child(4) { animation-delay: 4.5s; }
-.process-step:nth-child(5) { animation-delay: 6s; }
-.process-step:nth-child(6) { animation-delay: 7.5s; }
+.process-step:nth-child(2) { animation-delay: 2.25s; }
+.process-step:nth-child(3) { animation-delay: 4.5s; }
+.process-step:nth-child(4) { animation-delay: 6.75s; }
 
-/* El haz de luz empieza a correr un poco después de que se active la tarjeta */
+/* El haz de luz corre un poco después de que se active la tarjeta */
 .process-step:nth-child(1)::before { animation-delay: 0.8s; }
-.process-step:nth-child(2)::before { animation-delay: 2.3s; }
-.process-step:nth-child(3)::before { animation-delay: 3.8s; }
-.process-step:nth-child(4)::before { animation-delay: 5.3s; }
-.process-step:nth-child(5)::before { animation-delay: 6.8s; }
-.process-step:nth-child(6)::before { animation-delay: 8.3s; }
+.process-step:nth-child(3)::before { animation-delay: 5.3s; }
 
 /* ── ANIMACIÓN DE LA TARJETA (PULSO DE ENERGÍA) ── */
 @keyframes pulseCard {
@@ -224,24 +214,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-/* Responsividad */
-@media (max-width: 992px) {
-  .process-steps {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  /* Resetear regla de 3 columnas */
-  .process-step::after,
-  .process-step::before {
-    display: block;
-  }
-  
-  .process-step:nth-child(2n)::after,
-  .process-step:nth-child(2n)::before {
-    display: none;
-  }
 }
 
 @media (max-width: 640px) {

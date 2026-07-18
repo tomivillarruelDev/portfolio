@@ -3,6 +3,23 @@ import { CommonModule } from '@angular/common';
 import { Technology } from 'src/app/shared/interfaces/technology.interface';
 import { TechnologyService } from 'src/app/admin/services/technology.service';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
+
+interface CertEntry {
+  id?: string;
+  title: string;
+  platform: string;
+  year?: string;
+  url?: string;
+  downloadUrl?: string;
+  order?: number;
+}
+
+const CERT_FALLBACK: CertEntry[] = [
+  { title: 'Angular: De cero a experto',              platform: 'Udemy · Fernando Herrera',          year: 'Dic 2023' },
+  { title: 'Diplomatura — Programador Web Full Stack', platform: 'Universidad Provincial de Córdoba', year: '2022'     },
+  { title: 'Análisis de datos con Python',             platform: 'Platzi',                            year: '2023'     },
+];
 
 @Component({
   selector: 'portfolio-skills',
@@ -14,6 +31,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 export class SkillsComponent implements OnInit {
   readonly technologies = signal<Technology[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
+  readonly certsOpen = signal(false);
+  readonly certs = signal<CertEntry[]>(CERT_FALLBACK);
 
   readonly orbitInner = computed(() => this.technologies().slice(0, 4));
   readonly orbitOuter = computed(() => this.technologies().slice(4, 8));
@@ -21,24 +40,30 @@ export class SkillsComponent implements OnInit {
   readonly skillImages = viewChildren<ElementRef<HTMLImageElement>>('skillImg');
 
   private readonly technologyService = inject(TechnologyService);
+  private readonly firebaseService   = inject(FirebaseService);
 
   constructor() {
-    // Al cargarse las tecnologías asíncronamente de la base de datos, 
-    // se insertan en el DOM. En ese momento exacto disparamos el chequeo
-    // de imágenes de caché con un leve retraso para dar tiempo al renderizado.
     effect(() => {
       const techs = this.technologies();
       if (techs.length > 0) {
-        setTimeout(() => {
-          this.checkCompletedImages();
-        }, 100);
+        setTimeout(() => this.checkCompletedImages(), 100);
       }
     });
   }
 
   async ngOnInit(): Promise<void> {
-    const techs = await this.technologyService.getTechnologies();
+    const [techs, remoteCerts] = await Promise.all([
+      this.technologyService.getTechnologies(),
+      this.firebaseService.getList<CertEntry>('education'),
+    ]);
     this.technologies.set(techs);
+    if (remoteCerts.length > 0) {
+      this.certs.set(remoteCerts.sort((a, b) => (a.order ?? 999) - (b.order ?? 999)));
+    }
+  }
+
+  toggleCerts(): void {
+    this.certsOpen.update(v => !v);
   }
 
   private checkCompletedImages(): void {
@@ -46,9 +71,7 @@ export class SkillsComponent implements OnInit {
       const img = ref.nativeElement;
       if (img.complete) {
         const key = img.getAttribute('data-img-key');
-        if (key) {
-          this.onImageLoad(key);
-        }
+        if (key) this.onImageLoad(key);
       }
     });
   }

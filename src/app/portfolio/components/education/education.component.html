@@ -4,42 +4,37 @@
 
       <div class="edu-sticky reveal-left">
         <p class="section-label">Formación</p>
-        <h2 class="section-title">Educación &amp;<br>Certificados</h2>
-        <p class="section-desc">Aprendizaje constante como ventaja competitiva.</p>
-        <div class="edu-legend">
-          <div class="edu-legend-item">
-            <div class="edu-legend-dot" style="background:#a78bfa"></div> Frontend / Angular
-          </div>
-          <div class="edu-legend-item">
-            <div class="edu-legend-dot" style="background:#34d399"></div> Backend / Testing
-          </div>
-          <div class="edu-legend-item">
-            <div class="edu-legend-dot" style="background:#60a5fa"></div> Data / Python
-          </div>
-          <div class="edu-legend-item">
-            <div class="edu-legend-dot" style="background:#fbbf24"></div> Educación formal
-          </div>
-        </div>
+        <h2 class="section-title">Certificaciones</h2>
+        <p class="section-desc">Aprendizaje continuo aplicado a cada proyecto.</p>
       </div>
 
-      <div class="reveal-right">
-        <div class="edu-table-head">
-          <span>Año</span>
-          <span>Certificado</span>
-          <span>Categoría</span>
-        </div>
-        <div class="edu-table">
-          @for (edu of educations; track edu.title; let i = $index) {
-            <div class="edu-row">
-              <span class="edu-row-year">{{ edu.year }}</span>
-              <div class="edu-row-info">
-                <div class="edu-row-title">{{ edu.title }}</div>
-                <div class="edu-row-platform">{{ edu.platform }}</div>
-              </div>
-              <span class="edu-cat {{ getCatClass(edu, i) }}">{{ getCatLabel(edu, i) }}</span>
+      <div class="edu-certs reveal-right">
+        @for (edu of educations; track edu.title) {
+          <div class="cert-row">
+            <div class="cert-info">
+              <span class="cert-title">{{ edu.title }}</span>
+              <span class="cert-platform">{{ edu.platform }}</span>
             </div>
-          }
-        </div>
+            <span class="cert-year">{{ edu.year }}</span>
+            <div class="cert-actions">
+              @if (edu.url) {
+                <a [href]="edu.url" target="_blank" rel="noopener noreferrer" class="cert-btn cert-btn-view">
+                  Ver
+                </a>
+              }
+              @if (edu.downloadUrl) {
+                <a [href]="edu.downloadUrl" target="_blank" rel="noopener noreferrer" download class="cert-btn cert-btn-download">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Descargar
+                </a>
+              }
+            </div>
+          </div>
+        }
       </div>
 
     </div>

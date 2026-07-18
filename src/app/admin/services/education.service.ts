@@ -7,6 +7,8 @@ export interface EducationEntry {
   title: string;
   platform: string;
   category: string;
+  url?: string;
+  downloadUrl?: string;
   order?: number;
 }
 

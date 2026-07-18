@@ -54,6 +54,19 @@
           }
         </div>
 
+        <div class="form-row">
+          <div class="form-group">
+            <label>URL para ver el certificado</label>
+            <input formControlName="url" type="url" placeholder="https://..." />
+            <span class="field-hint">Aparece como botón "Ver". Opcional.</span>
+          </div>
+          <div class="form-group">
+            <label>URL para descargar</label>
+            <input formControlName="downloadUrl" type="url" placeholder="https://..." />
+            <span class="field-hint">Aparece como botón "Descargar". Opcional.</span>
+          </div>
+        </div>
+
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="saving">
             {{ saving ? 'Guardando...' : (editingId ? 'Actualizar' : 'Crear') }}

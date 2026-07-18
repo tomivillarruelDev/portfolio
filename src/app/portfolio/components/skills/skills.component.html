@@ -109,5 +109,54 @@
       </div>
 
     </div>
+
+    <!-- ── ACORDEÓN CERTIFICACIONES ── -->
+    <div class="certs-accordion">
+      <div class="certs-header">
+        <span class="certs-toggle-label">Certificaciones</span>
+      </div>
+
+      <div class="certs-list">
+        @for (cert of certs(); track cert.title; let i = $index) {
+          @if (i < 2 || certsOpen()) {
+            <div class="cert-item">
+              <div class="cert-item-info">
+                <span class="cert-item-name">{{ cert.title }}</span>
+                <span class="cert-item-platform">{{ cert.platform }}</span>
+              </div>
+              @if (cert.year) {
+                <span class="cert-item-year">{{ cert.year }}</span>
+              }
+              @if (cert.url || cert.downloadUrl) {
+                <div class="cert-item-actions">
+                  @if (cert.url) {
+                    <a [href]="cert.url" target="_blank" rel="noopener noreferrer" class="cert-pill cert-pill-view">Ver</a>
+                  }
+                  @if (cert.downloadUrl) {
+                    <a [href]="cert.downloadUrl" target="_blank" rel="noopener noreferrer" download class="cert-pill cert-pill-dl">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      Descargar
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      @if (certs().length > 2) {
+        <button class="certs-toggle" (click)="toggleCerts()" [attr.aria-expanded]="certsOpen()">
+          <svg class="certs-chevron" [class.open]="certsOpen()"
+               width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+          {{ certsOpen() ? 'Ver menos' : 'Ver ' + (certs().length - 2) + ' más' }}
+        </button>
+      }
+    </div>
+
   </div>
 </section>

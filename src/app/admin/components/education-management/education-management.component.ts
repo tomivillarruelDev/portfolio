@@ -44,10 +44,12 @@ export class EducationManagementComponent implements OnInit {
 
   buildForm(entry?: EducationEntry) {
     this.form = this.fb.group({
-      year:     [entry?.year     ?? '', Validators.required],
-      title:    [entry?.title    ?? '', Validators.required],
-      platform: [entry?.platform ?? '', Validators.required],
-      category: [entry?.category ?? 'Frontend', Validators.required],
+      year:        [entry?.year        ?? '', Validators.required],
+      title:       [entry?.title       ?? '', Validators.required],
+      platform:    [entry?.platform    ?? '', Validators.required],
+      category:    [entry?.category    ?? 'Frontend', Validators.required],
+      url:         [entry?.url         ?? ''],
+      downloadUrl: [entry?.downloadUrl ?? ''],
     });
   }
 
