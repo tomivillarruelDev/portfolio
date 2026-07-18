@@ -205,7 +205,22 @@
   gap: 16px;
   padding: 13px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background 0.15s;
+  transition: background 0.2s ease, padding-left 0.25s ease;
+  position: relative;
+}
+
+.cert-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--purple-2), transparent);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+  border-radius: 2px;
 }
 
 .cert-item:last-child {
@@ -213,7 +228,12 @@
 }
 
 .cert-item:hover {
-  background: rgba(124, 58, 237, 0.05);
+  background: rgba(124, 58, 237, 0.08);
+  padding-left: 24px;
+}
+
+.cert-item:hover::before {
+  transform: scaleY(1);
 }
 
 .cert-item-info {
