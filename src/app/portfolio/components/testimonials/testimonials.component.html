@@ -11,7 +11,7 @@
           <div class="testi-quote">"</div>
           <p class="testi-text" [innerHTML]="item.text"></p>
           <div class="testi-author">
-            <div class="testi-avatar">{{ item.avatar }}</div>
+            <div class="testi-avatar" [innerHTML]="sanitizeHtml(item.avatar)"></div>
             <div>
               <div class="testi-name">{{ item.name }}</div>
               <div class="testi-role">{{ item.role }}</div>

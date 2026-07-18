@@ -39,12 +39,31 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label>Avatar / Emoji *</label>
-            <input formControlName="avatar" placeholder="Ej: 👨‍💼, 👩‍💻, 🧑‍🔬 o iniciales" />
+            <label>Icono sugerido</label>
+            <select [value]="selectedAvatarType" (change)="onSelectDefaultAvatar($event)">
+              <option value="custom">— Personalizado (Iniciales o propio SVG) —</option>
+              <option value="user">Usuario clásico</option>
+              <option value="code">Tecnología (Código)</option>
+              <option value="business">Empresa (Maletín)</option>
+              <option value="globe">Global (Web / Remoto)</option>
+              <option value="star">Estrellas / Destacado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contenido del Avatar (Iniciales o SVG) *</label>
+            <input formControlName="avatar" placeholder="Ej: <svg>...</svg> o iniciales (ej: CM)" />
             @if (form.get('avatar')?.invalid && form.get('avatar')?.touched) {
               <span class="field-error">Campo requerido</span>
             }
           </div>
+        </div>
+
+        <div class="avatar-preview-section">
+          <span>Vista previa del avatar:</span>
+          <div class="entry-avatar-display" [innerHTML]="sanitizeHtml(form.get('avatar')?.value)"></div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group">
             <label>Estrellas (1 a 5) *</label>
             <select formControlName="stars">
@@ -99,7 +118,7 @@
               </svg>
             </button>
           </div>
-          <div class="entry-avatar-display">{{ entry.avatar }}</div>
+          <div class="entry-avatar-display" [innerHTML]="sanitizeHtml(entry.avatar)"></div>
           <div class="entry-info">
             <div class="entry-title">{{ entry.name }}</div>
             <div class="entry-platform">{{ entry.role }}</div>

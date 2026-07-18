@@ -41,6 +41,8 @@ ngx-skeleton-loader {
   --muted:    #8b8aad;
   --border:   rgba(124,58,237,0.22);
   --glass:    rgba(124,58,237,0.07);
+  --danger:   #f87171;
+  --danger-bg: rgba(239, 68, 68, 0.1);
 }
 
 html { scroll-behavior: smooth; color-scheme: dark; }
@@ -162,6 +164,51 @@ body.admin-mode textarea:focus {
   background: rgba(255, 255, 255, 0.06) !important;
 }
 
+body.admin-mode select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 16px !important;
+  padding-right: 40px !important;
+  cursor: pointer !important;
+}
+
+body.admin-mode select option {
+  background: #120e2b !important;
+  color: #ffffff !important;
+  padding: 10px !important;
+}
+
+/* ── VALIDACIONES DE FORMULARIO EN ADMIN ── */
+body.admin-mode input.ng-invalid.ng-touched,
+body.admin-mode select.ng-invalid.ng-touched,
+body.admin-mode textarea.ng-invalid.ng-touched {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+  background: rgba(239, 68, 68, 0.02) !important;
+}
+
+body.admin-mode input.ng-invalid.ng-touched:focus,
+body.admin-mode select.ng-invalid.ng-touched:focus,
+body.admin-mode textarea.ng-invalid.ng-touched:focus {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;
+  background: rgba(239, 68, 68, 0.04) !important;
+}
+
+/* Unificación de etiquetas de error en Admin */
+body.admin-mode .field-error,
+body.admin-mode .validation-error {
+  color: var(--danger) !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  margin-top: 0.35rem !important;
+  display: block !important;
+}
+
 body.admin-mode label,
 body.admin-mode .form-group label {
   color: var(--text) !important;
@@ -222,6 +269,9 @@ body.admin-mode app-project-form,
 body.admin-mode app-dashboard,
 body.admin-mode app-technology-management,
 body.admin-mode app-experience-management,
+body.admin-mode app-references-management,
+body.admin-mode app-whatsapp-management,
+body.admin-mode app-captcha-management,
 body.admin-mode app-education-management,
 body.admin-mode app-stats-management,
 body.admin-mode app-cv-upload,
