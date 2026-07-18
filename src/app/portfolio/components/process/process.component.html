@@ -15,15 +15,18 @@
               <stop offset="100%" stop-color="#f472b6"/>
             </linearGradient>
             <filter id="lineGlow">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
               <feMerge>
                 <feMergeNode in="blur"/>
                 <feMergeNode in="SourceGraphic"/>
               </feMerge>
             </filter>
+            <clipPath id="lineClip" #lineClip></clipPath>
           </defs>
-          <path class="path-trail" #pathTrail/>
-          <path class="path-line" #pathLine/>
+          <g clip-path="url(#lineClip)">
+            <path class="path-trail" #pathTrail/>
+            <path class="path-line" #pathLine/>
+          </g>
         </svg>
 
         <div class="steps-grid">

@@ -21,6 +21,7 @@ export class ProcessComponent implements AfterViewInit, OnDestroy {
   @ViewChild('timelineSvg') svgRef!: ElementRef<SVGSVGElement>;
   @ViewChild('pathLine') pathLineRef!: ElementRef<SVGPathElement>;
   @ViewChild('pathTrail') pathTrailRef!: ElementRef<SVGPathElement>;
+  @ViewChild('lineClip') lineClipRef!: ElementRef<SVGClipPathElement>;
   @ViewChildren('stepCircle') circleRefs!: QueryList<ElementRef<HTMLElement>>;
 
   private animated = false;
@@ -70,6 +71,8 @@ export class ProcessComponent implements AfterViewInit, OnDestroy {
     this.pathTrailRef.nativeElement.setAttribute('d', d);
     this.pathLineRef.nativeElement.setAttribute('d', d);
 
+    this.updateClipPath(pts, w, h);
+
     const total = this.pathLineRef.nativeElement.getTotalLength();
     const line = this.pathLineRef.nativeElement;
     line.style.transition = 'none';
@@ -78,7 +81,6 @@ export class ProcessComponent implements AfterViewInit, OnDestroy {
   }
 
   private smoothPath(pts: { x: number; y: number }[], totalWidth: number): string {
-    // Cubic bezier S-curve through all points with horizontal tail extensions
     let d = `M 0 ${pts[0].y} L ${pts[0].x} ${pts[0].y}`;
     for (let i = 0; i < pts.length - 1; i++) {
       const a = pts[i];
@@ -88,6 +90,26 @@ export class ProcessComponent implements AfterViewInit, OnDestroy {
     }
     d += ` L ${totalWidth} ${pts[pts.length - 1].y}`;
     return d;
+  }
+
+  private updateClipPath(pts: { x: number; y: number }[], w: number, h: number): void {
+    if (!this.lineClipRef) return;
+    const clipEl = this.lineClipRef.nativeElement;
+
+    // Circle radius (36) + border (2) + 4px clearance = 42
+    const r = 42;
+
+    // evenodd: outer rect is visible area; each circle arc punches a hole
+    let d = `M0,0 H${w} V${h} H0 Z`;
+    pts.forEach(p => {
+      d += ` M${p.x - r},${p.y} a${r},${r} 0 1,0 ${r * 2},0 a${r},${r} 0 1,0 -${r * 2},0`;
+    });
+
+    clipEl.innerHTML = '';
+    const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pathEl.setAttribute('d', d);
+    pathEl.setAttribute('fill-rule', 'evenodd');
+    clipEl.appendChild(pathEl);
   }
 
   private setupIntersectionObserver(): void {
