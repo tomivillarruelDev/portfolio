@@ -1,0 +1,300 @@
+#process {
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.process-orb-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.03) 0%, transparent 70%);
+  top: -10%;
+  left: -20%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.process-orb-2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.02) 0%, transparent 70%);
+  bottom: -10%;
+  right: -20%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.process-inner {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.process-inner .section-label {
+  justify-content: center;
+}
+
+.process-inner .section-label::before {
+  display: none;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 56px;
+  position: relative;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.process-step {
+  padding: 24px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(8px);
+  position: relative;
+  text-align: left;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  animation: pulseCard 9s infinite linear;
+}
+
+/* 1. LÍNEA CONECTORA ESTÁTICA (Siempre visible - Desktop) */
+.process-step::after {
+  content: '';
+  position: absolute;
+  top: 38px; /* Centrado con el número */
+  right: -29px;
+  width: 29px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08); /* Fina y siempre visible */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* El último elemento de cada fila no tiene línea en desktop */
+@media (min-width: 993px) {
+  .process-step:nth-child(3n)::after {
+    display: none;
+  }
+}
+
+/* 2. HAZ DE LUZ FLUYENTE (Se desliza sobre la línea estática - Desktop) */
+.process-step::before {
+  content: '';
+  position: absolute;
+  top: 38px;
+  right: -29px;
+  width: 29px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--purple-2), var(--pink), transparent);
+  background-size: 200% 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  animation: pulseLine 9s infinite linear;
+}
+
+@media (min-width: 993px) {
+  .process-step:nth-child(3n)::before {
+    display: none;
+  }
+}
+
+.step-badge-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.step-number {
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  background: linear-gradient(135deg, #fff 40%, rgba(255, 255, 255, 0.3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: background 0.3s ease;
+}
+
+.step-badge-text {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--purple-2);
+  text-transform: uppercase;
+}
+
+.step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── RETARDOS DE ANIMACIÓN (1.5s por paso) ── */
+.process-step:nth-child(1) { animation-delay: 0s; }
+.process-step:nth-child(2) { animation-delay: 1.5s; }
+.process-step:nth-child(3) { animation-delay: 3s; }
+.process-step:nth-child(4) { animation-delay: 4.5s; }
+.process-step:nth-child(5) { animation-delay: 6s; }
+.process-step:nth-child(6) { animation-delay: 7.5s; }
+
+/* El haz de luz empieza a correr un poco después de que se active la tarjeta */
+.process-step:nth-child(1)::before { animation-delay: 0.8s; }
+.process-step:nth-child(2)::before { animation-delay: 2.3s; }
+.process-step:nth-child(3)::before { animation-delay: 3.8s; }
+.process-step:nth-child(4)::before { animation-delay: 5.3s; }
+.process-step:nth-child(5)::before { animation-delay: 6.8s; }
+.process-step:nth-child(6)::before { animation-delay: 8.3s; }
+
+/* ── ANIMACIÓN DE LA TARJETA (PULSO DE ENERGÍA) ── */
+@keyframes pulseCard {
+  0% {
+    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.015);
+    box-shadow: none;
+    transform: translateY(0);
+  }
+  4% {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(124, 58, 237, 0.04);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.1);
+    transform: translateY(-4px);
+  }
+  14% {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(124, 58, 237, 0.04);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.1);
+    transform: translateY(-4px);
+  }
+  18%, 100% {
+    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.015);
+    box-shadow: none;
+    transform: translateY(0);
+  }
+}
+
+/* ── ANIMACIÓN DEL HAZ DE LUZ FLUYENTE ── */
+@keyframes pulseLine {
+  0% {
+    opacity: 0;
+    background-position: 200% 0;
+  }
+  4% {
+    opacity: 1;
+    background-position: 100% 0;
+  }
+  14% {
+    opacity: 1;
+    background-position: 0% 0;
+  }
+  18%, 100% {
+    opacity: 0;
+    background-position: -100% 0;
+  }
+}
+
+/* Hover manual sobreescribe suavemente */
+.process-step:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  background: rgba(124, 58, 237, 0.05) !important;
+  box-shadow: 0 12px 25px rgba(124, 58, 237, 0.15) !important;
+  z-index: 10;
+}
+
+.process-step:hover .step-number {
+  background: linear-gradient(135deg, var(--purple-2), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+  .process-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Resetear regla de 3 columnas */
+  .process-step::after,
+  .process-step::before {
+    display: block;
+  }
+  
+  .process-step:nth-child(2n)::after,
+  .process-step:nth-child(2n)::before {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  /* Conector estático vertical en móviles */
+  .process-step::after {
+    top: auto;
+    bottom: -37px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 1px;
+    height: 37px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Haz de luz vertical en móviles */
+  .process-step::before {
+    top: auto;
+    bottom: -37px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 1.5px;
+    height: 37px;
+    background: linear-gradient(180deg, transparent, var(--purple-2), var(--pink), transparent);
+    background-size: 100% 200%;
+    opacity: 0;
+  }
+
+  .process-step:last-child::after,
+  .process-step:last-child::before {
+    display: none;
+  }
+
+  @keyframes pulseLine {
+    0% {
+      opacity: 0;
+      background-position: 0% 200%;
+    }
+    4% {
+      opacity: 1;
+      background-position: 0% 100%;
+    }
+    14% {
+      opacity: 1;
+      background-position: 0% 0%;
+    }
+    18%, 100% {
+      opacity: 0;
+      background-position: 0% -100%;
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { SkillsComponent } from '../../components/skills/skills.component';
 import { ExperienceComponent } from '../../components/experience/experience.component';
 import { EducationComponent } from '../../components/education/education.component';
 import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
+import { ProcessComponent } from '../../components/process/process.component';
 import { ContactComponent } from '../../components/contact/contact.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { WhatsappButtonComponent } from '../../components/whatsapp-button/whatsapp-button.component';
@@ -31,6 +32,7 @@ gsap.registerPlugin(ScrollTrigger);
     ExperienceComponent,
     EducationComponent,
     TestimonialsComponent,
+    ProcessComponent,
     ContactComponent,
     FooterComponent,
     WhatsappButtonComponent,
