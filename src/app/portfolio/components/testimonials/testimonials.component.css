@@ -8,7 +8,8 @@
 }
 
 #testimonials .reveal .section-title {
-  font-size: clamp(34px, 4.5vw, 52px);
+  font-size: clamp(22px, 2.8vw, 32px);
+  letter-spacing: -0.8px;
 }
 
 #testimonials {
@@ -21,7 +22,8 @@
 }
 
 #testimonials .reveal .section-title {
-  font-size: clamp(34px, 4.5vw, 52px);
+  font-size: clamp(22px, 2.8vw, 32px);
+  letter-spacing: -0.8px;
 }
 
 .testi-grid {

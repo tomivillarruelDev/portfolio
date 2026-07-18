@@ -481,8 +481,9 @@ section[id] { scroll-margin-top: 80px; }
   font-size: 11px; font-weight: 700; letter-spacing: 3.5px; text-transform: uppercase;
   color: var(--purple-3); margin-bottom: 14px;
 }
-.section-label::before { content: ''; display: block; width: 28px; height: 1px; background: linear-gradient(90deg, var(--purple-2), transparent); }
+
 .section-title { font-size: clamp(30px, 4vw, 46px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.08; margin-bottom: 14px; }
+.section-title em { font-style: italic; font-weight: 400; letter-spacing: -0.5px; }
 .section-desc { font-size: 15.5px; color: var(--muted); max-width: 480px; line-height: 1.75; }
 
 /* ── BUTTONS ── */
