@@ -23,8 +23,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/robots.txt",
-              "src/sitemap.xml",
-              "src/manifest.webmanifest"
+              "src/sitemap.xml"
             ],
             "styles": ["src/styles.css"],
             "scripts": [],
@@ -82,8 +81,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/robots.txt",
-              "src/sitemap.xml",
-              "src/manifest.webmanifest"
+              "src/sitemap.xml"
             ],
             "styles": ["src/styles.css"],
             "scripts": []
