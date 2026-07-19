@@ -132,6 +132,19 @@ export class ProjectsComponent implements OnDestroy {
         }
       }
     });
+    this.scheduleScrollTriggerRefresh();
+  }
+
+  // Las imágenes (Firebase, red real) pueden tardar más que los refresh()
+  // fijos de initGsap y cambian el aspect-ratio/alto de .browser-screen al
+  // cargar. Si eso pasa después del último refresh(), el ScrollTrigger queda
+  // con el "start" del pin desactualizado y reaparece un hueco antes del
+  // primer proyecto. Recalculamos cada vez que termina de cargar una imagen.
+  private refreshDebounce: any;
+  private scheduleScrollTriggerRefresh(): void {
+    if (!this.gsapInited) return;
+    clearTimeout(this.refreshDebounce);
+    this.refreshDebounce = setTimeout(() => ScrollTrigger.refresh(), 60);
   }
 
   ngOnDestroy(): void {
@@ -171,6 +184,7 @@ export class ProjectsComponent implements OnDestroy {
         this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
       }
     }
+    this.scheduleScrollTriggerRefresh();
   }
 
   getBrowserAspectRatio(project: Project): string {
@@ -336,14 +350,62 @@ export class ProjectsComponent implements OnDestroy {
       if (orbits.length) gsap.set(orbits, { opacity: 0 });
     });
 
-    const tl = gsap.timeline();
     const [e1, e2] = els;
-    tl.to(e1.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, 0)
-      .to(e1.orbits, { opacity: 0.95, duration: 0.14 }, 0.04)
-      .to(e1.narr!,   { x: 0, opacity: 1, duration: 0.18, ease: 'power2.out' }, 0.12)
-      .to(e1.chips,  { y: 0, opacity: 1, stagger: 0.04, duration: 0.14 }, 0.16)
-      .to(e1.badges, { opacity: 1, stagger: 0.05, duration: 0.14 }, 0.20)
-      .to({}, { duration: 0.14 })
+
+    // El reveal del proyecto 1 vive en su PROPIO ScrollTrigger (no en el
+    // pineado) y NO usa scrub: dispara la animación completa "de golpe" (como
+    // siempre) apenas el stage entra en pantalla, en vez de recién cuando
+    // engancha el pin ('top top') 100vh más tarde, que era el hueco vacío real.
+    // Con scrub quedaba atado 1:1 al scroll y se sentía gradual/parallax en
+    // vez del pop de siempre.
+    const header    = e1.sc.querySelector<HTMLElement>('.proj-logo, .proj-eyebrow');
+    const name      = e1.sc.querySelector<HTMLElement>('.proj-name:not(.sr-only)');
+    const tagline   = e1.sc.querySelector<HTMLElement>('.proj-tagline');
+    const body      = e1.sc.querySelector<HTMLElement>('.proj-body');
+    const metrics   = Array.from(e1.sc.querySelectorAll<HTMLElement>('.proj-metric'));
+    const stackTags = Array.from(e1.sc.querySelectorAll<HTMLElement>('.stack-tag'));
+    const links     = Array.from(e1.sc.querySelectorAll<HTMLElement>('.proj-link'));
+    const textLines = [header, name, tagline, body].filter((el): el is HTMLElement => !!el);
+
+    // Estado inicial extra SOLO para la entrada del proyecto 1: el resto de
+    // props (scale/y/opacity de frame, narr, chips, badges, orbits) ya las
+    // deja listas el forEach de arriba, igual que en la escena 2.
+    // Amplitudes grandes y timeline estirado (~2.4s) a propósito: tiene que
+    // notarse a simple vista, no ser un detalle sutil de medio segundo.
+    gsap.set(e1.frame!, { rotationY: -50, rotationX: 8, scale: 1.35, filter: 'blur(22px)', transformPerspective: 1200 });
+    gsap.set(e1.badges, { scale: 0.3, rotation: -12 });
+    gsap.set(e1.chips,  { scale: 0.4, y: -70 });
+    gsap.set(textLines, { opacity: 0, y: 40 });
+    gsap.set(metrics,   { opacity: 0, y: 45, scale: 0.6 });
+    gsap.set(stackTags, { opacity: 0, y: 24, scale: 0.4, rotation: -8 });
+    gsap.set(links,     { opacity: 0, y: 36, scale: 0.6 });
+
+    const introTl = gsap.timeline({ paused: true });
+    introTl
+      .to(e1.frame!, { scale: 1, y: 0, rotationY: 0, rotationX: 0, filter: 'blur(0px)', opacity: 1, duration: 0.9, ease: 'elastic.out(1, 0.6)' }, 0)
+      .to(e1.orbits, { opacity: 0.95, scale: 1, duration: 0.7, ease: 'back.out(1.4)' }, 0.15)
+      .to(e1.narr!,  { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
+      .to(header ? [header] : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.45)
+      .to(name   ? [name]   : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.58)
+      .to(tagline ? [tagline] : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.71)
+      .to(body   ? [body]   : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.84)
+      .to(e1.chips,  { y: 0, scale: 1, opacity: 1, rotation: 0, stagger: 0.12, duration: 0.55, ease: 'elastic.out(1, 0.55)' }, 1.0)
+      .to(e1.badges, { scale: 1, opacity: 1, rotation: 0, stagger: 0.1, duration: 0.55, ease: 'elastic.out(1, 0.55)' }, 1.15)
+      .to(metrics,   { opacity: 1, y: 0, scale: 1, stagger: 0.14, duration: 0.6, ease: 'elastic.out(1, 0.6)' }, 1.35)
+      .to(stackTags, { opacity: 1, y: 0, scale: 1, rotation: 0, stagger: 0.07, duration: 0.5, ease: 'back.out(2.2)' }, 1.65)
+      .to(links,     { opacity: 1, y: 0, scale: 1, stagger: 0.18, duration: 0.55, ease: 'back.out(2)' }, 1.9);
+
+    ScrollTrigger.create({
+      trigger: stage, start: 'top 20%',
+      onEnter: () => introTl.play(),
+      onLeaveBack: () => introTl.reverse(),
+    });
+
+    const tl = gsap.timeline();
+    // El pin arranca con el proyecto 1 ya revelado (por el ScrollTrigger de
+    // arriba); esta pausa reemplaza esa fase para que el crossfade hacia el
+    // proyecto 2 siga cayendo en el mismo punto de scroll que antes.
+    tl.to({}, { duration: 0.63 })
       .to(scenes[0], { autoAlpha: 0, duration: 0.12 })
       .to(scenes[1], { autoAlpha: 1, duration: 0.10 }, '<0.04')
       .to(e2.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, '<0.04')
