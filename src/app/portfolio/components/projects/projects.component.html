@@ -6,7 +6,7 @@
       <div class="ph-eyebrow">
         <span class="ph-chip">Trabajo selecto</span>
         <span class="ph-sep"></span>
-        <span class="ph-cnt">03 proyectos</span>
+        <span class="ph-cnt">{{ featuredProjects().length < 10 ? '0' + featuredProjects().length : featuredProjects().length }} proyectos</span>
       </div>
 
       <div class="ph-title-block">
@@ -27,8 +27,7 @@
   </div>
 
   @for (project of featuredProjects(); track project.name; let i = $index) {
-    @if (i < 2) {
-      <div class="proj-scene" [class.reverse]="i % 2 === 1" [attr.data-n]="i === 0 ? '01' : '02'">
+    <div class="proj-scene" [class.reverse]="i % 2 === 1" [attr.data-n]="(i + 1) < 10 ? '0' + (i + 1) : (i + 1)">
 
         <div class="proj-stage">
           <div class="proj-orbit"></div>
@@ -331,7 +330,6 @@
         </div>
 
       </div>
-    }
   }
 
   @if (featuredProjects().length === 0) {

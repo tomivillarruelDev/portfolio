@@ -156,9 +156,8 @@ export class ProjectsComponent implements OnDestroy {
 
   private async loadProjects() {
     const all = await this.firebaseService.getProjects('projects-image');
-    const featured = all.slice(0, 2);
-    this.featuredProjects.set(featured);
-    featured.forEach(p => this.startAutoplay(p));
+    this.featuredProjects.set(all);
+    all.forEach(p => this.startAutoplay(p));
   }
 
   scrollToContact(event: Event): void {
@@ -340,7 +339,7 @@ export class ProjectsComponent implements OnDestroy {
     }));
 
     gsap.set(scenes[0], { autoAlpha: 1 });
-    gsap.set(scenes[1], { autoAlpha: 0 });
+    scenes.slice(1).forEach(sc => gsap.set(sc, { autoAlpha: 0 }));
 
     els.forEach(({ frame, narr, badges, chips, orbits, isRev }) => {
       if (frame)         gsap.set(frame,  { scale: 1.20, y: 90, opacity: 0 });
@@ -350,7 +349,7 @@ export class ProjectsComponent implements OnDestroy {
       if (orbits.length) gsap.set(orbits, { opacity: 0 });
     });
 
-    const [e1, e2] = els;
+    const e1 = els[0];
 
     // El reveal del proyecto 1 vive en su PROPIO ScrollTrigger (no en el
     // pineado) y NO usa scrub: dispara la animación completa "de golpe" (como
@@ -404,20 +403,27 @@ export class ProjectsComponent implements OnDestroy {
     const tl = gsap.timeline();
     // El pin arranca con el proyecto 1 ya revelado (por el ScrollTrigger de
     // arriba); esta pausa reemplaza esa fase para que el crossfade hacia el
-    // proyecto 2 siga cayendo en el mismo punto de scroll que antes.
-    tl.to({}, { duration: 0.63 })
-      .to(scenes[0], { autoAlpha: 0, duration: 0.12 })
-      .to(scenes[1], { autoAlpha: 1, duration: 0.10 }, '<0.04')
-      .to(e2.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, '<0.04')
-      .to(e2.orbits, { opacity: 0.95, duration: 0.14 }, '<0.04')
-      .to(e2.narr!,   { x: 0, opacity: 1, duration: 0.18, ease: 'power2.out' }, '<0.10')
-      .to(e2.chips,  { y: 0, opacity: 1, stagger: 0.04, duration: 0.14 }, '<0.14')
-      .to(e2.badges, { opacity: 1, stagger: 0.05, duration: 0.14 }, '<0.17')
-      .to({}, { duration: 0.10 });
+    // proyecto 2 (y los siguientes) siga cayendo en el mismo punto de scroll que antes.
+    for (let i = 1; i < els.length; i++) {
+      const currentScene = scenes[i - 1];
+      const nextScene = scenes[i];
+      const nextEl = els[i];
 
+      tl.to({}, { duration: 0.63 })
+        .to(currentScene, { autoAlpha: 0, duration: 0.12 })
+        .to(nextScene, { autoAlpha: 1, duration: 0.10 }, '<0.04')
+        .to(nextEl.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, '<0.04')
+        .to(nextEl.orbits, { opacity: 0.95, duration: 0.14 }, '<0.04')
+        .to(nextEl.narr!,   { x: 0, opacity: 1, duration: 0.18, ease: 'power2.out' }, '<0.10')
+        .to(nextEl.chips,  { y: 0, opacity: 1, stagger: 0.04, duration: 0.14 }, '<0.14')
+        .to(nextEl.badges, { opacity: 1, stagger: 0.05, duration: 0.14 }, '<0.17');
+    }
+    tl.to({}, { duration: 0.10 });
+
+    const totalScrollPercent = (scenes.length - 1) * 130;
     ScrollTrigger.create({
       trigger: stage, pin: true, pinSpacing: true, scrub: 1.4,
-      start: 'top top', end: '+=130%', animation: tl,
+      start: 'top top', end: `+=${totalScrollPercent}%`, animation: tl,
     });
 
     setTimeout(() => ScrollTrigger.refresh(), 100);

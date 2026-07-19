@@ -71,6 +71,8 @@ export class FirebaseService {
         : [],
     }));
 
-    return this.projects.filter(p => p.isVisible !== false);
+    return this.projects
+      .filter(p => p.isVisible !== false)
+      .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
   }
 }
