@@ -329,21 +329,21 @@
 .carousel-control {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateZ(30px) !important;
   width: 38px;
   height: 38px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
-  z-index: 10;
+  z-index: 20 !important;
   opacity: 0;
   pointer-events: none;
   padding: 0;
@@ -358,21 +358,23 @@
   right: 14px;
 }
 
-/* Mostrar controles al hacer hover sobre la tarjeta */
-.browser-screen:hover .carousel-control {
-  opacity: 1;
-  pointer-events: auto;
+/* Mostrar controles al hacer hover sobre el frame */
+.proj-frame:hover .carousel-control,
+.carousel-container:hover .carousel-control {
+  opacity: 0.75 !important;
+  pointer-events: auto !important;
 }
 
 .carousel-control:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-50%) scale(1.06);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-50%) scale(1.06) translateZ(35px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
 }
 .carousel-control:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.95) translateZ(30px) !important;
 }
 
 /* Indicadores de puntos inferiores */
@@ -380,18 +382,20 @@
   position: absolute;
   bottom: 12px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(30px) !important;
   display: flex;
   gap: 7px;
-  z-index: 10;
+  z-index: 20 !important;
   padding: 6px 10px;
   border-radius: 20px;
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .indicator-dot {
@@ -459,3 +463,46 @@
   opacity: 0.6;
 }
 
+/* --- AJUSTES DE TAMAÑO PARA EL MOCKUP DE TELÉFONO (MÁS GRANDE Y LEGIBLE) --- */
+.phone-frame {
+  width: 230px !important;
+  border-radius: 36px !important;
+  padding: 16px 10px 10px !important;
+}
+
+.phone-screen {
+  height: 430px !important;
+  border-radius: 26px !important;
+}
+
+.phone-notch {
+  width: 80px !important;
+  height: 20px !important;
+  margin-bottom: 10px !important;
+}
+
+.phone-notch::before {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.phone-notch::after {
+  width: 32px !important;
+  height: 4px !important;
+}
+
+.phone-home-bar {
+  width: 80px !important;
+  height: 4px !important;
+  margin-top: 10px !important;
+}
+
+/* --- CONTENEDOR DE MOCKUPS --- */
+.mockups-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 440px;
+}

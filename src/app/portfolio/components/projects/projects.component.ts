@@ -57,18 +57,42 @@ const STATIC_FALLBACK: {
   },
 ];
 
+import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'portfolio-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css'],
   standalone: true,
   imports: [CommonModule, ProjectCardComponent, NgxSkeletonLoaderModule],
+  animations: [
+    trigger('mockupTransition', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)', filter: 'blur(5px)' }),
+        animate('0.4s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1, transform: 'scale(1) translateZ(0)', filter: 'blur(0px)' }))
+      ]),
+      transition(':leave', [
+        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)', filter: 'blur(5px)', position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 1 })
+      ])
+    ])
+  ]
 })
 export class ProjectsComponent implements OnDestroy {
   readonly featuredProjects = signal<Project[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
   readonly imageAspectRatios = signal<Record<string, number>>({});
   currentImageIndex: Record<string, number> = {};
+
+  isCurrentImageMobile(project: Project): boolean {
+    const idx = this.currentImageIndex[project.id] || 0;
+    const key = project.id + '_' + idx;
+    const ratio = this.imageAspectRatios()[key];
+    if (ratio !== undefined) {
+      return ratio < 1.0;
+    }
+    return !!project.isMobileView;
+  }
+  
   private autoplayIntervals: Record<string, any> = {};
   private gsapInited = false;
 
