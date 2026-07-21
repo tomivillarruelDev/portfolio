@@ -305,14 +305,17 @@
           <p class="proj-tagline" [innerHTML]="getTagline(i, project)"></p>
           <p class="proj-body">{{ project.description }}</p>
 
-          <div class="proj-metrics">
-            @for (m of getMetrics(i, project); track m.val) {
-              <div class="proj-metric">
-                <div class="proj-metric-val">{{ m.val }}</div>
-                <div class="proj-metric-lab">{{ m.lab }}</div>
-              </div>
-            }
-          </div>
+          @let metricsList = getMetrics(i, project);
+          @if (metricsList.length > 0) {
+            <div class="proj-metrics">
+              @for (m of metricsList; track $index) {
+                <div class="proj-metric">
+                  <div class="proj-metric-val">{{ m.val }}</div>
+                  <div class="proj-metric-lab">{{ m.lab }}</div>
+                </div>
+              }
+            </div>
+          }
 
           <div class="proj-stack-row">
             @for (tech of project.technologies; track tech) {
