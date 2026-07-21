@@ -20,7 +20,13 @@
       <div class="small-card-desc">{{project.description}}</div>
       <div class="small-card-tags">
         @for (tech of project.technologies; track $index) {
-          <span class="small-tag">{{tech}}</span>
+          <span class="small-tag" [attr.title]="tech">
+            @if (getTechIcon(tech)) {
+              <img [src]="getTechIcon(tech)" [alt]="tech" class="small-tag-img" loading="lazy" />
+            } @else {
+              <span class="tech-ic {{ getTechClass(tech) }}">{{ getTechAbbr(tech) }}</span>
+            }
+          </span>
         }
       </div>
     </div>

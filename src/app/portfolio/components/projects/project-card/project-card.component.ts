@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { Project } from 'src/app/portfolio/interfaces/project.interface';
 import { FirebaseService } from 'src/app/portfolio/services/firebase.service';
 import { CommonModule } from '@angular/common';
+import { getTechClass, getTechAbbr } from 'src/app/portfolio/constants/tech-map.constant';
 
 @Component({
     selector: 'portfolio-card-projects',
@@ -28,6 +29,14 @@ export class ProjectCardComponent {
     const resp = await this.firebaseService.getProjects('projects');
     this.projects.set(resp);
   }
+
+  getTechIcon(techName: string): string | null {
+    if (!techName) return null;
+    return this.firebaseService.techIconCache()[techName.trim().toLowerCase()] || null;
+  }
+
+  getTechClass(tech: string): string { return getTechClass(tech); }
+  getTechAbbr(tech: string): string { return getTechAbbr(tech); }
 
   showProjects() {
     const total = this.projects().length;

@@ -798,6 +798,7 @@ section[id] { scroll-margin-top: 80px; }
 .small-projects-label { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
 .small-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 14px; margin-top: 24px; }
 .small-card {
+  display: flex; flex-direction: column; height: 100%;
   padding: 26px 24px; border-radius: 16px; border: 1px solid var(--border);
   background: var(--glass); backdrop-filter: blur(10px);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden;
@@ -811,19 +812,22 @@ section[id] { scroll-margin-top: 80px; }
 .small-card-links a { color: var(--muted); transition: color 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); text-decoration: none; font-size: 15px; display: flex; }
 .small-card-links a:hover { color: var(--purple-3); transform: scale(1.2); }
 .small-card-name { font-size: 15px; font-weight: 700; margin-bottom: 7px; }
-.small-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
-.small-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.small-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; flex: 1; }
+.small-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; align-items: center; }
 .small-tag {
-  padding: 3px 9px; border-radius: 50px; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); font-size: 10.5px; color: var(--purple-3); font-weight: 500;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  width: 28px; height: 28px; border-radius: 8px;
+  border: none; background: rgba(124,58,237,0.06);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   cursor: default;
 }
 .small-tag:hover {
-  transform: translateY(-2px) scale(1.06);
-  border-color: rgba(192, 132, 252, 0.45);
-  background-color: rgba(124, 58, 237, 0.18);
-  color: var(--text);
-  box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+  transform: translateY(-2px) scale(1.12);
+  background: rgba(124,58,237,0.18);
+  box-shadow: 0 4px 12px rgba(124,58,237,0.25);
+}
+.small-tag-img {
+  width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; border-radius: 4px;
 }
 
 /* ── SKILLS SECTION ── */
