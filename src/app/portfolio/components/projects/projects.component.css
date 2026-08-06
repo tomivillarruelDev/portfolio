@@ -432,23 +432,15 @@
   border-radius: 4px;
 }
 
-/* Ajustes responsivos para dispositivos táctiles donde no hay hover */
+/* Ajustes responsivos para dispositivos táctiles: ocultar botones flotantes sobre la foto para mantenerla limpia */
 @media (max-width: 900px) {
   .carousel-control {
-    opacity: 0.85;
-    pointer-events: auto;
-    width: 32px;
-    height: 32px;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
-  .carousel-control.prev {
-    left: 8px;
-  }
-  .carousel-control.next {
-    right: 8px;
-  }
-  .carousel-control svg {
-    width: 16px;
-    height: 16px;
+  .carousel-container:active .carousel-control {
+    opacity: 0.8 !important;
+    pointer-events: auto !important;
   }
   .carousel-indicators {
     bottom: 8px;
@@ -530,13 +522,71 @@
   overflow: hidden;
 }
 
-@media (max-width: 600px) {
-  .mockups-wrapper {
-    min-height: 520px;
-    padding: 10px 0;
+/* ── EXTERNAL CAROUSEL NAV (mobile only) ── */
+.carousel-nav-external {
+  display: none;
+}
+
+.carousel-ext-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--purple-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.carousel-ext-btn:active {
+  transform: scale(0.92);
+  background: rgba(124, 58, 237, 0.18);
+}
+
+.carousel-ext-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+@media (max-width: 900px) {
+  /* Show external nav, hide internal controls and indicators */
+  .carousel-nav-external {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .carousel-control {
+    display: none !important;
+  }
+
+  .carousel-indicators {
+    display: none !important;
+  }
+
+  /* Stack frame + nav vertically. Frame type is fixed per-project on mobile
+     so min-height and overflow:hidden are not needed — natural height is stable. */
+  .mockups-wrapper {
+    flex-direction: column;
+    gap: 0;
+    min-height: unset;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 600px) {
+  .mockups-wrapper {
+    padding: 10px 0;
   }
 }
 

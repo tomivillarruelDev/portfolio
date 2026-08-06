@@ -51,11 +51,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
   animations: [
     trigger('mockupTransition', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)', filter: 'blur(5px)' }),
-        animate('0.4s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1, transform: 'scale(1) translateZ(0)', filter: 'blur(0px)' }))
+        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)' }),
+        animate('0.35s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1, transform: 'scale(1) translateZ(0)' }))
       ]),
       transition(':leave', [
-        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)', filter: 'blur(5px)', position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 1 })
+        style({ position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 1 }),
+        animate('0.2s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 0, transform: 'scale(0.96) translateZ(0)' }))
       ])
     ])
   ]
@@ -64,10 +65,11 @@ export class ProjectsComponent implements OnDestroy {
   readonly featuredProjects = signal<Project[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
   readonly imageAspectRatios = signal<Record<string, number>>({});
-  currentImageIndex: Record<string, number> = {};
+  readonly currentImageIndex = signal<Record<string, number>>({});
 
   isCurrentImageMobile(project: Project): boolean {
-    const idx = this.currentImageIndex[project.id] || 0;
+    const isMobile = window.innerWidth < 900;
+    const idx = isMobile ? 0 : (this.currentImageIndex()[project.id] || 0);
     const key = project.id + '_' + idx;
     const ratio = this.imageAspectRatios()[key];
     if (ratio !== undefined) {
@@ -194,15 +196,13 @@ export class ProjectsComponent implements OnDestroy {
   }
 
   getBrowserAspectRatio(project: Project): string {
-    const idx = this.currentImageIndex[project.id] || 0;
-    const key = project.id + '_' + idx;
+    const key = project.id + '_0';
     const ratio = this.imageAspectRatios()[key];
-    return ratio ? `${ratio}` : '1.6'; // Fallback 16/10
+    return ratio ? `${ratio}` : '1.6';
   }
 
   getBrowserMaxWidth(project: Project): number {
-    const idx = this.currentImageIndex[project.id] || 0;
-    const key = project.id + '_' + idx;
+    const key = project.id + '_0';
     const ratio = this.imageAspectRatios()[key];
     if (!ratio) return 600;
     if (ratio >= 1.2) return 600;
@@ -283,8 +283,8 @@ export class ProjectsComponent implements OnDestroy {
     }
     const images = this.getProjectImages(project);
     if (images.length <= 1) return;
-    const current = this.currentImageIndex[project.id] || 0;
-    this.currentImageIndex[project.id] = current === 0 ? images.length - 1 : current - 1;
+    const current = this.currentImageIndex()[project.id] || 0;
+    this.currentImageIndex.update(s => ({ ...s, [project.id]: current === 0 ? images.length - 1 : current - 1 }));
   }
 
   nextImage(project: Project, event?: Event): void {
@@ -295,8 +295,8 @@ export class ProjectsComponent implements OnDestroy {
     }
     const images = this.getProjectImages(project);
     if (images.length <= 1) return;
-    const current = this.currentImageIndex[project.id] || 0;
-    this.currentImageIndex[project.id] = current === images.length - 1 ? 0 : current + 1;
+    const current = this.currentImageIndex()[project.id] || 0;
+    this.currentImageIndex.update(s => ({ ...s, [project.id]: current === images.length - 1 ? 0 : current + 1 }));
   }
 
   goToImage(project: Project, index: number, event?: Event): void {
@@ -305,7 +305,7 @@ export class ProjectsComponent implements OnDestroy {
       event.preventDefault();
       this.resetAutoplay(project);
     }
-    this.currentImageIndex[project.id] = index;
+    this.currentImageIndex.update(s => ({ ...s, [project.id]: index }));
   }
 
   getTechIcon(techName: string): string | null {

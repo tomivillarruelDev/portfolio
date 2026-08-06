@@ -796,7 +796,7 @@ section[id] { scroll-margin-top: 80px; }
 .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
 .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
 .browser-bar { flex: 1; height: 24px; background: rgba(255,255,255,0.04); border-radius: 5px; display: flex; align-items: center; padding: 0 10px; font-size: 10.5px; color: var(--muted); }
-.browser-screen { height: 350px; border-radius: 0 0 14px 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.browser-screen { height: 350px; border-radius: 0 0 14px 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .proj-glow { position: absolute; width: 180px; height: 180px; border-radius: 50%; filter: blur(55px); opacity: 0.7; }
 .proj-pin-stage {
   position: relative;
@@ -1140,9 +1140,9 @@ footer span { color: var(--purple-3); }
 
   .proj-frame { max-width: 100% !important; width: 100%; }
   .browser-frame { max-width: 100% !important; width: 100%; }
-  .browser-screen { height: auto; max-height: 310px; }
-  /* Prevent layout shift when carousel switches between phone/browser mockup */
-  .mockups-wrapper { min-height: 520px !important; display: flex; align-items: center; justify-content: center; }
+  /* Fixed height on mobile — overrides inline height:auto and aspect-ratio so
+     the browser-screen never resizes when carousel advances to a different image. */
+  .browser-screen { height: 260px !important; max-height: 260px !important; aspect-ratio: unset !important; }
   .proj-scene::before { font-size: min(50vw, 240px); }
   .proj-name { font-size: clamp(26px, 7.5vw, 48px); letter-spacing: -1.5px; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
   .small-projects { margin-top: 48px; }
