@@ -214,5 +214,7 @@
     grid-template-columns: 1fr;
     gap: 48px;
   }
-  .dev-headline { font-size: clamp(36px, 11vw, 64px); }
+  .dev-profile {
+    display: none !important;
+  }
 }
