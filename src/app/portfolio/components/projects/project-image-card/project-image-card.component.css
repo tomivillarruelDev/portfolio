@@ -1,12 +1,12 @@
 .image-container {
   position: relative;
-  min-width: 350px; /* Asegúrate de que este sea el ancho de tu imagen */
-  min-height: 226px; /* Asegúrate de que este sea la altura de tu imagen */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 226px;
   background-color: var(--gray);
   overflow: hidden;
   border-radius: 0.8rem;
-
-
 }
 .slide-image {
   position: absolute;

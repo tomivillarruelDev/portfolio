@@ -534,3 +534,9 @@
     padding: 10px 0;
   }
 }
+
+@media (max-width: 900px) {
+  .ph-clip-row {
+    clip-path: none !important;
+  }
+}

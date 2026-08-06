@@ -99,11 +99,11 @@ export class ProjectsComponent implements OnDestroy {
     });
 
     effect(() => {
-      const projects = this.featuredProjects();
-      if (projects.length > 0) {
-        setTimeout(() => {
-          this.checkCompletedImages();
-        }, 100);
+      const images = this.projectImages();
+      if (images.length > 0) {
+        this.checkCompletedImages();
+        setTimeout(() => this.checkCompletedImages(), 100);
+        setTimeout(() => this.checkCompletedImages(), 400);
       }
     });
 

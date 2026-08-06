@@ -36,25 +36,10 @@
           @if (project.iconURL) {
             <div class="proj-badge pb-icon">
               <div style="position:relative;width:32px;height:32px;flex-shrink:0;">
-                @if (!imagesLoaded()[project.id + '_icon']) {
-                  <ngx-skeleton-loader
-                    [theme]="{
-                      height: '32px',
-                      width: '32px',
-                      'border-radius': '8px',
-                      'background-color': 'rgba(255, 255, 255, 0.08)',
-                      margin: '0',
-                      display: 'block'
-                    }"
-                    animation="pulse"
-                  ></ngx-skeleton-loader>
-                }
                 <img #projImg [src]="project.iconURL" [alt]="project.name"
                      [attr.data-img-key]="project.id + '_icon'"
                      (load)="onImageLoad(project.id + '_icon')"
-                     [style.opacity]="imagesLoaded()[project.id + '_icon'] ? 1 : 0"
-                     style="position:absolute;top:0;left:0;width:32px;height:32px;object-fit:contain;border-radius:8px;display:block;transition:opacity 0.4s ease;"
-                     loading="lazy" />
+                     style="position:absolute;top:0;left:0;width:32px;height:32px;object-fit:contain;border-radius:8px;display:block;" />
               </div>
             </div>
           }
@@ -93,15 +78,11 @@
                      (mouseleave)="startAutoplay(project)">
                   @let phoneImages = getProjectImages(project);
                   @if (phoneImages.length === 1) {
-                    @if (!imagesLoaded()[project.id + '_0']) {
-                      <ngx-skeleton-loader [theme]="{ height: '100%', width: '100%', 'border-radius': '0', 'background-color': 'rgba(255,255,255,0.08)', margin: '0', display: 'block' }" animation="pulse"></ngx-skeleton-loader>
-                    }
                     <img #projImg [src]="phoneImages[0]" [alt]="project.name"
                          [attr.data-img-key]="project.id + '_0'"
-                         (load)="onImageLoad(project.id + '_0')"
+                         (load)="onImageLoad(project.id + '_0', $event)"
                          (click)="openViewer($event, project, 0)"
-                         [style.opacity]="imagesLoaded()[project.id + '_0'] ? 1 : 0"
-                         style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy" />
+                         style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;cursor:pointer;" />
                     <div class="iv-zoom-hint" (click)="openViewer($event, project, 0)">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                     </div>
@@ -110,15 +91,11 @@
                       <div class="carousel-slides" [style.transform]="'translateX(-' + (currentImageIndex[project.id] || 0) * 100 + '%)'" style="display:flex;width:100%;height:100%;transition:transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);">
                         @for (img of phoneImages; track img; let imgIdx = $index) {
                           <div class="carousel-slide" style="min-width:100%;width:100%;height:100%;position:relative;">
-                            @if (!imagesLoaded()[project.id + '_' + imgIdx]) {
-                              <ngx-skeleton-loader [theme]="{ height: '100%', width: '100%', 'border-radius': '0', 'background-color': 'rgba(255,255,255,0.08)', margin: '0', display: 'block' }" animation="pulse"></ngx-skeleton-loader>
-                            }
                             <img #projImg [src]="img" [alt]="project.name + ' - Foto ' + (imgIdx + 1)"
                                  [attr.data-img-key]="project.id + '_' + imgIdx"
-                                 (load)="onImageLoad(project.id + '_' + imgIdx)"
+                                 (load)="onImageLoad(project.id + '_' + imgIdx, $event)"
                                  (click)="openViewer($event, project, imgIdx)"
-                                 [style.opacity]="imagesLoaded()[project.id + '_' + imgIdx] ? 1 : 0"
-                                 style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy" />
+                                 style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;cursor:pointer;" />
                             <div class="iv-zoom-hint" (click)="openViewer($event, project, imgIdx)">
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                             </div>
@@ -170,15 +147,11 @@
                        style="padding:0;width:100%;height:auto;max-height:450px;">
                     @let images = getProjectImages(project);
                     @if (images.length === 1) {
-                      @if (!imagesLoaded()[project.id + '_0']) {
-                        <ngx-skeleton-loader [theme]="{ height: '100%', width: '100%', 'border-radius': '0', 'background-color': 'rgba(255, 255, 255, 0.08)', margin: '0', display: 'block' }" animation="pulse"></ngx-skeleton-loader>
-                      }
                       <img #projImg [src]="images[0]" [alt]="project.name"
                            [attr.data-img-key]="project.id + '_0'"
                            (load)="onImageLoad(project.id + '_0', $event)"
                            (click)="openViewer($event, project, 0)"
-                           [style.opacity]="imagesLoaded()[project.id + '_0'] ? 1 : 0"
-                           style="width:100%;height:100%;object-fit:contain;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
+                           style="width:100%;height:100%;object-fit:contain;display:block;cursor:pointer;"/>
                       <div class="iv-zoom-hint" (click)="openViewer($event, project, 0)">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                       </div>
@@ -187,15 +160,11 @@
                         <div class="carousel-slides" [style.transform]="'translateX(-' + (currentImageIndex[project.id] || 0) * 100 + '%)'" style="display:flex;width:100%;height:100%;transition:transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);">
                           @for (img of images; track img; let imgIdx = $index) {
                             <div class="carousel-slide" style="min-width:100%;width:100%;height:100%;position:relative;">
-                              @if (!imagesLoaded()[project.id + '_' + imgIdx]) {
-                                <ngx-skeleton-loader [theme]="{ height: '100%', width: '100%', 'border-radius': '0', 'background-color': 'rgba(255, 255, 255, 0.08)', margin: '0', display: 'block' }" animation="pulse"></ngx-skeleton-loader>
-                              }
                               <img #projImg [src]="img" [alt]="project.name + ' - Foto ' + (imgIdx + 1)"
                                    [attr.data-img-key]="project.id + '_' + imgIdx"
                                    (load)="onImageLoad(project.id + '_' + imgIdx, $event)"
                                    (click)="openViewer($event, project, imgIdx)"
-                                   [style.opacity]="imagesLoaded()[project.id + '_' + imgIdx] ? 1 : 0"
-                                   style="width:100%;height:100%;object-fit:contain;display:block;transition:opacity 0.4s ease;cursor:pointer;" loading="lazy"/>
+                                   style="width:100%;height:100%;object-fit:contain;display:block;cursor:pointer;"/>
                               <div class="iv-zoom-hint" (click)="openViewer($event, project, imgIdx)">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                               </div>
@@ -248,25 +217,10 @@
               <!-- Modo A: wordmark — el logo ya trae el texto -->
               <div class="proj-logo">
                 <div class="proj-logo-img-wrap proj-logo-img-wrap--wordmark">
-                  @if (!imagesLoaded()[project.id + '_logo']) {
-                    <ngx-skeleton-loader
-                      [theme]="{
-                        height: '56px',
-                        width: '220px',
-                        'border-radius': '6px',
-                        'background-color': 'rgba(255, 255, 255, 0.08)',
-                        margin: '0',
-                        display: 'block'
-                      }"
-                      animation="pulse"
-                    ></ngx-skeleton-loader>
-                  }
                   <img #projImg [src]="project.logoURL" [alt]="project.name"
                        [attr.data-img-key]="project.id + '_logo'"
                        (load)="onImageLoad(project.id + '_logo')"
-                       [style.opacity]="imagesLoaded()[project.id + '_logo'] ? 1 : 0"
-                       style="position:absolute;top:0;left:0;height:56px;width:auto;max-width:260px;object-fit:contain;display:block;transition:opacity 0.4s ease;"
-                       loading="lazy" />
+                       style="height:56px;width:auto;max-width:260px;object-fit:contain;display:block;" />
                 </div>
               </div>
               <h3 class="sr-only">{{ project.name }}</h3>
@@ -274,25 +228,10 @@
               <!-- Modo B: ícono + nombre -->
               <div class="proj-logo proj-logo--with-name">
                 <div class="proj-logo-img-wrap proj-logo-img-wrap--icon">
-                  @if (!imagesLoaded()[project.id + '_logo']) {
-                    <ngx-skeleton-loader
-                      [theme]="{
-                        height: '48px',
-                        width: '48px',
-                        'border-radius': '8px',
-                        'background-color': 'rgba(255, 255, 255, 0.08)',
-                        margin: '0',
-                        display: 'block'
-                      }"
-                      animation="pulse"
-                    ></ngx-skeleton-loader>
-                  }
                   <img #projImg [src]="project.logoURL" [alt]="project.name + ' logo'"
                        [attr.data-img-key]="project.id + '_logo'"
                        (load)="onImageLoad(project.id + '_logo')"
-                       [style.opacity]="imagesLoaded()[project.id + '_logo'] ? 1 : 0"
-                       style="position:absolute;top:0;left:0;width:48px;height:48px;object-fit:contain;border-radius:8px;display:block;transition:opacity 0.4s ease;"
-                       loading="lazy" />
+                       style="width:48px;height:48px;object-fit:contain;border-radius:8px;display:block;" />
                 </div>
                 <h3 class="proj-name" [innerHTML]="getNameHtml(i, project)"></h3>
               </div>

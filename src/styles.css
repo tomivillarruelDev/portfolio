@@ -45,11 +45,30 @@ ngx-skeleton-loader {
   --danger-bg: rgba(239, 68, 68, 0.1);
 }
 
-html { scroll-behavior: smooth; color-scheme: dark; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
 body {
   font-family: 'Inter', sans-serif;
-  background: var(--bg); color: var(--text);
-  overflow-x: hidden; line-height: 1.6;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+#main-content {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ── ADMIN DARK THEME OVERRIDE ── */
@@ -595,7 +614,7 @@ section[id] { scroll-margin-top: 80px; }
 /* ── PROJECTS ── */
 .proj-scene {
   display: grid; grid-template-columns: 1.15fr 0.85fr;
-  align-items: center; min-height: 100vh; position: relative; overflow: visible;
+  align-items: center; min-height: 100vh; position: relative; overflow: hidden;
   padding: 0 12px; max-width: 1400px; margin: 0 auto;
 }
 .proj-scene.reverse { grid-template-columns: 0.85fr 1.15fr; }
@@ -1133,7 +1152,7 @@ footer span { color: var(--purple-3); }
   #about   { padding: 80px 0; }
   #skills  { padding: 80px 0; }
   #contact { padding: 80px 0 60px; }
-  #projects { overflow-x: clip; }
+  #projects { overflow-x: hidden; width: 100%; max-width: 100%; }
 
   /* Nav CTA: shorter */
   .nav-cta { font-size: 12px; padding: 7px 14px; white-space: nowrap; }
