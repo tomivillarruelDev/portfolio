@@ -310,7 +310,51 @@ export class ProjectsComponent implements OnDestroy {
   }
 
   private initGsap(): void {
-    if (window.innerWidth < 900) return;
+    if (window.innerWidth < 900) {
+      const section = document.querySelector<HTMLElement>('#projects');
+      if (!section) return;
+      const scenes = Array.from(section.querySelectorAll<HTMLElement>('.proj-scene'));
+      scenes.forEach(sc => {
+        const frame = sc.querySelector<HTMLElement>('.proj-frame');
+        const narr  = sc.querySelector<HTMLElement>('.proj-narrative');
+        const tags  = Array.from(sc.querySelectorAll<HTMLElement>('.stack-tag'));
+        const links = Array.from(sc.querySelectorAll<HTMLElement>('.proj-link'));
+
+        if (frame) {
+          gsap.fromTo(frame,
+            { opacity: 0, y: 36, scale: 0.94 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'power2.out',
+              scrollTrigger: { trigger: sc, start: 'top 85%', toggleActions: 'play none none reverse' }
+            }
+          );
+        }
+        if (narr) {
+          gsap.fromTo(narr,
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.1,
+              scrollTrigger: { trigger: sc, start: 'top 85%', toggleActions: 'play none none reverse' }
+            }
+          );
+        }
+        if (tags.length) {
+          gsap.fromTo(tags,
+            { opacity: 0, scale: 0.85 },
+            { opacity: 1, scale: 1, stagger: 0.05, duration: 0.45, ease: 'back.out(1.6)',
+              scrollTrigger: { trigger: sc, start: 'top 80%', toggleActions: 'play none none reverse' }
+            }
+          );
+        }
+        if (links.length) {
+          gsap.fromTo(links,
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+              scrollTrigger: { trigger: sc, start: 'top 75%', toggleActions: 'play none none reverse' }
+            }
+          );
+        }
+      });
+      return;
+    }
 
     const section = document.querySelector<HTMLElement>('#projects');
     if (!section) return;

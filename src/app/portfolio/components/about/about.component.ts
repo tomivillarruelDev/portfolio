@@ -19,14 +19,13 @@ export class AboutComponent implements AfterViewInit {
 
   private initAnimations(): void {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (window.innerWidth < 900) return;
 
     const rows = document.querySelectorAll<HTMLElement>('.cap-row');
     if (rows.length) {
       gsap.set(rows, { x: 14, opacity: 0 });
       ScrollTrigger.create({
         trigger: '.cap-list',
-        start: 'top 65%',
+        start: 'top 80%',
         once: true,
         onEnter: () => gsap.to(rows, {
           x: 0, opacity: 1,

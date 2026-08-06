@@ -71,16 +71,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   private initAllAnimations(): void {
-    this.initRevealObserver();  // always: handles .reveal via IntersectionObserver
-    this.initNavShrink();       // always
-    this.initStatCounters();    // always: number counters work on all screens
-    this.initCtaBanner();       // always: fixed banner visible on about+experience
+    this.initRevealObserver();  // handles .reveal, .reveal-left, .reveal-right via IntersectionObserver
+    this.initNavShrink();       // navbar shrink on scroll
+    this.initStatCounters();    // number counters
+    this.initCtaBanner();       // floating banner
 
-    // GSAP scrub animations set opacity:0 inline — skip on mobile where
-    // scroll triggers don't complete reliably, leaving content invisible
-    if (window.innerWidth < 900) return;
+    if (window.innerWidth >= 900) {
+      this.initHeroExit();
+    }
 
-    this.initHeroExit();
     this.initStatCols();
     this.initSectionLabels();
     this.initSectionTitles();
@@ -94,6 +93,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initContactCard();
   }
 
+  private getST(el: Element, start = 'top 88%', end = 'top 48%', scrubVal = 0.6) {
+    return window.innerWidth < 900
+      ? { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+      : { trigger: el, scrub: scrubVal, start, end };
+  }
+
   private initRevealObserver(): void {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -101,34 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         else e.target.classList.remove('visible');
       });
     }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
-    document.querySelectorAll('.reveal,.stagger').forEach(el => io.observe(el));
-
-    if (window.innerWidth < 900) {
-      // On mobile, make reveal-left/right immediately visible instead of scrub-animating
-      document.querySelectorAll<HTMLElement>('.reveal-left, .reveal-right').forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-        el.style.transition = 'none';
-      });
-      return;
-    }
-
-    document.querySelectorAll<HTMLElement>('.reveal-left').forEach(el => {
-      el.style.transition = 'none';
-      gsap.fromTo(el,
-        { x: -40, opacity: 0 },
-        { x: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 88%', end: 'top 48%' } }
-      );
-    });
-    document.querySelectorAll<HTMLElement>('.reveal-right').forEach(el => {
-      el.style.transition = 'none';
-      gsap.fromTo(el,
-        { x: 40, opacity: 0 },
-        { x: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 88%', end: 'top 48%' } }
-      );
-    });
+    document.querySelectorAll('.reveal, .stagger, .reveal-left, .reveal-right').forEach(el => io.observe(el));
   }
 
   private initNavShrink(): void {
@@ -161,7 +139,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 36, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 86%', end: 'top 40%' } }
+          scrollTrigger: this.getST(el, 'top 86%', 'top 40%', 0.7) }
       );
     });
   }
@@ -173,7 +151,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.to(obj, {
         val: target, ease: 'power2.out',
         onUpdate: () => { el.textContent = Math.round(obj.val).toString(); },
-        scrollTrigger: { trigger: el, scrub: 1.2, start: 'top 82%', end: 'top 30%' },
+        scrollTrigger: this.getST(el, 'top 82%', 'top 30%', 1.2),
       });
     });
   }
@@ -183,7 +161,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
         { clipPath: 'inset(0 0% 0 0)', opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.5, start: 'top 92%', end: 'top 62%' } }
+          scrollTrigger: this.getST(el, 'top 92%', 'top 62%', 0.5) }
       );
     });
   }
@@ -193,7 +171,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 48, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.6, start: 'top 88%', end: 'top 48%' } }
+          scrollTrigger: this.getST(el, 'top 88%', 'top 48%', 0.6) }
       );
     });
   }
@@ -203,7 +181,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.5, start: 'top 90%', end: 'top 55%' } }
+          scrollTrigger: this.getST(el, 'top 90%', 'top 55%', 0.5) }
       );
     });
   }
@@ -225,8 +203,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .to(content,  { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, 0.22);
 
       ScrollTrigger.create({
-        trigger: entry, scrub: 0.9,
-        start: 'top 88%', end: 'top 28%',
+        ...this.getST(entry, 'top 88%', 'top 28%', 0.9),
         animation: tl,
       });
     });
@@ -241,7 +218,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(pills,
         { scale: 0.82, opacity: 0 },
         { scale: 1, opacity: 1, stagger: 0.06, ease: 'power2.out',
-          scrollTrigger: { trigger: group as Element, scrub: 0.9, start: 'top 82%', end: 'top 18%' } }
+          scrollTrigger: this.getST(group as Element, 'top 82%', 'top 18%', 0.9) }
       );
     });
   }
@@ -251,7 +228,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { scale: 0.94, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
-          scrollTrigger: { trigger: el, scrub: 0.7, start: 'top 88%', end: 'top 48%' } }
+          scrollTrigger: this.getST(el, 'top 88%', 'top 48%', 0.7) }
       );
     });
   }
@@ -262,8 +239,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { scale: 0.90, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
-          scrollTrigger: { trigger: el, scrub: 0.7,
-            start: 'top 90%', end: 'top 50%' } }
+          scrollTrigger: this.getST(el, 'top 90%', 'top 50%', 0.7) }
       );
     };
 
@@ -294,7 +270,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.6, start: 'top 88%', end: 'top 45%' } }
+          scrollTrigger: this.getST(el, 'top 88%', 'top 45%', 0.6) }
       );
     });
   }
@@ -333,7 +309,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: el, scrub: 0.6, start: 'top 88%', end: 'top 45%' } }
+          scrollTrigger: this.getST(el, 'top 88%', 'top 45%', 0.6) }
       );
     });
   }
@@ -350,17 +326,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (label) gsap.fromTo(label,
         { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
         { clipPath: 'inset(0 0% 0 0)', opacity: 1,
-          scrollTrigger: { trigger: label, scrub: 0.5, start: 'top 92%', end: 'top 62%' } }
+          scrollTrigger: this.getST(label, 'top 92%', 'top 62%', 0.5) }
       );
       if (headline) gsap.fromTo(headline,
         { y: 48, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: headline, scrub: 0.6, start: 'top 88%', end: 'top 48%' } }
+          scrollTrigger: this.getST(headline, 'top 88%', 'top 48%', 0.6) }
       );
       if (loss) gsap.fromTo(loss,
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: { trigger: loss, scrub: 0.5, start: 'top 90%', end: 'top 55%' } }
+          scrollTrigger: this.getST(loss, 'top 90%', 'top 55%', 0.5) }
       );
     }
 
@@ -372,7 +348,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(box,
         { scale: 0.94, opacity: 0 },
         { scale: 1, opacity: 1,
-          scrollTrigger: { trigger: box, scrub: 0.7, start: 'top 85%', end: 'top 40%' } }
+          scrollTrigger: this.getST(box, 'top 85%', 'top 40%', 0.7) }
       );
     }
   }
