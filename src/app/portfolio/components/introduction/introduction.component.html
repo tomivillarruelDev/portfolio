@@ -8,6 +8,7 @@
 
       <div class="hero-content">
         <h1 class="hero-title">
+          <span class="sr-only">Tomás Villarruel — Desarrollador Full Stack | Angular &amp; TypeScript</span>
           Código que<br>
           <span class="gradient-text" id="heroGradient">convierte.</span>
         </h1>
@@ -48,7 +49,7 @@
               animation="pulse"
             ></ngx-skeleton-loader>
           } @else if (profileImageUrl()) {
-            <img [src]="profileImageUrl()" alt="Tomás Villarruel"
+            <img [src]="profileImageUrl()" alt="Tomás Villarruel — Desarrollador Full Stack" fetchpriority="high" decoding="async"
                  style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>
           } @else {
             <svg width="200" height="210" viewBox="0 0 200 210" xmlns="http://www.w3.orxg/2000/svg" style="position:relative;z-index:1;" aria-label="Tomás Villarruel">

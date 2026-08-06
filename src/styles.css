@@ -1377,7 +1377,18 @@ footer span { color: var(--purple-3); }
 .btn-outline svg, .proj-link-secondary svg, .social-btn svg {
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
-.btn-outline:hover svg, .proj-link-secondary:hover svg, .social-btn:hover svg {
-  transform: translateY(-2.5px) scale(1.15);
+
+/* ── ACCESSIBILITY & SEO HELPERS ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
+
 
