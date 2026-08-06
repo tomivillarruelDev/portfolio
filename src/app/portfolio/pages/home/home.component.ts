@@ -7,7 +7,6 @@ import { AboutComponent } from '../../components/about/about.component';
 import { ProjectsComponent } from '../../components/projects/projects.component';
 import { SkillsComponent } from '../../components/skills/skills.component';
 import { ExperienceComponent } from '../../components/experience/experience.component';
-import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
 import { ProcessComponent } from '../../components/process/process.component';
 import { ContactComponent } from '../../components/contact/contact.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
@@ -29,7 +28,6 @@ gsap.registerPlugin(ScrollTrigger);
     ProjectsComponent,
     SkillsComponent,
     ExperienceComponent,
-    TestimonialsComponent,
     ProcessComponent,
     ContactComponent,
     FooterComponent,
@@ -92,7 +90,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initAboutValues();
     this.initSmallCards();
     this.initEduCards();
-    this.initTestimonials();
     this.initOrbParallax();
     this.initContactCard();
   }
@@ -315,7 +312,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   private initCtaBanner(): void {
-    const ids = ['skills', 'projects', 'testimonials'];
+    const ids = ['skills', 'projects'];
     const sections = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!sections.length) return;
 

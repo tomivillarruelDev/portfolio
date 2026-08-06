@@ -60,7 +60,7 @@
 
 .ph-word-fill {
   display: block;
-  font-size: clamp(72px, 13vw, 190px);
+  font-size: clamp(36px, 11vw, 190px);
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 0.87;
@@ -89,7 +89,7 @@
 
 .ph-word-stroke {
   display: block;
-  font-size: clamp(72px, 13vw, 190px);
+  font-size: clamp(36px, 11vw, 190px);
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 0.87;

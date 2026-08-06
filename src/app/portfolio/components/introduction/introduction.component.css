@@ -7,8 +7,7 @@
 .hero-title { font-size: clamp(44px, 6.5vw, 82px); font-weight: 900; line-height: 1.02; letter-spacing: -2.5px; margin-bottom: 12px; }
 .hero-gradient { background: linear-gradient(160deg, #ede9fe 0%, var(--purple-3) 55%, var(--purple-2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; transition: opacity 0.3s, transform 0.3s; }
 .hero-tagline { font-size: 17px; color: var(--muted); max-width: 500px; line-height: 1.75; margin-bottom: 14px; }
-.hero-differentiator { font-size: 14px; color: var(--purple-3); font-weight: 600; margin-bottom: 38px; display: flex; align-items: center; gap: 8px; }
-.hero-differentiator::before { content: '→'; }
+.hero-differentiator { font-size: 14px; color: var(--purple-3); font-weight: 600; margin-bottom: 38px; }
 .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 
 .hero-avatar-wrap { position: relative; width: 260px; height: 260px; flex-shrink: 0; }
@@ -24,7 +23,6 @@
   .hero-grid { grid-template-columns: 1fr; gap: 36px; text-align: center; }
   .hero-avatar-wrap { width: 200px; height: 200px; margin: 0 auto; order: -1; }
   .hero-actions { justify-content: center; }
-  .hero-differentiator { justify-content: center; }
   .hero-scroll { display: none; }
   .hero-tagline { margin: 0 auto 14px; }
 }
