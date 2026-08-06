@@ -242,6 +242,34 @@ export class ProjectsComponent implements OnDestroy {
     }
   }
 
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  onTouchStart(event: TouchEvent): void {
+    if (event.touches.length === 1) {
+      this.touchStartX = event.touches[0].clientX;
+      this.touchStartY = event.touches[0].clientY;
+    }
+  }
+
+  onTouchEnd(project: Project, event: TouchEvent): void {
+    if (event.changedTouches.length === 1) {
+      const touchEndX = event.changedTouches[0].clientX;
+      const touchEndY = event.changedTouches[0].clientY;
+      const diffX = this.touchStartX - touchEndX;
+      const diffY = this.touchStartY - touchEndY;
+
+      // Ensure horizontal swipe is dominant and exceeds threshold (35px)
+      if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) {
+          this.nextImage(project, event);
+        } else {
+          this.prevImage(project, event);
+        }
+      }
+    }
+  }
+
   resetAutoplay(project: Project): void {
     this.stopAutoplay(project);
     this.startAutoplay(project);

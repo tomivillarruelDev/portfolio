@@ -526,12 +526,17 @@
   justify-content: center;
   align-items: center;
   min-height: 440px;
+  /* Contain absolutely-positioned :leave elements during @mockupTransition */
+  overflow: hidden;
 }
 
 @media (max-width: 600px) {
   .mockups-wrapper {
-    min-height: auto;
+    min-height: 520px;
     padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

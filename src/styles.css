@@ -1141,6 +1141,8 @@ footer span { color: var(--purple-3); }
   .proj-frame { max-width: 100% !important; width: 100%; }
   .browser-frame { max-width: 100% !important; width: 100%; }
   .browser-screen { height: auto; max-height: 310px; }
+  /* Prevent layout shift when carousel switches between phone/browser mockup */
+  .mockups-wrapper { min-height: 520px !important; display: flex; align-items: center; justify-content: center; }
   .proj-scene::before { font-size: min(50vw, 240px); }
   .proj-name { font-size: clamp(26px, 7.5vw, 48px); letter-spacing: -1.5px; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
   .small-projects { margin-top: 48px; }
