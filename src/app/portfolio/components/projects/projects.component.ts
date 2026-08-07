@@ -528,21 +528,24 @@ export class ProjectsComponent implements OnDestroy {
 
     scenes.forEach(scene => {
       // With [hidden], both phone-frame and browser-frame are always in the DOM.
-      // querySelectorAll ensures both get the 3D tilt hover — not just the first one.
+      // Apply tilt to the wrapper div (parentElement of .proj-frame) instead of
+      // the frame itself — that way overflow:hidden + border-radius on the frame
+      // never clips the rotated content (the clip box follows the untransformed frame).
       const frames = Array.from(scene.querySelectorAll<HTMLElement>('.proj-frame'));
       frames.forEach(frame => {
+        const tiltTarget = (frame.parentElement ?? frame) as HTMLElement;
         let on = false;
-        frame.addEventListener('mouseenter', () => { on = true; });
-        frame.addEventListener('mousemove', (e: MouseEvent) => {
+        tiltTarget.addEventListener('mouseenter', () => { on = true; });
+        tiltTarget.addEventListener('mousemove', (e: MouseEvent) => {
           if (!on) return;
           const r = frame.getBoundingClientRect();
           const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
           const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-          gsap.to(frame, { rotationX: -dy * 6, rotationY: dx * 8, scale: 1.03, transformPerspective: 1100, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+          gsap.to(tiltTarget, { rotationX: -dy * 5, rotationY: dx * 8, scale: 1.03, transformPerspective: 1100, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
         });
-        frame.addEventListener('mouseleave', () => {
+        tiltTarget.addEventListener('mouseleave', () => {
           on = false;
-          gsap.to(frame, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
+          gsap.to(tiltTarget, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
         });
       });
     });

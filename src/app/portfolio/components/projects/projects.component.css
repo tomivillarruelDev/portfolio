@@ -478,6 +478,14 @@
   isolation: isolate;
 }
 
+/* Wrapper del phone-frame (el div[hidden] renderizado por Angular).
+   Necesita perspective + transform-style para que el tilt 3D del padre
+   llegue al frame sin ser aplanado por un contexto de stacking intermedio. */
+.mockups-wrapper > div {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
 .phone-screen {
   height: 430px !important;
   border-radius: 26px !important;
@@ -518,8 +526,9 @@
   justify-content: center;
   align-items: center;
   min-height: 440px;
-  /* Contain absolutely-positioned :leave elements during @mockupTransition */
-  overflow: hidden;
+  /* overflow:hidden clipeaba el tilt 3D — usamos visible + perspective */
+  overflow: visible;
+  perspective: 1200px;
 }
 
 /* ── EXTERNAL CAROUSEL NAV (mobile only) ── */
