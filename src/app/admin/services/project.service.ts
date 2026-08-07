@@ -22,6 +22,7 @@ export interface Project {
   page?: string | null;
   photoURL?: string | null;
   photoURLs?: string[] | null;
+  photoTypes?: string[] | null;
   logoURL?: string | null;
   logoIsWordmark?: boolean | null;
   iconURL?: string | null;

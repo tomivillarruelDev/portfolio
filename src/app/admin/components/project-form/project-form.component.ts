@@ -39,7 +39,9 @@ export class ProjectFormComponent implements OnInit {
 
   // Propiedades para el carrusel de imágenes
   existingSecondaryUrls: string[] = [];
+  existingSecondaryTypes: string[] = [];
   secondaryPreviews: (string | ArrayBuffer)[] = [];
+  newSecondaryTypes: string[] = [];
   selectedSecondaryFiles: File[] = [];
 
   get loading(): boolean { return this.isLoading; }
@@ -174,8 +176,12 @@ export class ProjectFormComponent implements OnInit {
       }
       if (Array.isArray(project.photoURLs)) {
         this.existingSecondaryUrls = [...project.photoURLs];
+        this.existingSecondaryTypes = project.photoURLs.map((_, i) =>
+          (project.photoTypes ?? [])[i] ?? 'desktop'
+        );
       } else {
         this.existingSecondaryUrls = [];
+        this.existingSecondaryTypes = [];
       }
     } catch {
       this.errorMessage = 'Error al cargar los datos del proyecto.';
@@ -225,6 +231,7 @@ export class ProjectFormComponent implements OnInit {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         this.selectedSecondaryFiles.push(file);
+        this.newSecondaryTypes.push('desktop');
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -238,11 +245,23 @@ export class ProjectFormComponent implements OnInit {
 
   removeExistingSecondary(index: number): void {
     this.existingSecondaryUrls.splice(index, 1);
+    this.existingSecondaryTypes.splice(index, 1);
   }
 
   removeNewSecondary(index: number): void {
     this.selectedSecondaryFiles.splice(index, 1);
     this.secondaryPreviews.splice(index, 1);
+    this.newSecondaryTypes.splice(index, 1);
+  }
+
+  toggleExistingType(index: number): void {
+    this.existingSecondaryTypes[index] =
+      this.existingSecondaryTypes[index] === 'mobile' ? 'desktop' : 'mobile';
+  }
+
+  toggleNewType(index: number): void {
+    this.newSecondaryTypes[index] =
+      this.newSecondaryTypes[index] === 'mobile' ? 'desktop' : 'mobile';
   }
 
   isTechSelected(tech: Technology): boolean {
@@ -325,6 +344,7 @@ export class ProjectFormComponent implements OnInit {
           }
         }
         projectData.photoURLs = [...this.existingSecondaryUrls, ...newSecondaryUrls];
+        projectData.photoTypes = [...this.existingSecondaryTypes, ...this.newSecondaryTypes];
       }
 
       if (this.isEditMode && this.projectId) {

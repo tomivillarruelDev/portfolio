@@ -40,41 +40,37 @@ const STATIC_FALLBACK: {
   },
 ];
 
-import { trigger, transition, style, animate } from '@angular/animations';
-
 @Component({
   selector: 'portfolio-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css'],
   standalone: true,
   imports: [CommonModule, ProjectCardComponent, NgxSkeletonLoaderModule],
-  animations: [
-    trigger('mockupTransition', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.96) translateZ(0)' }),
-        animate('0.35s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1, transform: 'scale(1) translateZ(0)' }))
-      ]),
-      transition(':leave', [
-        style({ position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 1 }),
-        animate('0.2s cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 0, transform: 'scale(0.96) translateZ(0)' }))
-      ])
-    ])
-  ]
 })
 export class ProjectsComponent implements OnDestroy {
   readonly featuredProjects = signal<Project[]>([]);
   readonly imagesLoaded = signal<Record<string, boolean>>({});
   readonly imageAspectRatios = signal<Record<string, number>>({});
   readonly currentImageIndex = signal<Record<string, number>>({});
+  // Stable per-project flag set once when image _0 loads. Never changes during
+  // carousel autoplay, so the phone/browser @if branch never toggles mid-session
+  // (which would reset CSS animations on orbit/badge siblings).
+  readonly projectIsMobile = signal<Record<string, boolean>>({});
 
   isCurrentImageMobile(project: Project): boolean {
-    const isMobile = window.innerWidth < 900;
-    const idx = isMobile ? 0 : (this.currentImageIndex()[project.id] || 0);
-    const key = project.id + '_' + idx;
-    const ratio = this.imageAspectRatios()[key];
-    if (ratio !== undefined) {
-      return ratio < 1.0;
+    const idx = this.currentImageIndex()[project.id] || 0;
+    // photoTypes covers photoURLs[] (secondary images).
+    // The carousel is built as [photoURL, ...photoURLs], so:
+    //   carousel idx 0  → photoURL (no photoTypes entry → fallback)
+    //   carousel idx 1  → photoURLs[0] → photoTypes[0]
+    //   carousel idx N  → photoURLs[N-1] → photoTypes[N-1]
+    const types = project.photoTypes;
+    if (idx > 0 && types && types[idx - 1] !== undefined) {
+      return types[idx - 1] === 'mobile';
     }
+    // idx === 0 (photoURL) or no explicit type: use stable fallback.
+    const cached = this.projectIsMobile()[project.id];
+    if (cached !== undefined) return cached;
     return !!project.isMobileView;
   }
   
@@ -190,9 +186,20 @@ export class ProjectsComponent implements OnDestroy {
       if (img.naturalWidth > 0 && img.naturalHeight > 0) {
         const ratio = img.naturalWidth / img.naturalHeight;
         this.imageAspectRatios.update(state => ({ ...state, [key]: ratio }));
+        // Set the stable phone/browser flag when image 0 loads.
+        // Keyed by projectId (everything before the last '_0').
+        if (key.endsWith('_0')) {
+          const projectId = key.slice(0, -2);
+          if (this.projectIsMobile()[projectId] === undefined) {
+            this.projectIsMobile.update(state => ({ ...state, [projectId]: ratio < 1.0 }));
+          }
+        }
       }
     }
-    this.scheduleScrollTriggerRefresh();
+    // Only refresh ScrollTrigger for layout-affecting images (not carousel slides).
+    if (key.endsWith('_0') || key.endsWith('_logo') || key.endsWith('_icon')) {
+      this.scheduleScrollTriggerRefresh();
+    }
   }
 
   getBrowserAspectRatio(project: Project): string {
@@ -398,7 +405,7 @@ export class ProjectsComponent implements OnDestroy {
       sc.style.position = 'absolute';
       sc.style.top = '0';
       sc.style.left = '50%';
-      sc.style.transform = 'translateX(-50%)';
+      sc.style.transform = '';
       sc.style.width = '100%';
       sc.style.maxWidth = '1400px';
       sc.style.height = '100%';
@@ -406,6 +413,11 @@ export class ProjectsComponent implements OnDestroy {
       sc.style.minHeight = 'unset';
       sc.style.zIndex = String(i + 1);
     });
+
+    // GSAP owns xPercent so it never collides with its own transform writes
+    // (autoAlpha, frame scale/y, narr x, etc.). Must run before any other
+    // gsap.set() call on these elements so the centering is in GSAP's cache.
+    gsap.set(scenes, { xPercent: -50 });
 
     const els = scenes.map(sc => ({
       sc,
@@ -421,8 +433,8 @@ export class ProjectsComponent implements OnDestroy {
     scenes.slice(1).forEach(sc => gsap.set(sc, { autoAlpha: 0 }));
 
     els.forEach(({ frame, narr, badges, chips, orbits, isRev }) => {
-      if (frame)         gsap.set(frame,  { scale: 1.20, y: 90, opacity: 0 });
-      if (narr)          gsap.set(narr,   { x: isRev ? -110 : 110, opacity: 0 });
+      if (frame)         gsap.set(frame,  { scale: 1.06, y: 28, opacity: 0 });
+      if (narr)          gsap.set(narr,   { x: isRev ? -60 : 60, opacity: 0 });
       if (badges.length) gsap.set(badges, { opacity: 0 });
       if (chips.length)  gsap.set(chips,  { y: -50, opacity: 0 });
       if (orbits.length) gsap.set(orbits, { opacity: 0 });
@@ -461,7 +473,7 @@ export class ProjectsComponent implements OnDestroy {
     const introTl = gsap.timeline({ paused: true });
     introTl
       .to(e1.frame!, { scale: 1, y: 0, rotationY: 0, rotationX: 0, filter: 'blur(0px)', opacity: 1, duration: 0.9, ease: 'elastic.out(1, 0.6)' }, 0)
-      .to(e1.orbits, { opacity: 0.95, scale: 1, duration: 0.7, ease: 'back.out(1.4)' }, 0.15)
+      .to(e1.orbits, { opacity: 0.95, duration: 0.7, ease: 'power2.out' }, 0.15)
       .to(e1.narr!,  { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
       .to(header ? [header] : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.45)
       .to(name   ? [name]   : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.58)
@@ -471,7 +483,13 @@ export class ProjectsComponent implements OnDestroy {
       .to(e1.badges, { scale: 1, opacity: 1, rotation: 0, stagger: 0.1, duration: 0.55, ease: 'elastic.out(1, 0.55)' }, 1.15)
       .to(metrics,   { opacity: 1, y: 0, scale: 1, stagger: 0.14, duration: 0.6, ease: 'elastic.out(1, 0.6)' }, 1.35)
       .to(stackTags, { opacity: 1, y: 0, scale: 1, rotation: 0, stagger: 0.07, duration: 0.5, ease: 'back.out(2.2)' }, 1.65)
-      .to(links,     { opacity: 1, y: 0, scale: 1, stagger: 0.18, duration: 0.55, ease: 'back.out(2)' }, 1.9);
+      .to(links,     { opacity: 1, y: 0, scale: 1, stagger: 0.18, duration: 0.55, ease: 'back.out(2)' }, 1.9)
+      .call(() => {
+        // Clear GSAP's inline transform on badges/chips so CSS pb-float animation
+        // takes full control without GSAP's scale/rotation blocking it.
+        if (e1.badges.length) gsap.set(e1.badges, { clearProps: 'transform' });
+        if (e1.chips.length)  gsap.set(e1.chips,  { clearProps: 'transform' });
+      });
 
     ScrollTrigger.create({
       trigger: stage, start: 'top 20%',
@@ -488,14 +506,14 @@ export class ProjectsComponent implements OnDestroy {
       const nextScene = scenes[i];
       const nextEl = els[i];
 
-      tl.to({}, { duration: 0.63 })
-        .to(currentScene, { autoAlpha: 0, duration: 0.12 })
-        .to(nextScene, { autoAlpha: 1, duration: 0.10 }, '<0.04')
-        .to(nextEl.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.22, ease: 'power3.out' }, '<0.04')
-        .to(nextEl.orbits, { opacity: 0.95, duration: 0.14 }, '<0.04')
-        .to(nextEl.narr!,   { x: 0, opacity: 1, duration: 0.18, ease: 'power2.out' }, '<0.10')
-        .to(nextEl.chips,  { y: 0, opacity: 1, stagger: 0.04, duration: 0.14 }, '<0.14')
-        .to(nextEl.badges, { opacity: 1, stagger: 0.05, duration: 0.14 }, '<0.17');
+      tl.to({}, { duration: 0.55 })
+        .to(currentScene, { autoAlpha: 0, duration: 0.20 })
+        .to(nextScene,    { autoAlpha: 1, duration: 0.18 }, '<0.08')
+        .to(nextEl.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.30, ease: 'power2.out' }, '<0.06')
+        .to(nextEl.orbits, { opacity: 0.95, duration: 0.22 }, '<0.06')
+        .to(nextEl.narr!,   { x: 0, opacity: 1, duration: 0.26, ease: 'power2.out' }, '<0.14')
+        .to(nextEl.chips,  { y: 0, opacity: 1, stagger: 0.05, duration: 0.20 }, '<0.18')
+        .to(nextEl.badges, { opacity: 1, stagger: 0.06, duration: 0.20 }, '<0.20');
     }
     tl.to({}, { duration: 0.10 });
 
@@ -509,20 +527,23 @@ export class ProjectsComponent implements OnDestroy {
     setTimeout(() => ScrollTrigger.refresh(), 600);
 
     scenes.forEach(scene => {
-      const frame = scene.querySelector<HTMLElement>('.proj-frame');
-      if (!frame) return;
-      let on = false;
-      frame.addEventListener('mouseenter', () => { on = true; });
-      frame.addEventListener('mousemove', (e: MouseEvent) => {
-        if (!on) return;
-        const r = frame.getBoundingClientRect();
-        const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-        const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-        gsap.to(frame, { rotationX: -dy * 6, rotationY: dx * 8, scale: 1.03, transformPerspective: 1100, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
-      });
-      frame.addEventListener('mouseleave', () => {
-        on = false;
-        gsap.to(frame, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
+      // With [hidden], both phone-frame and browser-frame are always in the DOM.
+      // querySelectorAll ensures both get the 3D tilt hover — not just the first one.
+      const frames = Array.from(scene.querySelectorAll<HTMLElement>('.proj-frame'));
+      frames.forEach(frame => {
+        let on = false;
+        frame.addEventListener('mouseenter', () => { on = true; });
+        frame.addEventListener('mousemove', (e: MouseEvent) => {
+          if (!on) return;
+          const r = frame.getBoundingClientRect();
+          const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+          const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+          gsap.to(frame, { rotationX: -dy * 6, rotationY: dx * 8, scale: 1.03, transformPerspective: 1100, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+        });
+        frame.addEventListener('mouseleave', () => {
+          on = false;
+          gsap.to(frame, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
+        });
       });
     });
   }

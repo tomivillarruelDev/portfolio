@@ -442,6 +442,37 @@
   border-color: rgba(16, 185, 129, 0.3);
 }
 
+.btn-toggle-type {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: #a5b4fc;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  z-index: 3;
+}
+.btn-toggle-type:hover {
+  background: rgba(124, 58, 237, 0.25);
+  border-color: rgba(124, 58, 237, 0.6);
+  color: #c4b5fd;
+}
+.btn-toggle-type.is-mobile {
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+}
+.btn-toggle-type.is-mobile:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.7);
+}
+
 .secondary-upload {
   margin-top: 0.5rem;
 }

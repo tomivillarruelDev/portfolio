@@ -16,6 +16,7 @@ export interface Project {
   page?: string;
   photoURL?: string;
   photoURLs?: string[];
+  photoTypes?: string[];
   logoURL?: string;
   logoIsWordmark?: boolean;
   iconURL?: string;

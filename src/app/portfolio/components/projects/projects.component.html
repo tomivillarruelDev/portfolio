@@ -70,9 +70,9 @@
 
           <div class="mockups-wrapper">
             @let _navImages = getProjectImages(project);
-            @if (isCurrentImageMobile(project)) {
-              <!-- ── PHONE MOCKUP ── -->
-              <div class="phone-frame proj-frame" @mockupTransition>
+            <!-- ── PHONE MOCKUP — always in DOM, hidden when not mobile ── -->
+            <div [hidden]="!isCurrentImageMobile(project)">
+              <div class="phone-frame proj-frame">
                 <div class="phone-notch"></div>
                 <div class="phone-screen"
                      (mouseenter)="stopAutoplay(project)"
@@ -119,11 +119,11 @@
                 </div>
                 <div class="phone-home-bar"></div>
               </div>
-            } @else {
-              <!-- ── BROWSER MOCKUP ── -->
+            </div>
+            <!-- ── BROWSER MOCKUP — always in DOM, hidden when mobile ── -->
+            <div [hidden]="isCurrentImageMobile(project)">
               <div class="proj-frame browser-frame"
-                   [style.max-width.px]="getBrowserMaxWidth(project)"
-                   @mockupTransition>
+                   [style.max-width.px]="getBrowserMaxWidth(project)">
                 <div class="browser-chrome">
                   <div class="browser-dots">
                     <div class="browser-dot dot-r"></div>
@@ -208,7 +208,7 @@
                   </div>
                 }
               </div>
-            }
+            </div>
             @if (_navImages.length > 1) {
               <div class="carousel-nav-external">
                 <button class="carousel-ext-btn" (click)="prevImage(project, $event)" aria-label="Imagen anterior">
