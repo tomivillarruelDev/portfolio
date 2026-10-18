@@ -494,6 +494,19 @@
   transform-style: preserve-3d;
 }
 
+/* ── DESKTOP: animación de entrada al cambiar phone ↔ browser ──
+   Reemplaza al viejo @mockupTransition (Angular) sin destruir el DOM: al pasar
+   de [hidden] (display:none) a visible, el browser reinicia la animation CSS. */
+@media (min-width: 901px) {
+  .mockups-wrapper > div:not([hidden]):not(.carousel-nav-external) {
+    animation: mockup-in 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+}
+@keyframes mockup-in {
+  from { opacity: 0; transform: scale(0.96); filter: blur(5px); }
+  to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+}
+
 /* ── MOBILE: phone y browser SUPERPUESTOS en la misma celda de grid ──
    Antes el wrapper era flex-column y el frame oculto (visibility:hidden) seguía
    ocupando lugar → los dos se apilaban y quedaba un hueco enorme arriba/abajo.
