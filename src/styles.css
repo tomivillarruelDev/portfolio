@@ -1020,10 +1020,6 @@ section[id] { scroll-margin-top: 80px; }
 .mid-cta-text span { background: linear-gradient(135deg, var(--purple-2), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
 /* ── FOOTER ── */
-footer { padding: 28px 60px; border-top: 1px solid rgba(124,58,237,0.08); display: flex; justify-content: space-between; align-items: center; }
-footer p { font-size: 12.5px; color: var(--muted); }
-footer span { color: var(--purple-3); }
-@media(max-width:600px) { footer { flex-direction: column; gap: 8px; text-align: center; padding: 28px 20px; } }
 
 /* ── ANIMATIONS (scroll) ── */
 /* .reveal: IO-driven, keeps CSS transition for smooth class-toggle */
@@ -1214,7 +1210,6 @@ footer span { color: var(--purple-3); }
   .proj-scene::before { display: none; }
 
   /* Footer */
-  footer { padding: 24px 20px; }
 
   /* Mid CTA */
   .mid-cta-text { font-size: 17px; }

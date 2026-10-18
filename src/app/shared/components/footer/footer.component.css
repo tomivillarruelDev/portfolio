@@ -1,15 +1,96 @@
-footer {
-  padding: 28px 60px;
-  border-top: 1px solid rgba(124,58,237,0.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 1;
+/* ── FOOTER: nombre gigante ── */
+.site-footer {
+  display: block;
+  padding: 36px 0 28px;
+  border-top: 1px solid rgba(124, 58, 237, 0.14);
+  overflow: hidden;
 }
-footer p { font-size: 12.5px; color: var(--muted); }
-footer span { color: var(--purple-3); }
 
-@media (max-width: 700px) {
-  footer { flex-direction: column; gap: 6px; text-align: center; padding: 24px; }
+/* Fila superior: logo, navegación y redes */
+.ft-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.ft-logo img { height: 30px; width: auto; display: block; transition: opacity 0.2s ease; }
+.ft-logo:hover img { opacity: 0.8; }
+.ft-nav { display: flex; gap: 26px; font-size: 14px; }
+.ft-icons { display: flex; gap: 8px; }
+
+.ft-link { position: relative; color: var(--muted); text-decoration: none; transition: color 0.2s ease; }
+.ft-link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
+  background: var(--purple-3); transform: scaleX(0); transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ft-link:hover { color: var(--text); }
+.ft-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.ft-ico {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.24);
+  display: grid; place-items: center; color: var(--muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease,
+              transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ft-ico:hover { color: var(--text); border-color: rgba(167, 139, 250, 0.6); background: rgba(124, 58, 237, 0.12); transform: translateY(-2px); }
+.ft-ico:active { transform: translateY(0) scale(0.95); }
+
+/* Nombre gigante: contorno + relleno violeta que se pinta de izquierda a derecha */
+.ft-giant {
+  position: relative;
+  margin: 56px 0 18px;
+  font-size: clamp(40px, 12vw, 140px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.85;
+  white-space: nowrap;
+  user-select: none;
+}
+.ft-giant-stroke {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(168, 85, 247, 0.38);
+}
+.ft-giant-fill {
+  position: absolute; inset: 0; display: block;
+  background: linear-gradient(115deg, #f1f0ff 0%, #c4b5fd 40%, var(--purple-2) 80%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+.site-footer.in .ft-giant-fill { clip-path: inset(0 0 0 0); }
+@media (hover: hover) {
+  .ft-giant:hover .ft-giant-fill { clip-path: inset(0 100% 0 0); transition-duration: 0.6s; transition-delay: 0s; }
+}
+
+/* Barra inferior */
+.ft-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ft-copy { font-size: 12.5px; color: var(--muted); }
+.ft-copy span { color: var(--purple-3); }
+.ft-totop {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none;
+  transition: color 0.2s ease;
+}
+.ft-ring {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  display: grid; place-items: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.ft-ring svg { transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ft-totop:hover { color: var(--text); }
+.ft-totop:hover .ft-ring { border-color: var(--purple-3); background: rgba(124, 58, 237, 0.12); }
+.ft-totop:hover .ft-ring svg { transform: translateY(-3px); }
+
+/* Revelado al entrar en pantalla */
+.ft-rv { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.site-footer.in .ft-rv { opacity: 1; transform: none; }
+.site-footer.in .ft-d2 { transition-delay: 0.16s; }
+
+@media (max-width: 800px) {
+  .ft-nav { display: none; }
+  .ft-giant { margin-top: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ft-rv { opacity: 1; transform: none; transition: none; }
+  .ft-giant-fill { transition: none; clip-path: none; }
 }

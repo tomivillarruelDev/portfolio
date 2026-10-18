@@ -64,6 +64,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Links del menú mobile: primero cierra el menú (descongela el body y lo
+   * devuelve a su posición) y recién después calcula el destino y scrollea.
+   * Antes era al revés: el destino se calculaba con el body congelado
+   * (scrollY = 0) y el cierre pisaba el scroll volviendo a la posición vieja.
+   */
+  navigateFromMenu(event: Event, id: string): void {
+    event.preventDefault();
+    this.closeMenu();
+    requestAnimationFrame(() => this.scrollTo(event, id));
+  }
+
   toggleMenu(): void {
     this.menuActive.update((active) => {
       const newState = !active;
@@ -96,7 +108,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.renderer.removeStyle(document.body, 'top');
       this.renderer.removeStyle(document.body, 'width');
       this.renderer.removeStyle(document.body, 'overflow-y');
-      window.scrollTo(0, scrollY);
+      // 'instant': html tiene scroll-behavior:smooth y, si no, la página "viaja" al cerrar el menú
+      window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
     }
   }
 
