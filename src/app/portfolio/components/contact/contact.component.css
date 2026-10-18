@@ -86,3 +86,28 @@
 }
 
 .contact-headline-accent { color: var(--purple-3); }
+
+/* ── Éxito del formulario: el círculo y el tilde se dibujan, después sube el texto ── */
+.contact-success { animation: cs-fade 0.4s ease both; }
+.cs-circle { stroke-dasharray: 64; stroke-dashoffset: 64; animation: cs-draw 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+.cs-check  { stroke-dasharray: 12; stroke-dashoffset: 12; animation: cs-draw 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards; }
+.contact-success-title, .contact-success-sub { animation: cs-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.contact-success-title { animation-delay: 0.35s; }
+.contact-success-sub   { animation-delay: 0.45s; }
+@keyframes cs-draw { to { stroke-dashoffset: 0; } }
+@keyframes cs-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cs-up   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ── Errores de validación: entran suaves en vez de aparecer de golpe ── */
+.input-error { animation: err-in 0.16s ease-out both; }
+@keyframes err-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* ── Botón Copiar: cambio de texto con deslizamiento y estado verde ── */
+.copy-label { display: inline-flex; align-items: center; gap: 5px; animation: copy-in 0.15s ease-out both; }
+@keyframes copy-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.copy-email-btn.is-copied { color: #86efac; border-color: rgba(134, 239, 172, 0.4); background-color: rgba(34, 197, 94, 0.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-circle, .cs-check { stroke-dashoffset: 0; animation: none; }
+  .contact-success-title, .contact-success-sub, .copy-label, .input-error { animation: cs-fade 0.3s ease both; }
+}

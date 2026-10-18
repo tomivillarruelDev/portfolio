@@ -494,13 +494,6 @@ section[id] { scroll-margin-top: 80px; }
 .gradient-text::selection, .ph-word-fill::selection, .dev-hl-fill::selection { background: rgba(196, 181, 253, 0.35); }
 input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); color: #ffffff; }
 
-/* ── CURSOR GLOW ── */
-.cursor-glow {
-  position: fixed; width: 280px; height: 280px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,58,237,0.07), transparent 70%);
-  pointer-events: none; z-index: 9999; top: 0; left: 0; will-change: transform;
-}
-
 /* ── SECTION HEADERS ── */
 .section-label {
   display: inline-flex; align-items: center; gap: 10px;
@@ -1075,9 +1068,6 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 
 /* ── EDU table (missing) ── */
 .edu-table { display: flex; flex-direction: column; }
-
-/* ── CURSOR GLOW ── */
-.cursor-glow { position: fixed; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%); pointer-events: none; z-index: 9999; top: 0; left: 0; will-change: transform; }
 
 /* ── GRADIENT TEXT (hero cycling word) ── */
 .gradient-text {

@@ -24,7 +24,13 @@
             </svg>
             tomasvillarruel18&#64;gmail.com
           </a>
-          <button class="copy-email-btn" (click)="copyEmail()">{{ copyLabel }}</button>
+          <button class="copy-email-btn" [class.is-copied]="copyLabel === 'Copiado'" (click)="copyEmail()" aria-live="polite">
+            @if (copyLabel === 'Copiado') {
+              <span class="copy-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Copiado</span>
+            } @else {
+              <span class="copy-label">Copiar</span>
+            }
+          </button>
         </div>
       </div>
 
@@ -120,10 +126,10 @@
       } @else {
         <div class="contact-success">
           <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="9 12 11 14 15 10"/>
+            <circle class="cs-circle" cx="12" cy="12" r="10"/>
+            <polyline class="cs-check" points="9 12 11 14 15 10"/>
           </svg>
-          <div class="contact-success-title">¡Mensaje enviado!</div>
+          <div class="contact-success-title">Mensaje enviado</div>
           <div class="contact-success-sub">Mensaje recibido. Te escribo pronto.</div>
         </div>
       }

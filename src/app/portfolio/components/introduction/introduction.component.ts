@@ -44,7 +44,6 @@ export class IntroductionComponent implements AfterViewInit {
       theme: 'light-border',
     });
     this.ngZone.runOutsideAngular(() => {
-      this.initCursorGlow();
       this.initHeroTextCycle();
     });
   }
@@ -75,19 +74,6 @@ export class IntroductionComponent implements AfterViewInit {
         behavior: 'smooth'
       });
     }
-  }
-
-  // ── cursor glow ──────────────────────────────────────────────────────────
-  private initCursorGlow(): void {
-    const glow = document.getElementById('cursorGlow');
-    if (!glow) return;
-    let mx = -500, my = -500;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    const tick = () => {
-      glow.style.transform = `translate(${mx - 140}px, ${my - 140}px)`;
-      requestAnimationFrame(tick);
-    };
-    tick();
   }
 
   // ── hero text cycling (CSS transitions, same as HTML) ────────────────────

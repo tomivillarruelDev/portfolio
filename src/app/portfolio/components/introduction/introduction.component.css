@@ -75,3 +75,22 @@
   .hero-avatar-wrap { width: 160px; height: 160px; }
   .hero-title { letter-spacing: -2px; }
 }
+
+/* ── Entrada del hero al cargar ──
+   Cada línea del título sube desde una máscara (mismo recurso que el título de
+   "Proyectos destacados"); después aparecen bajada, frase y botones en cascada.
+   El clip-path deja aire arriba y a los costados para tildes y el blur de la palabra que rota. */
+.hero-line { display: block; clip-path: inset(-0.35em -0.6em 0 -0.6em); padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.hero-line-inner { display: block; transform: translateY(110%); animation: hero-line-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
+.hero-line-inner--2 { animation-delay: 0.2s; }
+.hero-tagline, .hero-differentiator, .hero-actions { animation: hero-fade-up 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.hero-tagline       { animation-delay: 0.45s; }
+.hero-differentiator { animation-delay: 0.53s; }
+.hero-actions       { animation-delay: 0.61s; }
+@keyframes hero-line-up { to { transform: translateY(0); } }
+@keyframes hero-fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-line-inner { transform: none; animation: none; }
+  .hero-tagline, .hero-differentiator, .hero-actions { animation: hero-fade 0.4s ease both; }
+  @keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+}
