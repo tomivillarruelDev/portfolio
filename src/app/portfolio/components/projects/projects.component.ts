@@ -358,6 +358,12 @@ export class ProjectsComponent implements OnDestroy {
     return project.nameHtml || STATIC_FALLBACK[i]?.nameHtml || project.name;
   }
 
+  /** Nombre sin HTML para el <h3> oculto, los alt y la URL de respaldo
+   *  (en la base algunos nombres traen <br>, p. ej. "Reel<br>VERSE"). */
+  plainName(project: { name?: string }): string {
+    return (project.name ?? '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  }
+
   getTagline(i: number, project: Project): string {
     return project.tagline || STATIC_FALLBACK[i]?.tagline || '';
   }
@@ -384,11 +390,13 @@ export class ProjectsComponent implements OnDestroy {
         const tags  = Array.from(sc.querySelectorAll<HTMLElement>('.stack-tag'));
         const links = Array.from(sc.querySelectorAll<HTMLElement>('.proj-link'));
 
+        // Cada elemento se dispara cuando él mismo asoma (95%), no cuando la escena
+        // entera llega al 75-85%: así no queda pantalla negra antes de cada proyecto.
         if (frame) {
           gsap.fromTo(frame,
             { opacity: 0, y: 36, scale: 0.94 },
             { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'power2.out',
-              scrollTrigger: { trigger: sc, start: 'top 85%', toggleActions: 'play none none reverse' }
+              scrollTrigger: { trigger: frame, start: 'top 95%', toggleActions: 'play none none reverse' }
             }
           );
         }
@@ -396,7 +404,7 @@ export class ProjectsComponent implements OnDestroy {
           gsap.fromTo(narr,
             { opacity: 0, y: 24 },
             { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.1,
-              scrollTrigger: { trigger: sc, start: 'top 85%', toggleActions: 'play none none reverse' }
+              scrollTrigger: { trigger: narr, start: 'top 95%', toggleActions: 'play none none reverse' }
             }
           );
         }
@@ -404,7 +412,7 @@ export class ProjectsComponent implements OnDestroy {
           gsap.fromTo(tags,
             { opacity: 0, scale: 0.85 },
             { opacity: 1, scale: 1, stagger: 0.05, duration: 0.45, ease: 'back.out(1.6)',
-              scrollTrigger: { trigger: sc, start: 'top 80%', toggleActions: 'play none none reverse' }
+              scrollTrigger: { trigger: tags[0], start: 'top 95%', toggleActions: 'play none none reverse' }
             }
           );
         }
@@ -412,7 +420,7 @@ export class ProjectsComponent implements OnDestroy {
           gsap.fromTo(links,
             { opacity: 0, y: 16 },
             { opacity: 1, y: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
-              scrollTrigger: { trigger: sc, start: 'top 75%', toggleActions: 'play none none reverse' }
+              scrollTrigger: { trigger: links[0], start: 'top 95%', toggleActions: 'play none none reverse' }
             }
           );
         }

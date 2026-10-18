@@ -93,10 +93,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initContactCard();
   }
 
-  private getST(el: Element, start = 'top 88%', end = 'top 48%', scrubVal = 0.6) {
+  /**
+   * Scroll de las animaciones de entrada. Antes terminaban recién cuando el elemento
+   * llegaba a la mitad de la pantalla (top 48%), y la mitad inferior quedaba siempre
+   * vacía o apagada: se veían bloques negros entre secciones. Ahora arrancan apenas
+   * el elemento asoma y quedan completas al 70% de la altura.
+   */
+  private getST(el: Element, scrubVal = 0.6) {
     return window.innerWidth < 900
-      ? { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
-      : { trigger: el, scrub: scrubVal, start, end };
+      ? { trigger: el, start: 'top 95%', toggleActions: 'play none none reverse' }
+      : { trigger: el, scrub: scrubVal, start: 'top 100%', end: 'top 70%' };
   }
 
   private initRevealObserver(): void {
@@ -139,7 +145,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 36, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(el, 'top 86%', 'top 40%', 0.7) }
+          scrollTrigger: this.getST(el, 0.7) }
       );
     });
   }
@@ -151,7 +157,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.to(obj, {
         val: target, ease: 'power2.out',
         onUpdate: () => { el.textContent = Math.round(obj.val).toString(); },
-        scrollTrigger: this.getST(el, 'top 82%', 'top 30%', 1.2),
+        scrollTrigger: this.getST(el, 1.2),
       });
     });
   }
@@ -161,7 +167,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
         { clipPath: 'inset(0 0% 0 0)', opacity: 1,
-          scrollTrigger: this.getST(el, 'top 92%', 'top 62%', 0.5) }
+          scrollTrigger: this.getST(el, 0.5) }
       );
     });
   }
@@ -171,7 +177,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 48, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(el, 'top 88%', 'top 48%', 0.6) }
+          scrollTrigger: this.getST(el, 0.6) }
       );
     });
   }
@@ -181,7 +187,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(el, 'top 90%', 'top 55%', 0.5) }
+          scrollTrigger: this.getST(el, 0.5) }
       );
     });
   }
@@ -203,7 +209,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .to(content,  { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, 0.22);
 
       ScrollTrigger.create({
-        ...this.getST(entry, 'top 88%', 'top 28%', 0.9),
+        ...this.getST(entry, 0.9),
         animation: tl,
       });
     });
@@ -218,7 +224,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(pills,
         { scale: 0.82, opacity: 0 },
         { scale: 1, opacity: 1, stagger: 0.06, ease: 'power2.out',
-          scrollTrigger: this.getST(group as Element, 'top 82%', 'top 18%', 0.9) }
+          scrollTrigger: this.getST(group as Element, 0.9) }
       );
     });
   }
@@ -228,7 +234,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { scale: 0.94, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
-          scrollTrigger: this.getST(el, 'top 88%', 'top 48%', 0.7) }
+          scrollTrigger: this.getST(el, 0.7) }
       );
     });
   }
@@ -239,7 +245,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { scale: 0.90, opacity: 0 },
         { scale: 1, opacity: 1, ease: 'power2.out',
-          scrollTrigger: this.getST(el, 'top 90%', 'top 50%', 0.7) }
+          scrollTrigger: this.getST(el, 0.7) }
       );
     };
 
@@ -270,7 +276,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(el, 'top 88%', 'top 45%', 0.6) }
+          scrollTrigger: this.getST(el, 0.6) }
       );
     });
   }
@@ -309,7 +315,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(el,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(el, 'top 88%', 'top 45%', 0.6) }
+          scrollTrigger: this.getST(el, 0.6) }
       );
     });
   }
@@ -326,17 +332,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (label) gsap.fromTo(label,
         { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
         { clipPath: 'inset(0 0% 0 0)', opacity: 1,
-          scrollTrigger: this.getST(label, 'top 92%', 'top 62%', 0.5) }
+          scrollTrigger: this.getST(label, 0.5) }
       );
       if (headline) gsap.fromTo(headline,
         { y: 48, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(headline, 'top 88%', 'top 48%', 0.6) }
+          scrollTrigger: this.getST(headline, 0.6) }
       );
       if (loss) gsap.fromTo(loss,
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1,
-          scrollTrigger: this.getST(loss, 'top 90%', 'top 55%', 0.5) }
+          scrollTrigger: this.getST(loss, 0.5) }
       );
     }
 
@@ -348,7 +354,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       gsap.fromTo(box,
         { scale: 0.94, opacity: 0 },
         { scale: 1, opacity: 1,
-          scrollTrigger: this.getST(box, 'top 85%', 'top 40%', 0.7) }
+          scrollTrigger: this.getST(box, 0.7) }
       );
     }
   }

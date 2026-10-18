@@ -45,7 +45,7 @@
                      (mouseleave)="startAutoplay(project)">
                   @let phoneImages = getProjectImages(project);
                   @if (phoneImages.length === 1) {
-                    <img #projImg [src]="phoneImages[0]" [alt]="project.name"
+                    <img #projImg [src]="phoneImages[0]" [alt]="plainName(project)"
                          [attr.data-img-key]="project.id + '_0'"
                          (load)="onImageLoad(project.id + '_0', $event)"
                          (click)="openViewer($event, project, 0)"
@@ -58,7 +58,7 @@
                       <div class="carousel-slides" [style.transform]="'translateX(-' + (currentImageIndex()[project.id] || 0) * 100 + '%)'" style="display:flex;width:100%;height:100%;transition:transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);">
                         @for (img of phoneImages; track img; let imgIdx = $index) {
                           <div class="carousel-slide" style="min-width:100%;width:100%;height:100%;position:relative;">
-                            <img #projImg [src]="img" [alt]="project.name + ' - Foto ' + (imgIdx + 1)"
+                            <img #projImg [src]="img" [alt]="plainName(project) + ' - Foto ' + (imgIdx + 1)"
                                  [attr.data-img-key]="project.id + '_' + imgIdx"
                                  (load)="onImageLoad(project.id + '_' + imgIdx, $event)"
                                  (click)="openViewer($event, project, imgIdx)"
@@ -100,7 +100,7 @@
                     <span style="display:inline-flex;align-items:center;gap:4px;color:#6b7280;width:100%;max-width:100%;overflow:hidden;min-width:0;">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                       <span style="display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;font-size:10px;vertical-align:middle;min-width:0;">
-                        {{ project.page || 'github.com/' + project.name.toLowerCase().replace(' ','-') }}
+                        {{ project.page || 'github.com/' + plainName(project).toLowerCase().replace(' ','-') }}
                       </span>
                     </span>
                   </div>
@@ -114,7 +114,7 @@
                        style="padding:0;width:100%;height:auto;max-height:450px;">
                     @let images = getProjectImages(project);
                     @if (images.length === 1) {
-                      <img #projImg [src]="images[0]" [alt]="project.name"
+                      <img #projImg [src]="images[0]" [alt]="plainName(project)"
                            [attr.data-img-key]="project.id + '_0'"
                            (load)="onImageLoad(project.id + '_0', $event)"
                            (click)="openViewer($event, project, 0)"
@@ -127,7 +127,7 @@
                         <div class="carousel-slides" [style.transform]="'translateX(-' + (currentImageIndex()[project.id] || 0) * 100 + '%)'" style="display:flex;width:100%;height:100%;transition:transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);">
                           @for (img of images; track img; let imgIdx = $index) {
                             <div class="carousel-slide" style="min-width:100%;width:100%;height:100%;position:relative;">
-                              <img #projImg [src]="img" [alt]="project.name + ' - Foto ' + (imgIdx + 1)"
+                              <img #projImg [src]="img" [alt]="plainName(project) + ' - Foto ' + (imgIdx + 1)"
                                    [attr.data-img-key]="project.id + '_' + imgIdx"
                                    (load)="onImageLoad(project.id + '_' + imgIdx, $event)"
                                    (click)="openViewer($event, project, imgIdx)"
@@ -199,18 +199,18 @@
               <!-- Modo A: wordmark — el logo ya trae el texto -->
               <div class="proj-logo">
                 <div class="proj-logo-img-wrap proj-logo-img-wrap--wordmark">
-                  <img #projImg [src]="project.logoURL" [alt]="project.name"
+                  <img #projImg [src]="project.logoURL" [alt]="plainName(project)"
                        [attr.data-img-key]="project.id + '_logo'"
                        (load)="onImageLoad(project.id + '_logo')"
                        style="height:56px;width:auto;max-width:260px;object-fit:contain;display:block;" />
                 </div>
               </div>
-              <h3 class="sr-only">{{ project.name }}</h3>
+              <h3 class="sr-only">{{ plainName(project) }}</h3>
             } @else {
               <!-- Modo B: ícono + nombre -->
               <div class="proj-logo proj-logo--with-name">
                 <div class="proj-logo-img-wrap proj-logo-img-wrap--icon">
-                  <img #projImg [src]="project.logoURL" [alt]="project.name + ' logo'"
+                  <img #projImg [src]="project.logoURL" [alt]="plainName(project) + ' logo'"
                        [attr.data-img-key]="project.id + '_logo'"
                        (load)="onImageLoad(project.id + '_logo')"
                        style="width:48px;height:48px;object-fit:contain;border-radius:8px;display:block;" />

@@ -850,7 +850,7 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 }
 
 /* ── SKILLS SECTION ── */
-#skills { padding: 120px 0; }
+#skills { padding: 88px 0; }
 .skills-inner { display: flex; align-items: center; gap: 80px; }
 .skills-left { flex: 1; }
 .skills-orb-wrap { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; height: 380px; }
@@ -888,12 +888,12 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 @media(max-width:768px) { .skills-inner { flex-direction: column; gap: 48px; } .skills-orb-wrap { width: 100%; } }
 
 /* ── ABOUT ── */
-#about { padding: 120px 0; background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 18%, var(--bg2) 82%, var(--bg) 100%); }
+#about { padding: 88px 0; background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 18%, var(--bg2) 82%, var(--bg) 100%); }
 .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 @media(max-width:768px) { .about-inner { grid-template-columns: 1fr; } }
 
 /* ── EXPERIENCE ── */
-#experience { padding: 120px 0; }
+#experience { padding: 88px 0; }
 .exp-entry { padding: 64px 0; border-top: 1px solid rgba(255,255,255,0.065); position: relative; }
 .exp-entry:last-child { border-bottom: 1px solid rgba(255,255,255,0.065); }
 .exp-index { font-size: 10.5px; letter-spacing: 0.22em; font-weight: 700; color: rgba(168,85,247,0.4); margin-bottom: 18px; }
@@ -913,7 +913,7 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 @media(max-width:700px) { .exp-headline { font-size: 14vw; } .exp-content { grid-template-columns: 1fr; gap: 28px 0; } .exp-pullquote { border-left: none; border-top: 1px solid rgba(124,58,237,0.2); padding: 20px 0 0; margin-top: 0; } }
 
 /* ── EDUCATION ── */
-#education { padding: 120px 0; }
+#education { padding: 88px 0; }
 .edu-layout { display: grid; grid-template-columns: 320px 1fr; gap: 80px; align-items: start; }
 .edu-sticky { position: sticky; top: 100px; }
 .edu-sticky .section-desc { margin-top: 16px; }
@@ -938,7 +938,7 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 @media(max-width:900px) { .edu-layout { grid-template-columns: 1fr; } .edu-sticky { position: static; } }
 
 /* ── CONTACT ── */
-#contact { padding: 120px 0 100px; background: rgba(124,58,237,0.018); }
+#contact { padding: 88px 0 88px; background: rgba(124,58,237,0.018); }
 .contact-inner { text-align: center; position: relative; z-index: 1; }
 .contact-inner .section-label { justify-content: center; }
 .contact-inner .section-label::before { display: none; }
@@ -1171,8 +1171,8 @@ input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); co
 
 /* ── SMALL MOBILE (≤ 600px) ── */
 @media (max-width: 600px) {
-  #about, #skills, #experience, #education { padding: 64px 0; }
-  #contact { padding: 64px 0 48px; }
+  #about, #skills, #experience, #education { padding: 56px 0; }
+  #contact { padding: 56px 0 48px; }
 
   /* Nav: hide CTA button — Contact link in hamburger covers it */
   .nav-cta { display: none; }

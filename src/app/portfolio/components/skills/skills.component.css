@@ -331,7 +331,7 @@
   .skills-list { justify-content: center; }
 }
 @media (max-width: 600px) {
-  #skills { padding: 64px 0; }
+  #skills { padding: 56px 0; }
   .skills-list { gap: 8px; }
 }
 
