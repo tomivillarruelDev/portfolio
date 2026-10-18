@@ -4,7 +4,7 @@
     <div class="proj-hero reveal">
 
       <div class="ph-eyebrow">
-        <span class="ph-chip">Trabajo selecto</span>
+        <span class="ph-chip">Seleccionados</span>
         <span class="ph-sep"></span>
         <span class="ph-cnt">{{ featuredProjects().length < 10 ? '0' + featuredProjects().length : featuredProjects().length }} proyectos</span>
       </div>
@@ -20,7 +20,7 @@
 
       <div class="ph-footer-row">
         <div class="ph-rule"></div>
-        <p class="ph-sub">Productos reales. Problemas reales. Resultados medibles.</p>
+        <p class="ph-sub">Sitios y apps que hoy están en línea. Probalos.</p>
       </div>
 
     </div>
@@ -31,42 +31,6 @@
 
         <div class="proj-stage">
           <div class="proj-orbit"></div>
-          <div class="proj-orbit-2"></div>
-
-          @if (project.iconURL) {
-            <div class="proj-badge pb-icon">
-              <div style="position:relative;width:32px;height:32px;flex-shrink:0;">
-                <img #projImg [src]="project.iconURL" [alt]="project.name"
-                     [attr.data-img-key]="project.id + '_icon'"
-                     (load)="onImageLoad(project.id + '_icon')"
-                     style="position:absolute;top:0;left:0;width:32px;height:32px;object-fit:contain;border-radius:8px;display:block;" />
-              </div>
-            </div>
-          }
-
-          @for (tech of project.technologies.slice(0,4); track tech; let bi = $index) {
-            <div class="proj-badge" [ngClass]="'pb-' + (bi+1)">
-              @if (getTechIcon(tech)) {
-                <img [src]="getTechIcon(tech)" [alt]="tech" width="16" height="16" style="width:16px;height:16px;object-fit:contain;flex-shrink:0;border-radius:4px;" loading="lazy"/>
-              } @else {
-                <span class="tech-ic {{ getTechClass(tech) }}">{{ getTechAbbr(tech) }}</span>
-              }
-              {{ tech }}
-            </div>
-          }
-
-          @if (project.chipVals?.length) {
-            @if (!project.iconURL) {
-              <div class="proj-chip pc-1">
-                <div class="proj-chip-val">{{ project.chipVals![0] }}</div>
-                <div class="proj-chip-lab">{{ project.chipVals![1] }}</div>
-              </div>
-            }
-            <div class="proj-chip pc-2">
-              <div class="proj-chip-val">{{ project.chipVals![2] }}</div>
-              <div class="proj-chip-lab">{{ project.chipVals![3] }}</div>
-            </div>
-          }
 
           <div class="mockups-wrapper"
                [class.no-phone]="!projectHasPhone(project)"

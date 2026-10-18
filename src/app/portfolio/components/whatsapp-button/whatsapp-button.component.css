@@ -78,7 +78,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .wa-tooltip::after {
@@ -95,20 +95,6 @@
 .wa-btn:hover .wa-tooltip {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
-}
-
-/* Show on nudge (auto) */
-.wa-tooltip--nudge {
-  opacity: 1 !important;
-  transform: translateY(-50%) translateX(0) !important;
-  animation: wa-nudge 2.5s ease forwards;
-}
-
-@keyframes wa-nudge {
-  0%   { opacity: 0; transform: translateY(-50%) translateX(6px); }
-  15%  { opacity: 1; transform: translateY(-50%) translateX(0);   }
-  75%  { opacity: 1; transform: translateY(-50%) translateX(0);   }
-  100% { opacity: 0; transform: translateY(-50%) translateX(6px); }
 }
 
 @media (max-width: 640px) {

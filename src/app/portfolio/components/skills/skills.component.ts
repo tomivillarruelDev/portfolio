@@ -34,6 +34,23 @@ export class SkillsComponent implements OnInit {
   readonly certsOpen = signal(false);
   readonly certs = signal<CertEntry[]>(CERT_FALLBACK);
 
+  /** Stack agrupado por área (reemplaza la terminal decorativa). El orden de cada
+   *  grupo respeta el orden que viene del admin. */
+  readonly techGroups = computed(() => {
+    const areas: { name: string; re: RegExp }[] = [
+      { name: 'Frontend', re: /^(javascript|typescript|angular|react|vue|html|css|sass|tailwind|bootstrap|expo|ionic)/i },
+      { name: 'Backend',  re: /^(node|nest|express|python|django|flask|php|symfony|laravel|java|spring|c#|\.net|go)/i },
+      { name: 'Datos',    re: /^(mysql|postgre|mongo|sql|firebase|redis|supabase|sqlite)/i },
+      { name: 'Infra y herramientas', re: /./ },
+    ];
+    const groups = areas.map(a => ({ name: a.name, items: [] as Technology[] }));
+    for (const t of this.technologies()) {
+      const i = areas.findIndex(a => a.re.test((t.name || '').trim()));
+      groups[i].items.push(t);
+    }
+    return groups.filter(g => g.items.length);
+  });
+
   readonly orbitInner = computed(() => this.technologies().slice(0, 4));
   readonly orbitOuter = computed(() => this.technologies().slice(4, 8));
 

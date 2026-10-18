@@ -2,10 +2,10 @@
   <div class="container">
 
     <div class="contact-inner reveal">
-      <h2 class="contact-headline">¿Necesitás un dev<br>que se haga cargo<br><span style="background:linear-gradient(160deg,#ede9fe,var(--purple-3),var(--purple-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">de verdad?</span></h2>
+      <h2 class="contact-headline">¿Tenés algo para construir?<br><span class="contact-headline-accent">Contame.</span></h2>
       <p class="contact-loss">
-        Proyecto freelance o posición en equipo — lo que me importa es que haya algo concreto para construir.
-        <strong>Contame de qué se trata.</strong>
+        Freelance o en equipo, me sirve si hay algo concreto para construir.
+        <strong>Contame qué tenés en mente.</strong>
       </p>
     </div>
 
@@ -32,7 +32,7 @@
 
       <div class="contact-form-title" style="margin-bottom:6px;">Contame sobre tu proyecto</div>
       <div class="contact-form-sub" style="margin-bottom:28px;">
-        Te respondo en <span>menos de 24 horas.</span> Sin compromiso ni letra chica.
+        Te respondo en <span>menos de 24 horas.</span>
       </div>
 
       @if (!sent) {
@@ -81,7 +81,7 @@
               <option>Dashboard / SaaS / Panel interno</option>
               <option>Landing page / Sitio institucional</option>
               <option>API / Backend / Integración</option>
-              <option>Otro — te cuento</option>
+              <option>Otro, te cuento</option>
             </select>
             @if (tipoModel.invalid && (tipoModel.touched || tipoModel.dirty || contactForm.submitted)) {
               <div class="input-error">
@@ -110,7 +110,7 @@
           }
 
           <button type="submit" class="form-submit" [disabled]="sending" style="margin-top: 20px;">
-            @if (sending) { Enviando… } @else { Enviar mensaje → }
+            @if (sending) { Enviando… } @else { Enviar mensaje }
           </button>
           @if (error) {
             <div class="form-error" style="margin-top: 14px;">{{ error }}</div>

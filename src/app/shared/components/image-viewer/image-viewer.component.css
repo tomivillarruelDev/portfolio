@@ -48,7 +48,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 9992;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 5px;

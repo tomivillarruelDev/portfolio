@@ -8,12 +8,12 @@
 
       <div class="hero-content">
         <h1 class="hero-title">
-          <span class="sr-only">Tomás Villarruel — Desarrollador Full Stack | Angular &amp; TypeScript</span>
-          Código que<br>
-          <span class="gradient-text" id="heroGradient">convierte.</span>
+          <span class="sr-only">Tomás Villarruel, desarrollador Full Stack | Angular &amp; TypeScript</span>
+          Sitios que<br>
+          <span class="gradient-text" id="heroGradient">convierten.</span>
         </h1>
         <p class="hero-tagline">
-          Soy Tomás Villarruel, desarrollador Full Stack de Córdoba. Construyo productos digitales que combinan ingeniería sólida con experiencias que la gente quiere usar.
+          Soy Tomás Villarruel, desarrollador Full Stack en Córdoba. Armo sitios, tiendas y sistemas a medida, y los dejo andando en producción.
         </p>
         <p class="hero-differentiator">Construyo lo que acordamos. Y aviso si hay una forma mejor.</p>
         <div class="hero-actions">
@@ -21,19 +21,11 @@
             Ver mi trabajo
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a href="#contact" class="btn-outline" (click)="scrollToContact($event)">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 5.5l6 4 6-4" stroke="currentColor" stroke-width="1.5"/></svg>
-            Hablemos
-          </a>
-          <a [href]="cvUrl()" target="_blank" rel="noopener noreferrer" class="btn-outline" aria-label="Descargar CV">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            CV
-          </a>
+          <a [href]="cvUrl()" target="_blank" rel="noopener noreferrer" class="hero-cv-link">Descargar CV</a>
         </div>
       </div>
 
       <div class="hero-avatar-wrap">
-        <div class="hero-avatar-glow"></div>
         <div class="hero-avatar-ring"></div>
         <div class="hero-avatar">
           @if (isLoading()) {
@@ -49,7 +41,7 @@
               animation="pulse"
             ></ngx-skeleton-loader>
           } @else if (profileImageUrl()) {
-            <img [src]="profileImageUrl()" alt="Tomás Villarruel — Desarrollador Full Stack" fetchpriority="high" decoding="async"
+            <img [src]="profileImageUrl()" alt="Tomás Villarruel, desarrollador Full Stack" fetchpriority="high" decoding="async"
                  style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>
           } @else {
             <svg width="200" height="210" viewBox="0 0 200 210" xmlns="http://www.w3.orxg/2000/svg" style="position:relative;z-index:1;" aria-label="Tomás Villarruel">
@@ -83,8 +75,4 @@
     </div>
   </div>
 
-  <div class="hero-scroll">
-    <svg width="16" height="24" viewBox="0 0 16 24" fill="none"><rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" stroke-width="1.5" opacity="0.4"/><circle cx="8" cy="8" r="2.2" fill="currentColor" opacity="0.6"><animate attributeName="cy" values="8;14;8" dur="1.9s" repeatCount="indefinite"/></circle></svg>
-    Scroll
-  </div>
 </section>

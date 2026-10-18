@@ -5,67 +5,41 @@
       <div class="skills-left reveal-left">
         <h2 class="section-title">Tecnologías<br><em>que domino</em></h2>
         <p class="section-desc">Las herramientas que uso en el día a día.</p>
-        <div class="skills-list">
-          @for (tech of technologies(); track tech.id) {
-            <span class="skill-pill" style="display:inline-flex;align-items:center;">
-              @if (tech.icon) {
-                @if (!imagesLoaded()[tech.id || '']) {
-                  <ngx-skeleton-loader
-                    [theme]="{
-                      height: '18px',
-                      width: '18px',
-                      'border-radius': '3px',
-                      'background-color': 'rgba(255, 255, 255, 0.12)',
-                      margin: '0 8px 0 0',
-                      display: 'inline-block'
-                    }"
-                    animation="pulse"
-                  ></ngx-skeleton-loader>
+        <div class="sk-groups">
+          @for (group of techGroups(); track group.name; let gi = $index) {
+            <div class="sk-group" [style.--gi]="gi">
+              <h3 class="sk-group-title">{{ group.name }}</h3>
+              <div class="skills-list">
+                @for (tech of group.items; track tech.id; let ti = $index) {
+                <span class="skill-pill" [style.--ti]="ti" style="display:inline-flex;align-items:center;">
+                  @if (tech.icon) {
+                    @if (!imagesLoaded()[tech.id || '']) {
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          height: '18px',
+                          width: '18px',
+                          'border-radius': '3px',
+                          'background-color': 'rgba(255, 255, 255, 0.12)',
+                          margin: '0 8px 0 0',
+                          display: 'inline-block'
+                        }"
+                        animation="pulse"
+                      ></ngx-skeleton-loader>
+                    }
+                    <img #skillImg [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
+                         [attr.data-img-key]="tech.id || ''"
+                         (load)="onImageLoad(tech.id || '')"
+                         (error)="onImageLoad(tech.id || '')"
+                         [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'" />
+                  } @else {
+                    <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
+                  }
+                  {{ tech.name }}
+                </span>
                 }
-                <img #skillImg [src]="tech.icon" [alt]="tech.name" class="skill-pill-icon"
-                     [attr.data-img-key]="tech.id || ''"
-                     (load)="onImageLoad(tech.id || '')"
-                     (error)="onImageLoad(tech.id || '')"
-                     [style.display]="imagesLoaded()[tech.id || ''] ? 'inline-block' : 'none'" />
-              } @else {
-                <span class="tech-ic-dyn">{{ abbrev(tech.name) }}</span>
-              }
-              {{ tech.name }}
-            </span>
+              </div>
+            </div>
           }
-        </div>
-      </div>
-
-      <div class="skills-orb-wrap reveal-right">
-        <div class="skills-terminal">
-          <div class="term-chrome">
-            <span class="term-dot td-red"></span>
-            <span class="term-dot td-yellow"></span>
-            <span class="term-dot td-green"></span>
-            <span class="term-name">~/projects/tomas</span>
-          </div>
-          <div class="term-body">
-            <p class="term-line">
-              <span class="term-prompt">$</span>
-              <span class="term-cmd">ng g service auth/jwt --flat</span>
-            </p>
-            <p class="term-out">CREATE src/app/auth/jwt.service.ts</p>
-            <p class="term-line">
-              <span class="term-prompt">$</span>
-              <span class="term-cmd">firebase deploy --only hosting,functions</span>
-            </p>
-            <p class="term-out">&#10004;&nbsp; Deploy complete in 14s</p>
-            <p class="term-line">
-              <span class="term-prompt">$</span>
-              <span class="term-cmd">git push origin main</span>
-            </p>
-            <p class="term-out">[main a3f8c12] feat: módulo de pagos</p>
-            <p class="term-divider"></p>
-            <p class="term-line">
-              <span class="term-prompt">$</span>
-              <span class="term-cursor" aria-hidden="true">&#x258C;</span>
-            </p>
-          </div>
         </div>
       </div>
 

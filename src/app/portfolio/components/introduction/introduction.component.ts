@@ -4,7 +4,7 @@ import { ProfileImageService } from '../../../shared/services/profile-image.serv
 import tippy from 'tippy.js';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
-const HERO_WORDS = ['convierte.', 'impacta.', 'escala.', 'diferencia.'];
+const HERO_WORDS = ['convierten.', 'posicionan.', 'escalan.', 'performan.'];
 
 @Component({
   selector: 'app-introduction',
@@ -97,12 +97,19 @@ export class IntroductionComponent implements AfterViewInit {
     let wi = 0;
     setInterval(() => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(10px)';
+      el.style.transform = 'translateY(-8px)';
+      el.style.filter = 'blur(6px)';
       setTimeout(() => {
         wi = (wi + 1) % HERO_WORDS.length;
         el.textContent = HERO_WORDS[wi];
+        // Entra desde abajo y sale hacia arriba: se lee como una palabra que reemplaza a la otra
+        el.style.transition = 'none';
+        el.style.transform = 'translateY(10px)';
+        void el.offsetWidth;
+        el.style.transition = '';
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
+        el.style.filter = 'blur(0px)';
       }, 320);
     }, 2500);
   }

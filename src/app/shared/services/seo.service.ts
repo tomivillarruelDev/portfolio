@@ -45,8 +45,8 @@ export class SeoService {
 
   setHomePage(): void {
     this.setPage({
-      title: 'Tomás Villarruel — Desarrollador Full Stack | Angular, TypeScript, Node.js & Firebase',
-      description: 'Portfolio profesional de Tomás Villarruel, Desarrollador Full Stack especializado en Angular, TypeScript, Node.js, NestJS y Firebase en Argentina. Creación de productos digitales escalables y de alto rendimiento.',
+      title: 'Tomás Villarruel | Desarrollador Full Stack en Córdoba (Angular, NestJS)',
+      description: 'Desarrollador Full Stack en Córdoba, Argentina. Sitios, e-commerce y sistemas a medida con Angular, NestJS y PostgreSQL. Proyectos publicados y contacto directo.',
       url: `${this.BASE_URL}/`,
       keywords: 'Tomás Villarruel, Desarrollador Full Stack, Angular, TypeScript, Node.js, NestJS, Firebase, Symfony, PostgreSQL, RxJS, Desarrollador Web, Argentina, Córdoba'
     });

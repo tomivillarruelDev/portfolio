@@ -61,10 +61,8 @@
 
 /* Role */
 .dev-role {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--muted);
   margin-bottom: 8px;
 }
@@ -218,3 +216,13 @@
     display: none !important;
   }
 }
+
+/* Entrada escalonada de las capacidades cuando la columna se revela */
+.cap-dash .cap-row { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .6s cubic-bezier(0.2, 0.8, 0.2, 1), padding-left .22s ease, background .22s ease; }
+.cap-dash.visible .cap-row { opacity: 1; transform: none; }
+.cap-dash.visible .cap-row:nth-child(1) { transition-delay: .15s, .15s, 0s, 0s; }
+.cap-dash.visible .cap-row:nth-child(2) { transition-delay: .22s, .22s, 0s, 0s; }
+.cap-dash.visible .cap-row:nth-child(3) { transition-delay: .29s, .29s, 0s, 0s; }
+.cap-dash.visible .cap-row:nth-child(4) { transition-delay: .36s, .36s, 0s, 0s; }
+.cap-dash.visible .cap-row:nth-child(5) { transition-delay: .43s, .43s, 0s, 0s; }
+@media (prefers-reduced-motion: reduce) { .cap-dash .cap-row { opacity: 1; transform: none; transition: none; } }

@@ -151,10 +151,8 @@
 }
 
 .certs-toggle-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--muted, rgba(255, 255, 255, 0.4));
 }
 
@@ -334,4 +332,43 @@
 @media (max-width: 600px) {
   #skills { padding: 64px 0; }
   .skills-list { gap: 8px; }
+}
+
+/* ── Stack agrupado por área (reemplaza la terminal decorativa) ── */
+.skills-left { max-width: none; width: 100%; }
+.sk-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 44px;
+}
+.sk-group { border-top: 1px solid rgba(124, 58, 237, 0.2); padding-top: 18px; position: relative; }
+/* Línea que se "dibuja" al revelar la sección */
+.sk-group::before {
+  content: ''; position: absolute; top: -1px; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, var(--purple-3), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--gi, 0) * 120ms + 200ms);
+}
+.skills-left.visible .sk-group::before { transform: scaleX(1); }
+.sk-group-title { font-size: 14px; font-weight: 600; color: var(--purple-3); margin: 0 0 14px; }
+.sk-group .skills-list { margin-top: 0; gap: 8px; }
+
+/* Pills entran en cascada: grupo a grupo, pill a pill */
+.sk-group .skill-pill {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .45s ease, transform .5s cubic-bezier(0.2, 0.8, 0.2, 1), border-color .2s, background .2s, box-shadow .2s;
+}
+.skills-left.visible .sk-group .skill-pill {
+  opacity: 1; transform: none;
+  transition-delay: calc(var(--gi, 0) * 120ms + var(--ti, 0) * 45ms + 250ms), calc(var(--gi, 0) * 120ms + var(--ti, 0) * 45ms + 250ms), 0s, 0s, 0s;
+}
+.skills-left.visible .sk-group .skill-pill:hover { transform: translateY(-2px); }
+
+@media (max-width: 900px) { .sk-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .sk-groups { grid-template-columns: 1fr; gap: 22px; } .skills-list { justify-content: flex-start !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .sk-group .skill-pill { opacity: 1; transform: none; transition: none; }
+  .sk-group::before { transform: scaleX(1); transition: none; }
 }

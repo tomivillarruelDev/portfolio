@@ -362,9 +362,13 @@ export class ProjectsComponent implements OnDestroy {
     return project.tagline || STATIC_FALLBACK[i]?.tagline || '';
   }
 
+  // Métricas de relleno ("100%", "Top", "1 Click") restan credibilidad a las
+  // reales (<1.2s, 200K+, #1). Se filtran acá; en el admin se pueden seguir cargando.
+  private static readonly FILLER_METRIC = /^(100\s?%|top|1\s?click)$/i;
+
   getMetrics(i: number, project: Project): { val: string; lab: string }[] {
-    if (project.metrics?.length) return project.metrics;
-    return STATIC_FALLBACK[i]?.metrics ?? [];
+    const list = project.metrics?.length ? project.metrics : (STATIC_FALLBACK[i]?.metrics ?? []);
+    return list.filter(m => m?.val?.trim() && !ProjectsComponent.FILLER_METRIC.test(m.val.trim()));
   }
 
   private initGsap(): void {
@@ -498,7 +502,7 @@ export class ProjectsComponent implements OnDestroy {
     const introTl = gsap.timeline({ paused: true });
     introTl
       .to(e1.frame!, { scale: 1, y: 0, rotationY: 0, rotationX: 0, filter: 'blur(0px)', opacity: 1, duration: 0.9, ease: 'elastic.out(1, 0.6)' }, 0)
-      .to(e1.orbits, { opacity: 0.95, duration: 0.7, ease: 'power2.out' }, 0.15)
+      .to(e1.orbits, { opacity: 0.5, duration: 0.7, ease: 'power2.out' }, 0.15)
       .to(e1.narr!,  { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
       .to(header ? [header] : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.45)
       .to(name   ? [name]   : [], { opacity: 1, y: 0, duration: 0.55, ease: 'back.out(2)' }, 0.58)
@@ -535,7 +539,7 @@ export class ProjectsComponent implements OnDestroy {
         .to(currentScene, { autoAlpha: 0, duration: 0.20 })
         .to(nextScene,    { autoAlpha: 1, duration: 0.18 }, '<0.08')
         .to(nextEl.frame!,  { scale: 1, y: 0, opacity: 1, duration: 0.30, ease: 'power2.out' }, '<0.06')
-        .to(nextEl.orbits, { opacity: 0.95, duration: 0.22 }, '<0.06')
+        .to(nextEl.orbits, { opacity: 0.5, duration: 0.22 }, '<0.06')
         .to(nextEl.narr!,   { x: 0, opacity: 1, duration: 0.26, ease: 'power2.out' }, '<0.14')
         .to(nextEl.chips,  { y: 0, opacity: 1, stagger: 0.05, duration: 0.20 }, '<0.18')
         .to(nextEl.badges, { opacity: 1, stagger: 0.06, duration: 0.20 }, '<0.20');

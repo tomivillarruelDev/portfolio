@@ -84,3 +84,5 @@
 @media (max-width: 400px) {
   .contact-box { padding: 18px 14px; }
 }
+
+.contact-headline-accent { color: var(--purple-3); }
