@@ -68,7 +68,9 @@
             </div>
           }
 
-          <div class="mockups-wrapper">
+          <div class="mockups-wrapper"
+               [class.no-phone]="!projectHasPhone(project)"
+               [class.no-browser]="!projectHasBrowser(project)">
             @let _navImages = getProjectImages(project);
             <!-- ── PHONE MOCKUP — always in DOM, hidden when not mobile ── -->
             <div [hidden]="!isCurrentImageMobile(project)">

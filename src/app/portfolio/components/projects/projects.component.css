@@ -467,7 +467,7 @@
   opacity: 0.6;
 }
 
-/* --- AJUSTES DE TAMAÑO PARA EL MOCKUP DE TELÉFONO (MÁS GRANDE Y LEGIBLE) --- */
+/* --- MOCKUP DE TELÉFONO: tamaño base (desktop) --- */
 .phone-frame {
   width: 230px !important;
   border-radius: 36px !important;
@@ -478,14 +478,7 @@
   isolation: isolate;
 }
 
-/* Wrapper del phone-frame (el div[hidden] renderizado por Angular).
-   Necesita perspective + transform-style para que el tilt 3D del padre
-   llegue al frame sin ser aplanado por un contexto de stacking intermedio. */
-.mockups-wrapper > div {
-  perspective: 1200px;
-  transform-style: preserve-3d;
-}
-
+/* ── phone-screen base: desktop (la media query de abajo lo pisa en responsive) ── */
 .phone-screen {
   height: 430px !important;
   border-radius: 26px !important;
@@ -493,6 +486,66 @@
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   mask-image: -webkit-radial-gradient(white, black);
   isolation: isolate;
+}
+
+/* Wrappers dentro de mockups-wrapper: perspective + transform-style para el tilt 3D */
+.mockups-wrapper > div {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* ── MOBILE: phone y browser SUPERPUESTOS en la misma celda de grid ──
+   Antes el wrapper era flex-column y el frame oculto (visibility:hidden) seguía
+   ocupando lugar → los dos se apilaban y quedaba un hueco enorme arriba/abajo.
+   Con grid-area 1/1 ambos comparten celda: el alto del wrapper es siempre
+   max(phone, browser), así que cambiar de tipo de foto no mueve el layout. */
+@media (max-width: 900px) {
+  .mockups-wrapper {
+    display: grid !important;
+    grid-template-columns: 100%;
+    justify-items: center;
+    align-items: center;
+  }
+  .mockups-wrapper > div:not(.carousel-nav-external) {
+    grid-area: 1 / 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.35s ease, visibility 0s linear 0s;
+  }
+  .mockups-wrapper > div[hidden]:not(.carousel-nav-external) {
+    display: flex !important;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+  }
+  .mockups-wrapper > .carousel-nav-external {
+    grid-area: 2 / 1;
+  }
+  /* Si el proyecto no tiene fotos de un tipo, ese frame no reserva espacio */
+  .mockups-wrapper.no-phone > div[hidden]:not(.carousel-nav-external),
+  .mockups-wrapper.no-browser > div[hidden]:not(.carousel-nav-external) {
+    display: none !important;
+  }
+
+  /* Phone con alto FIJO (no depende de la imagen) → sin saltos */
+  .phone-frame {
+    width: 200px !important;
+    max-width: 200px !important;
+    border-radius: 40px !important;
+  }
+  .phone-screen {
+    height: 380px !important;
+    max-height: 380px !important;
+  }
+  .phone-screen img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+  }
 }
 
 .phone-notch {
@@ -583,10 +636,8 @@
     display: none !important;
   }
 
-  /* Stack frame + nav vertically. Frame type is fixed per-project on mobile
-     so min-height and overflow:hidden are not needed — natural height is stable. */
+  /* Frame + nav apilados (ver grid arriba). Alto estable: max(phone, browser). */
   .mockups-wrapper {
-    flex-direction: column;
     gap: 0;
     min-height: unset;
     overflow: visible;

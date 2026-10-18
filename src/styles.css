@@ -1140,9 +1140,11 @@ footer span { color: var(--purple-3); }
 
   .proj-frame { max-width: 100% !important; width: 100%; }
   .browser-frame { max-width: 100% !important; width: 100%; }
-  /* Fixed height on mobile — overrides inline height:auto and aspect-ratio so
-     the browser-screen never resizes when carousel advances to a different image. */
-  .browser-screen { height: 260px !important; max-height: 260px !important; aspect-ratio: unset !important; }
+  /* browser-screen con proporción fija de pantalla de PC (16:10): alto estable
+     (sin saltos entre fotos) y sin las franjas negras del letterbox. La imagen
+     llena el frame (cover, anclada arriba); el visor muestra la foto completa. */
+  .browser-screen { height: auto !important; max-height: none !important; aspect-ratio: 16 / 10 !important; }
+  .browser-screen img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top center !important; }
   .proj-scene::before { font-size: min(50vw, 240px); }
   .proj-name { font-size: clamp(26px, 7.5vw, 48px); letter-spacing: -1.5px; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
   .small-projects { margin-top: 48px; }
@@ -1171,8 +1173,7 @@ footer span { color: var(--purple-3); }
   /* Mid CTA */
   .mid-cta-text { font-size: 19px; }
 
-  /* Browser screen */
-  .browser-screen { height: 285px; }
+
 }
 
 /* ── SMALL MOBILE (≤ 600px) ── */
@@ -1193,7 +1194,6 @@ footer span { color: var(--purple-3); }
 
   /* Projects */
   .proj-scene { padding: 44px 16px 28px; gap: 20px; }
-  .browser-screen { height: 250px; }
   .proj-body { font-size: 13.5px; margin-bottom: 24px; }
   .proj-stack-row { margin-bottom: 24px; }
   .proj-links { flex-wrap: wrap; gap: 10px; }
@@ -1229,7 +1229,6 @@ footer span { color: var(--purple-3); }
   .container { padding: 0 16px; }
   nav { padding: 12px 16px; }
   .hero-avatar-wrap { width: 170px; height: 170px; }
-  .browser-screen { height: 220px; }
   .proj-metrics { grid-template-columns: 1fr; grid-auto-flow: row; }
   .proj-metric:nth-child(odd):last-child { grid-column: auto; }
   .contact-box { padding: 18px 14px; }

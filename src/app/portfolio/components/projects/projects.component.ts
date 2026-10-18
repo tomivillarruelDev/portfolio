@@ -74,6 +74,29 @@ export class ProjectsComponent implements OnDestroy {
     return !!project.isMobileView;
   }
   
+  /** Tipo de mockup ('phone' | 'browser') de cada foto del carrusel, en orden. */
+  private getMockupTypes(project: Project): ('phone' | 'browser')[] {
+    const count = this.getProjectImages(project).length || 1;
+    const types = project.photoTypes;
+    const cached = this.projectIsMobile()[project.id];
+    const first = cached !== undefined ? cached : !!project.isMobileView;
+    return Array.from({ length: count }, (_, idx) => {
+      if (idx > 0 && types && types[idx - 1] !== undefined) {
+        return types[idx - 1] === 'mobile' ? 'phone' : 'browser';
+      }
+      return first ? 'phone' : 'browser';
+    });
+  }
+
+  // En mobile el frame oculto reserva espacio (para que no salte el layout);
+  // solo tiene sentido si el proyecto realmente usa ese tipo de mockup.
+  projectHasPhone(project: Project): boolean {
+    return this.getMockupTypes(project).includes('phone');
+  }
+  projectHasBrowser(project: Project): boolean {
+    return this.getMockupTypes(project).includes('browser');
+  }
+
   private autoplayIntervals: Record<string, any> = {};
   private gsapInited = false;
 
@@ -350,7 +373,9 @@ export class ProjectsComponent implements OnDestroy {
       if (!section) return;
       const scenes = Array.from(section.querySelectorAll<HTMLElement>('.proj-scene'));
       scenes.forEach(sc => {
-        const frame = sc.querySelector<HTMLElement>('.proj-frame');
+        // Animamos el wrapper (contiene phone + browser superpuestos), no el
+        // primer .proj-frame: si no, el browser nunca recibía la animación.
+        const frame = sc.querySelector<HTMLElement>('.mockups-wrapper');
         const narr  = sc.querySelector<HTMLElement>('.proj-narrative');
         const tags  = Array.from(sc.querySelectorAll<HTMLElement>('.stack-tag'));
         const links = Array.from(sc.querySelectorAll<HTMLElement>('.proj-link'));
