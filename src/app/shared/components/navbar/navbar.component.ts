@@ -17,6 +17,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private readonly renderer = inject(Renderer2);
   private scrollListener!: () => void;
 
+  // "Hide on scroll": se oculta al bajar y aparece al subir
+  private lastScrollY = 0;
+  private ticking = false;
+  private static readonly SHOW_NEAR_TOP = 120; // px: cerca del inicio, siempre visible
+  private static readonly MIN_DELTA = 8;       // px: ignora micro-scrolls (trackpad)
+
   constructor() {
     this.cvService.cvUrl$.subscribe((url) => {
       if (url) this.cvUrl.set(url);
@@ -29,8 +35,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Nav shrink on scroll
     const nav = document.getElementById('nav');
+    this.lastScrollY = window.scrollY;
     this.scrollListener = () => {
       if (!nav) return;
+      this.scheduleVisibilityUpdate(nav);
       if (window.innerWidth <= 768) {
         nav.style.padding = '';
         return;
@@ -42,6 +50,29 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     };
     window.addEventListener('scroll', this.scrollListener, { passive: true });
+  }
+
+  /** Un solo cálculo por frame, aunque el scroll dispare muchos eventos. */
+  private scheduleVisibilityUpdate(nav: HTMLElement): void {
+    if (this.ticking) return;
+    this.ticking = true;
+    requestAnimationFrame(() => {
+      this.ticking = false;
+      const y = window.scrollY;
+
+      // Menú mobile abierto (body congelado) o cerca del inicio: siempre visible
+      if (this.menuActive() || y < NavbarComponent.SHOW_NEAR_TOP) {
+        nav.classList.remove('nav-hidden');
+        this.lastScrollY = y;
+        return;
+      }
+
+      const delta = y - this.lastScrollY;
+      if (Math.abs(delta) < NavbarComponent.MIN_DELTA) return;
+
+      nav.classList.toggle('nav-hidden', delta > 0);
+      this.lastScrollY = y;
+    });
   }
 
   ngOnDestroy(): void {
@@ -110,6 +141,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.renderer.removeStyle(document.body, 'overflow-y');
       // 'instant': html tiene scroll-behavior:smooth y, si no, la página "viaja" al cerrar el menú
       window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
+      // Que la restauración de posición no cuente como "scroll hacia abajo"
+      this.lastScrollY = scrollY;
     }
   }
 

@@ -487,6 +487,13 @@ section, nav, footer { position: relative; z-index: 1; }
 .orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
 section[id] { scroll-margin-top: 80px; }
 
+/* ── SELECCIÓN DE TEXTO: violeta de marca en lugar del azul nativo ── */
+::selection { background: rgba(139, 92, 246, 0.45); color: #ffffff; text-shadow: none; }
+::-moz-selection { background: rgba(139, 92, 246, 0.45); color: #ffffff; text-shadow: none; }
+/* Texto con degradé (relleno transparente): violeta más claro para que se siga leyendo */
+.gradient-text::selection, .ph-word-fill::selection, .dev-hl-fill::selection { background: rgba(196, 181, 253, 0.35); }
+input::selection, textarea::selection { background: rgba(139, 92, 246, 0.55); color: #ffffff; }
+
 /* ── CURSOR GLOW ── */
 .cursor-glow {
   position: fixed; width: 280px; height: 280px; border-radius: 50%;
