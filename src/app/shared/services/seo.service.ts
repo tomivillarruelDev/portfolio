@@ -13,7 +13,7 @@ interface SeoPage {
 @Injectable({ providedIn: 'root' })
 export class SeoService {
   private readonly BASE_URL = 'https://tomas-villarruel-portfolio.web.app';
-  private readonly DEFAULT_IMAGE = `${this.BASE_URL}/assets/og-image.png`;
+  private readonly DEFAULT_IMAGE = `${this.BASE_URL}/assets/og-image-v2.png`;
 
   constructor(
     private titleSvc: Title,
